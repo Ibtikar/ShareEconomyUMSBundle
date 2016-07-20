@@ -1,0 +1,4 @@
+ibtikar_share_economy_ums_login:
+    path:     /login
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:login }
+
