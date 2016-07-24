@@ -3,7 +3,7 @@
     "type": "symfony-bundle",
     "description": "Ibtikar share economy user management system",
     "keywords": ["User management"],
-    "homepage": "https://github.com/Ibtikar",
+    "homepage": "https://github.com/Ibtikar/share-economy-UMS",
     "license": "MIT",
     "authors": [
         {
