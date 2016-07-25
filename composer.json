@@ -17,7 +17,8 @@
         "symfony/security-bundle": "~2.3|~3.0",
         "symfony/twig-bundle": "~2.3|~3.0",
         "stof/doctrine-extensions-bundle": "^1.2",
-        "composer/installers": "~1.0"
+        "composer/installers": "~1.0",
+        "egulias/email-validator": "~1.2"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "~1.3",

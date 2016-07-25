@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"})
+ * @UniqueEntity(fields={"phone"}, groups={"signup", "edit"})
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
@@ -36,6 +37,9 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     *
+     * @Assert\NotBlank
+     * @Assert\Email(strict=true)
      */
     private $email;
 
@@ -120,16 +124,12 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="firstName", type="string", length=255)
-     */
-    private $firstName;
-
-    /**
-     * @var string
+     * @ORM\Column(name="fullName", type="string", length=255)
      *
-     * @ORM\Column(name="lastName", type="string", length=255)
+     * @Assert\NotBlank
+     * @Assert\Length(min = 4, max = 25)
      */
-    private $lastName;
+    private $fullName;
 
     /**
      * @var bool
@@ -434,51 +434,27 @@ class User implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
-     * Set firstName
+     * Set fullName
      *
-     * @param string $firstName
+     * @param string $fullName
      *
      * @return User
      */
-    public function setFirstName($firstName)
+    public function setFullName($fullName)
     {
-        $this->firstName = $firstName;
+        $this->fullName = $fullName;
 
         return $this;
     }
 
     /**
-     * Get firstName
+     * Get fullName
      *
      * @return string
      */
-    public function getFirstName()
+    public function getFullName()
     {
-        return $this->firstName;
-    }
-
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     *
-     * @return User
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * Get lastName
-     *
-     * @return string
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
+        return $this->fullName;
     }
 
     /**
