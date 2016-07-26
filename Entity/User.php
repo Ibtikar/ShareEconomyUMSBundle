@@ -181,7 +181,7 @@ class User implements AdvancedUserInterface, EquatableInterface
 
     public function __toString()
     {
-        return "$this->firstName $this->lastName";
+        return "$this->fullName";
     }
 
     public function __sleep()
