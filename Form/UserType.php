@@ -17,10 +17,10 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-                ->add('fullName', null, array('constraints' => array(new Assert\NotBlank())))
-                ->add('email', null, array('constraints' => array(new Assert\NotBlank(), new Assert\Email())))
-                ->add('password', null, array('constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 6, 'max' => 50)))))
-                ->add('phone', null, array('constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min' => 6, 'max' => 50)))))
+                ->add('fullName')
+                ->add('email')
+                ->add('password')
+                ->add('phone')
         ;
     }
 

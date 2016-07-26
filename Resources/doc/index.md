@@ -28,3 +28,7 @@ Installation steps
 6.Add the next line to your .gitignore file
 
     /src/Ibtikar/share-economy-UMS
+
+7.Run doctrine migrations command
+
+    bin/console doctrine:migrations:migrate --configuration=src/Ibtikar/share-economy-UMS/Resources/config/migrations.yml

@@ -19,7 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"})
- * @UniqueEntity(fields={"phone"}, groups={"signup", "edit"})
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
@@ -130,6 +129,15 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\Length(min = 4, max = 25)
      */
     private $fullName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255)
+     *
+     * @Assert\NotBlank
+     */
+    private $phone;
 
     /**
      * @var bool
@@ -455,6 +463,30 @@ class User implements AdvancedUserInterface, EquatableInterface
     public function getFullName()
     {
         return $this->fullName;
+    }
+
+    /**
+     * Set phone
+     *
+     * @param string $phone
+     *
+     * @return User
+     */
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    /**
+     * Get phone
+     *
+     * @return string
+     */
+    public function getPhone()
+    {
+        return $this->phone;
     }
 
     /**
