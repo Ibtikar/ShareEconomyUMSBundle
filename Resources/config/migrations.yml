@@ -1,4 +1,4 @@
 name: Share economy user management system Migrations  
 migrations_namespace: Ibtikar\ShareEconomyUMSBundle\Migrations
 table_name: migration_versions_ums
-migrations_directory: "src/Ibtikar/share-economy-UMS/Migrations"
+migrations_directory: "src/Ibtikar/ShareEconomyUMSBundle/Migrations"

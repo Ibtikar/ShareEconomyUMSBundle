@@ -3,8 +3,10 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Controller\API;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 
 class UserController extends Controller
 {
@@ -64,13 +66,13 @@ class UserController extends Controller
         $errors    = $validator->validate($user);
 
         if (count($errors) > 0) {
+            $output = ['status' => false];
+        } else {
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
             $output = ['status' => true, 'user' => $errors];
-        } else {
-             $output = ['status' => false];
         }
 
         return JsonResponse($output);

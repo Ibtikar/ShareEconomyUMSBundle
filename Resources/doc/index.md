@@ -5,7 +5,7 @@ Installation steps
 
     "extra": {
         "installer-paths": {
-            "src/Ibtikar/{$name}/": ["Ibtikar/share-economy-UMS"]
+            "src/Ibtikar/{$name}/": ["Ibtikar/ShareEconomyUMSBundle"]
         }
     }
 
@@ -27,8 +27,8 @@ Installation steps
 
 6.Add the next line to your .gitignore file
 
-    /src/Ibtikar/share-economy-UMS
+    /src/Ibtikar/ShareEconomyUMSBundle
 
 7.Run doctrine migrations command
 
-    bin/console doctrine:migrations:migrate --configuration=src/Ibtikar/share-economy-UMS/Resources/config/migrations.yml
+    bin/console doctrine:migrations:migrate --configuration=src/Ibtikar/ShareEconomyUMSBundle/Resources/config/migrations.yml

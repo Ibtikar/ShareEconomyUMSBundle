@@ -34,7 +34,7 @@
     },
     "extra": {
         "installer-paths": {
-            "src/{$name}": ["Ibtikar/share-economy-UMS"]
+            "src/{$name}": ["Ibtikar/ShareEconomyUMSBundle"]
         }
     }
 }
