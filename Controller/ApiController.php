@@ -5,27 +5,49 @@ namespace Ibtikar\ShareEconomyUMSBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 class ApiController extends Controller
 {
 
+    /**
+     * Register a customer to the system
+     *
+     * @ApiDoc(
+     *  description="Register a customer to the system",
+     *  parameters={
+     *      {"name"="fullName", "dataType"="string", "required"=true},
+     *      {"name"="email", "dataType"="string", "required"=true},
+     *      {"name"="phone", "dataType"="string", "required"=true},
+     *      {"name"="password", "dataType"="string", "required"=true}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function registerCustomerAction(Request $request)
     {
-        $entity = new User();
-        $form   = $this->createForm('\\Ibtikar\\ShareEconomyUMSBundle\\Form\\UserType', $entity);
-        $form->handleRequest($request);
+        $user = new User();
+        $user->setFullName($request->get('fullName'));
+        $user->setEmail($request->get('email'));
+        $user->setPhone($request->get('phone'));
+        $user->setUserPassword($request->get('password'));
 
-        if ($form->isValid()) {
+        $validator = $this->get('validator');
+        $errors    = $validator->validate($user);
+
+        if (count($errors) > 0) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+            $em->persist($user);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_admins_list'));
+            $output = ['status' => true, 'user' => $errors];
+        } else {
+             $output = ['status' => false];
         }
 
-        return $this->render('AdminBundle::Admins/new.html.twig', array(
-                'entity' => $entity,
-                'form'   => $form->createView(),
-        ));
+        return JsonResponse($output);
     }
 }

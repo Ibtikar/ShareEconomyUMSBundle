@@ -19,10 +19,10 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"})
+ * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"})
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
-
     /**
      * @var int
      *
@@ -61,6 +61,11 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     *
+     * @Assert\NotBlank
+     * @Assert\Length(min = 6, max = 12)
+     * @Assert\Regex(pattern="/[a-zA-Z]/", message="Please enter password with at lease 6 characters, one letter, and one number of them.")
+     * @Assert\Regex(pattern="/\d/", message="Please enter password with at lease 6 characters, one letter, and one number of them.")
      */
     private $password;
 
@@ -91,6 +96,13 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @ORM\Column(name="emailVerified", type="boolean")
      */
     private $emailVerified = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isPhoneVerified", type="boolean")
+     */
+    private $isPhoneVerified = false;
 
     /**
      * @var string
@@ -346,6 +358,30 @@ class User implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
+     * Set isPhoneVerified
+     *
+     * @param boolean $isPhoneVerified
+     *
+     * @return User
+     */
+    public function setIsPhoneVerified($isPhoneVerified)
+    {
+        $this->isPhoneVerified = $isPhoneVerified;
+
+        return $this;
+    }
+
+    /**
+     * Get isPhoneVerified
+     *
+     * @return bool
+     */
+    public function getIsPhoneVerified()
+    {
+        return $this->isPhoneVerified;
+    }
+
+    /**
      * Set emailVerificationToken
      *
      * @param string $emailVerificationToken
@@ -540,7 +576,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     public function eraseCredentials()
     {
         $this->userPassword = null;
-        $this->oldPassword = null;
+        $this->oldPassword  = null;
     }
 
     public function isAccountNonExpired()
@@ -645,5 +681,22 @@ class User implements AdvancedUserInterface, EquatableInterface
     public function getUpdated()
     {
         return $this->updated;
+    }
+
+    /**
+     * serialize user object needed information for the API
+     *
+     * @return array
+     */
+    public function serializeForApi()
+    {
+        return [
+            'fullName'        => $this->getFullName(),
+            'phone'           => $this->getPhone(),
+            'email'           => $this->getEmail(),
+            'created'         => $this->getCreated(),
+            'isEmailVerified' => $this->getEmailVerified(),
+            'isPhoneVerified' => $this->getIsPhoneVerified()
+        ];
     }
 }
