@@ -33,4 +33,46 @@ class UserController extends Controller
         // The security layer will intercept this request it should never reach here
         return new JsonResponse(array('code' => 401, 'message' => 'Bad credentials'));
     }
+
+    /**
+     * Register a customer to the system
+     *
+     * @ApiDoc(
+     *  description="Register a customer to the system",
+     *  section="User",
+     *  parameters={
+     *      {"name"="fullName", "dataType"="string", "required"=true},
+     *      {"name"="email", "dataType"="string", "required"=true},
+     *      {"name"="phone", "dataType"="string", "required"=true},
+     *      {"name"="password", "dataType"="string", "required"=true}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function registerCustomerAction(Request $request)
+    {
+        $user = new User();
+        $user->setFullName($request->get('fullName'));
+        $user->setEmail($request->get('email'));
+        $user->setPhone($request->get('phone'));
+        $user->setUserPassword($request->get('password'));
+
+        $validator = $this->get('validator');
+        $errors    = $validator->validate($user);
+
+        if (count($errors) > 0) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $output = ['status' => true, 'user' => $errors];
+        } else {
+             $output = ['status' => false];
+        }
+
+        return JsonResponse($output);
+    }
 }
