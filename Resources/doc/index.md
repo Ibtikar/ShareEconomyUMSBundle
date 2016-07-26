@@ -5,7 +5,7 @@ Installation steps
 
     "extra": {
         "installer-paths": {
-            "src/Ibtikar/{$name}/": ["Ibtikar/ShareEconomyUMSBundle"]
+            "src/Ibtikar/ShareEconomyUMSBundle/": ["Ibtikar/share-economy-UMS"]
         }
     }
 
