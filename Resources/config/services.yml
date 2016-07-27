@@ -14,3 +14,7 @@ services:
         arguments: [ '@api_operations' ]
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    ibtikar.shareeconomy.ums.email_sender:
+        class:  Ibtikar\ShareEconomyUMSBundle\Service\EmailSender
+        arguments:  ["@doctrine.orm.entity_manager", "@mailer", "@templating", %mailer_user%]

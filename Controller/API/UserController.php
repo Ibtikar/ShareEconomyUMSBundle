@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
+
 
 class UserController extends Controller
 {
@@ -62,20 +64,41 @@ class UserController extends Controller
         $user->setEmail($request->get('email'));
         $user->setPhone($request->get('phone'));
         $user->setUserPassword($request->get('password'));
+        $user->setRoles([User::ROLE_CUSTOMER]);
+        $user->setSystemUser(false);
 
         $validator = $this->get('validator');
-        $errors    = $validator->validate($user);
+        $errors    = $validator->validate($user, null, ['signup']);
 
         if (count($errors) > 0) {
+            var_dump($errors);
+            die;
             $output = ['status' => false];
         } else {
+            $phoneVerificationCode = new PhoneVerificationCode();
+            $phoneVerificationCode->generateCode();
+
+            $user->addPhoneVerificationCode($phoneVerificationCode);
+            $user->generateNewEmailVerificationToken();
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            $output = ['status' => true, 'user' => $errors];
+            $output = ['status' => true, 'user' => $user->serializeForApi()];
+
+            try{
+                // send phone verification code
+                $message = "Verification code for Akly is (" . $user->getPhoneVerificationCodes()->last()->getCode() . ") valid for " . PhoneVerificationCode::CODE_EXPIRY_MINUTES . " minutes";
+                $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
+
+                // send verification email
+                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+            } catch (Exception $ex) {
+
+            }
         }
 
-        return JsonResponse($output);
+        return new JsonResponse($output);
     }
 }

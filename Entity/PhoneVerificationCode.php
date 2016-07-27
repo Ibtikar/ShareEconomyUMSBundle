@@ -2,6 +2,7 @@
 
 namespace Ibtikar\ShareEconomyUMSBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PhoneVerificationCode
 {
+    const CODE_EXPIRY_MINUTES = 4;
+
     /**
      * @var integer
      *
@@ -33,12 +36,13 @@ class PhoneVerificationCode
      *
      * @ORM\Column(name="is_verified", type="boolean", nullable=false)
      */
-    private $isVerified;
+    private $isVerified = false;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
 
@@ -47,12 +51,10 @@ class PhoneVerificationCode
      *
      * @ORM\ManyToOne(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private $user;
-
-
 
     /**
      * Get id
@@ -158,5 +160,15 @@ class PhoneVerificationCode
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * generate random verification code
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function generateCode()
+    {
+        $this->setCode(mt_rand(10000, 99999));
     }
 }

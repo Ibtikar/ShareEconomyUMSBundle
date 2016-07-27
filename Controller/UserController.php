@@ -3,6 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends Controller
 {
@@ -24,6 +25,16 @@ class UserController extends Controller
                 'error' => $error,
                 )
         );
+    }
+
+    /**
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function verifyEmailAction(Request $request)
+    {
+
     }
 
 }

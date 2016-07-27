@@ -23,6 +23,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
+
+    const ROLE_SUPER_ADMIN      = 'ROLE_SUPER_ADMIN';
+    const ROLE_ADMIN            = 'ROLE_ADMIN';
+    const ROLE_CUSTOMER         = 'ROLE_CUSTOMER';
+    const ROLE_SERVICE_PROVIDER = 'ROLE_SERVICE_PROVIDER';
+
     /**
      * @var int
      *
@@ -145,7 +151,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, unique=true)
      *
      * @Assert\NotBlank
      */
@@ -174,9 +180,18 @@ class User implements AdvancedUserInterface, EquatableInterface
      */
     private $updated;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\OneToMany(targetEntity="PhoneVerificationCode", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid
+     */
+    private $phoneVerificationCodes;
+
     public function __construct()
     {
-        $this->salt = md5(uniqid(rand()));
+        $this->salt                   = md5(uniqid(rand()));
+        $this->phoneVerificationCodes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -684,6 +699,52 @@ class User implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
+     * Add phoneVerificationCode
+     *
+     * @param PhoneVerificationCode $phoneVerificationCode
+     *
+     * @return User
+     */
+    public function addPhoneVerificationCode(PhoneVerificationCode $phoneVerificationCode)
+    {
+        $this->phoneVerificationCodes[] = $phoneVerificationCode;
+        $phoneVerificationCode->setUser($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove phoneVerificationCode
+     *
+     * @param PhoneVerificationCode $phoneVerificationCode
+     */
+    public function removePhoneVerificationCode(PhoneVerificationCode $phoneVerificationCode)
+    {
+        $this->phoneVerificationCodes->removeElement($phoneVerificationCode);
+    }
+
+    /**
+     * Get phoneVerificationCodes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPhoneVerificationCodes()
+    {
+        return $this->phoneVerificationCodes;
+    }
+
+    /**
+     * generate random email verification token
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return string
+     */
+    public function generateNewEmailVerificationToken()
+    {
+        return $this->setEmailVerificationToken(bin2hex(random_bytes(32)));
+    }
+
+    /**
      * serialize user object needed information for the API
      *
      * @return array
@@ -695,6 +756,7 @@ class User implements AdvancedUserInterface, EquatableInterface
             'phone'           => $this->getPhone(),
             'email'           => $this->getEmail(),
             'created'         => $this->getCreated(),
+            'updated'         => $this->getUpdated(),
             'isEmailVerified' => $this->getEmailVerified(),
             'isPhoneVerified' => $this->getIsPhoneVerified()
         ];
