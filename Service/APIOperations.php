@@ -21,7 +21,6 @@ class APIOperations
     }
 
     /**
-     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @param User $user
      * @return array
      */
@@ -29,6 +28,11 @@ class APIOperations
     {
         $responseUser = new ResponseUser();
         $responseUser->id = $user->getId();
+        $responseUser->fullName = $user->getFullName();
+        $responseUser->email = $user->getEmail();
+        $responseUser->phone = $user->getPhone();
+        $responseUser->emailVerified = $user->getEmailVerified();
+        $responseUser->isPhoneVerified = $user->getIsPhoneVerified();
         return $this->getObjectDataAsArray($responseUser);
     }
 }

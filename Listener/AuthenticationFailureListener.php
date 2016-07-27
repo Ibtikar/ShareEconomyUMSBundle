@@ -18,7 +18,7 @@ class AuthenticationFailureListener
     /** @var $tranlator TranslatorInterface */
     private $translator;
 
-    /** @var $locale String */
+    /** @var $locale string */
     private $locale;
 
     public function __construct(TranslatorInterface $translator, $locale)

@@ -13,11 +13,31 @@ class User
     /**
      * @Assert\Type(type="string")
      */
+    public $id;
+
+    /**
+     * @Assert\Type(type="string")
+     */
     public $email;
 
     /**
      * @Assert\Type(type="string")
      */
     public $fullName;
+
+    /**
+     * @Assert\Type(type="string")
+     */
+    public $phone;
+
+    /**
+     * @Assert\Type(type="bool")
+     */
+    public $emailVerified;
+
+    /**
+     * @Assert\Type(type="bool")
+     */
+    public $isPhoneVerified;
 
 }
