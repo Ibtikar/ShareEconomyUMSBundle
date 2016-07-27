@@ -1,0 +1,6 @@
+"fill_mandatory_field": "Please fill mandatory field first."
+"invalid_email": "Please enter a valid mail"
+"email_exist": "The entered email is registered before"
+"phone_exist": "The entered phone number is registered before"
+"fullname_length_not_valid": "Please enter your name between 4 to 25 characters."
+"password_not_valid": "Please enter password with at lease 6 characters, one letter, and one number of them."

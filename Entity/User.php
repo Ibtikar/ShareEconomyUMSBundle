@@ -18,8 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\UserRepository")
- * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"})
- * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"})
+ * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"}, message="email_exist")
+ * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist")
  */
 class User implements AdvancedUserInterface, EquatableInterface
 {
@@ -43,8 +43,8 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      *
-     * @Assert\NotBlank
-     * @Assert\Email(strict=true)
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
+     * @Assert\Email(strict=true, message="invalid_email", groups={"signup"})
      */
     private $email;
 
@@ -59,7 +59,10 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string $userPassword
      *
-     * @Assert\NotBlank(groups={"signup", "password"})
+     * @Assert\NotBlank(groups={"signup", "password"}, message="fill_mandatory_field")
+     * @Assert\Length(min = 6, max = 12, groups={"signup"}, maxMessage="password_not_valid", minMessage="password_not_valid")
+     * @Assert\Regex(pattern="/[a-zA-Z]/", message="Please enter password with at lease 6 characters, one letter, and one number of them.", groups={"signup"})
+     * @Assert\Regex(pattern="/\d/", message="Please enter password with at lease 6 characters, one letter, and one number of them.", groups={"signup"})
      */
     private $userPassword;
 
@@ -69,9 +72,6 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @ORM\Column(name="password", type="string", length=255)
      *
      * @Assert\NotBlank
-     * @Assert\Length(min = 6, max = 12)
-     * @Assert\Regex(pattern="/[a-zA-Z]/", message="Please enter password with at lease 6 characters, one letter, and one number of them.")
-     * @Assert\Regex(pattern="/\d/", message="Please enter password with at lease 6 characters, one letter, and one number of them.")
      */
     private $password;
 
@@ -143,24 +143,24 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="fullName", type="string", length=255)
      *
-     * @Assert\NotBlank
-     * @Assert\Length(min = 4, max = 25)
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
+     * @Assert\Length(min = 4, max = 25, groups={"signup"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
      */
     private $fullName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255, unique=true)
+     * @ORM\Column(name="phone", type="string", length=255)
      *
-     * @Assert\NotBlank
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
      */
     private $phone;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="systemUser", type="boolean", options={"comment": "Used to hide admins or any system user from the backend list to prevent any operation on them"})
+     * @ORM\Column(name="systemUser", type="boolean")
      */
     private $systemUser;
 

@@ -49,7 +49,7 @@ class UserController extends Controller
      *      {"name"="fullName", "dataType"="string", "required"=true},
      *      {"name"="email", "dataType"="string", "required"=true},
      *      {"name"="phone", "dataType"="string", "required"=true},
-     *      {"name"="password", "dataType"="string", "required"=true}
+     *      {"name"="userPassword", "dataType"="string", "required"=true}
      *  }
      * )
      *
@@ -63,17 +63,20 @@ class UserController extends Controller
         $user->setFullName($request->get('fullName'));
         $user->setEmail($request->get('email'));
         $user->setPhone($request->get('phone'));
-        $user->setUserPassword($request->get('password'));
+        $user->setUserPassword($request->get('userPassword'));
         $user->setRoles([User::ROLE_CUSTOMER]);
         $user->setSystemUser(false);
 
-        $validator = $this->get('validator');
-        $errors    = $validator->validate($user, null, ['signup']);
+        $validator          = $this->get('validator');
+        $errors             = $validator->validate($user, null, ['signup']);
+        $validationMessages = [];
 
         if (count($errors) > 0) {
-            var_dump($errors);
-            die;
-            $output = ['status' => false];
+            foreach ($errors as $error) {
+                $validationMessages[$error->getPropertyPath()] = $this->get('translator')->trans($error->getMessage(), [], 'validators', 'en');
+            }
+
+            $output = ['status' => false, 'errors' => $validationMessages];
         } else {
             $phoneVerificationCode = new PhoneVerificationCode();
             $phoneVerificationCode->generateCode();
@@ -87,9 +90,9 @@ class UserController extends Controller
 
             $output = ['status' => true, 'user' => $user->serializeForApi()];
 
-            try{
+            try {
                 // send phone verification code
-                $message = "Verification code for Akly is (" . $user->getPhoneVerificationCodes()->last()->getCode() . ") valid for " . PhoneVerificationCode::CODE_EXPIRY_MINUTES . " minutes";
+                $message = "Verification code for Akly is (".$user->getPhoneVerificationCodes()->last()->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
                 $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
 
                 // send verification email
