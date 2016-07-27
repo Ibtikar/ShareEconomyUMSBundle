@@ -154,7 +154,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="systemUser", type="boolean")
+     * @ORM\Column(name="systemUser", type="boolean", options={"comment": "Used to hide admins or any system user from the backend list to prevent any operation on them"})
      */
     private $systemUser;
 
