@@ -25,7 +25,8 @@ class UserController extends Controller
      *  },
      *  statusCodes={
      *      200="Returned on success"
-     *  }
+     *  },
+     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @return JsonResponse
