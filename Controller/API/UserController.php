@@ -12,7 +12,7 @@ class UserController extends Controller
 {
 
     /**
-     * Login with existing user
+     * Login with an existing user
      *
      * @ApiDoc(
      *  tags={
@@ -20,8 +20,8 @@ class UserController extends Controller
      *  },
      *  section="User",
      *  parameters={
-     *      {"name"="username", "dataType"="string", "required"=true, "format"="{email address}"},
-     *      {"name"="password", "dataType"="string", "required"=true, "format"="{length: min: 8, max: 4096}, {match: /[\D+]+/u}, {match: /\d+/u}"}
+     *      {"name"="username", "dataType"="string", "required"=true},
+     *      {"name"="password", "dataType"="string", "required"=true}
      *  },
      *  statusCodes={
      *      200="Returned on success"

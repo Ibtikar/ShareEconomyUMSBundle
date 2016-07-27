@@ -1,3 +1,7 @@
 services:
 
-
+    jwt.authentication_failure_listener:
+        class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener
+        arguments: [ '@translator', '%locale%' ]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
