@@ -4,7 +4,6 @@ namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -36,14 +35,14 @@ class AuthenticationFailureListener
         $locale = $event->getRequest()->get('locale', $this->locale);
         $exception = $event->getException();
         $errorMessage = $exception->getMessage();
-        if ($exception instanceof UsernameNotFoundException) {
-            $errorMessage = 'The entered email is not registered, please enter again.';
-            if ($exception->getUsername() === AuthenticationProviderInterface::USERNAME_NONE_PROVIDED) {
-                $errorMessage = 'Please fill the mandatory field first.';
-            }
-        } else if ($exception instanceof BadCredentialsException) {
-            if (!$request->get('password')) {
-                $errorMessage = 'Please fill the mandatory field first.';
+        if (!$request->get('password')) {
+            $errorMessage = 'Please fill the mandatory field first.';
+        } else {
+            if ($exception instanceof UsernameNotFoundException) {
+                $errorMessage = 'The entered email is not registered, please enter again.';
+                if ($exception->getUsername() === AuthenticationProviderInterface::USERNAME_NONE_PROVIDED) {
+                    $errorMessage = 'Please fill the mandatory field first.';
+                }
             }
         }
         $response = new JsonResponse(array(
