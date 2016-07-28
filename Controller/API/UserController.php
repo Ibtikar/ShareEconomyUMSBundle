@@ -91,7 +91,7 @@ class UserController extends Controller
 
             try {
                 // send phone verification code
-                $message = "Verification code for Akly is (".$user->getPhoneVerificationCodes()->last()->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
+                $message = "Verification code for Akly is (".$phoneVerificationCode->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
                 $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
 
                 // send verification email
@@ -140,5 +140,63 @@ class UserController extends Controller
         }
 
         return new JsonResponse($output);
+    }
+
+    /**
+     * resend phone verification code
+     *
+     * @ApiDoc(
+     *  description="Resend phone verification code validity",
+     *  section="User",
+     *  parameters={
+     *      {"name"="user_id", "dataType"="string", "required"=true}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function resendVerificationCodeAction(Request $request)
+    {
+        $output = ['status' => false];
+        $em     = $this->getDoctrine()->getEntityManager();
+        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+
+        if ($user) {
+            $phoneVerificationCode = new PhoneVerificationCode();
+            $phoneVerificationCode->generateCode();
+
+            $user->addPhoneVerificationCode($phoneVerificationCode);
+
+            $em->persist($user);
+            $em->flush();
+
+            $output['status'] = $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+        }
+
+        return new JsonResponse($output);
+    }
+
+    /**
+     *
+     * @param type $user
+     * @param type $code
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return boolean
+     */
+    private function sendVerificationCodeMessage($user, $code)
+    {
+        $return = false;
+
+        try {
+            $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
+            $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
+            $return  = true;
+        } catch (Exception $ex) {
+            $return = false;
+        }
+
+        return $return;
     }
 }
