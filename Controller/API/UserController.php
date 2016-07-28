@@ -73,7 +73,7 @@ class UserController extends Controller
 
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $this->get('translator')->trans($error->getMessage(), [], 'validators', 'en');
+                $validationMessages[$error->getPropertyPath()] = $this->get('translator')->trans($error->getMessage(), [], 'validators');
             }
 
             $output = ['status' => false, 'errors' => $validationMessages];
