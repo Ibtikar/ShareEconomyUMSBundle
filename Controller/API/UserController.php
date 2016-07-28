@@ -9,7 +9,6 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 
-
 class UserController extends Controller
 {
 
@@ -88,7 +87,7 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $output = ['status' => true, 'user' => $user->serializeForApi()];
+            $output = ['status' => true, 'user' => $this->get('api_operations')->getUserData($user)];
 
             try {
                 // send phone verification code
@@ -100,6 +99,44 @@ class UserController extends Controller
             } catch (Exception $ex) {
 
             }
+        }
+
+        return new JsonResponse($output);
+    }
+
+    /**
+     * check phone verification code validity
+     *
+     * @ApiDoc(
+     *  description="Check phone verification code validity",
+     *  section="User",
+     *  parameters={
+     *      {"name"="user_id", "dataType"="string", "required"=true},
+     *      {"name"="code", "dataType"="string", "required"=true}
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function checkVerificationCodeAction(Request $request)
+    {
+        $output = [];
+        $em     = $this->getDoctrine()->getEntityManager();
+        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $code   = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id'), 'code' => $request->get('code')]);
+
+        if ($code) {
+            if ($code->isValid()) {
+                $token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
+
+                $output = ['status' => true, 'token' => $token];
+            } else {
+                $output = ['status' => false, 'message' => $this->get('translator')->trans('expired_verification_code')];
+            }
+        } else {
+            $output = ['status' => false, 'message' => $this->get('translator')->trans('wrong_verification_code')];
         }
 
         return new JsonResponse($output);

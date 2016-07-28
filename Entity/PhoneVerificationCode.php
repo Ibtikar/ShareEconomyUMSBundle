@@ -166,9 +166,23 @@ class PhoneVerificationCode
      * generate random verification code
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return integer
      */
     public function generateCode()
     {
         $this->setCode(mt_rand(10000, 99999));
+    }
+
+    /**
+     * check code validity
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return boolean
+     */
+    public function isValid()
+    {
+        $minCreationTime = new \DateTime('- ' . self::CODE_EXPIRY_MINUTES . ' minutes');
+
+        return $minCreationTime < $this->getCreatedAt();
     }
 }
