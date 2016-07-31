@@ -144,6 +144,14 @@ class UserController extends Controller
      *      {"name"="email", "dataType"="string", "required"=true},
      *      {"name"="phone", "dataType"="string", "required"=true},
      *      {"name"="userPassword", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
      *  }
      * )
      *
@@ -170,7 +178,8 @@ class UserController extends Controller
                 $validationMessages[$error->getPropertyPath()] = $this->get('translator')->trans($error->getMessage(), [], 'validators');
             }
 
-            $output = ['status' => false, 'errors' => $validationMessages];
+            $output         = new RegisterUserFailResponse();
+            $output->errors = $validationMessages;
         } else {
             $phoneVerificationCode = new PhoneVerificationCode();
             $phoneVerificationCode->generateCode();
@@ -182,7 +191,8 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            $output = ['status' => true, 'user' => $this->get('api_operations')->getUserData($user)];
+            $output       = new RegisterUserSuccessResponse();
+            $output->user = $this->get('api_operations')->getUserData($user);
 
             try {
                 // send phone verification code
@@ -207,6 +217,14 @@ class UserController extends Controller
      *  parameters={
      *      {"name"="user_id", "dataType"="string", "required"=true},
      *      {"name"="code", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
      *  }
      * )
      *
@@ -216,24 +234,24 @@ class UserController extends Controller
      */
     public function checkVerificationCodeAction(Request $request)
     {
-        $output = [];
-        $em     = $this->getDoctrine()->getEntityManager();
-        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
-        $code   = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id'), 'code' => $request->get('code')]);
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $code = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id'), 'code' => $request->get('code')]);
 
         if ($code) {
             if ($code->isValid()) {
-                $token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
-
-                $output = ['status' => true, 'token' => $token];
+                $output        = new UserTokenResponse();
+                $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
-                $output = ['status' => false, 'message' => $this->get('translator')->trans('expired_verification_code')];
+                $output          = new FailResponse();
+                $output->message = $this->get('translator')->trans('expired_verification_code');
             }
         } else {
-            $output = ['status' => false, 'message' => $this->get('translator')->trans('wrong_verification_code')];
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('wrong_verification_code');
         }
 
-        return new JsonResponse($output);
+        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
     }
 
     /**
@@ -244,6 +262,14 @@ class UserController extends Controller
      *  section="User",
      *  parameters={
      *      {"name"="user_id", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
      *  }
      * )
      *
@@ -253,23 +279,29 @@ class UserController extends Controller
      */
     public function resendVerificationCodeAction(Request $request)
     {
-        $output = ['status' => false];
-        $em     = $this->getDoctrine()->getEntityManager();
-        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
 
         if ($user) {
             $phoneVerificationCode = new PhoneVerificationCode();
             $phoneVerificationCode->generateCode();
 
             $user->addPhoneVerificationCode($phoneVerificationCode);
-
             $em->persist($user);
-            $em->flush();
 
-            $output['status'] = $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+            if ($this->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
+                $em->flush();
+                $output = new SuccessResponse();
+            } else {
+                $output          = new FailResponse();
+                $output->message = $this->get('translator')->trans('verification_message_not_sent', [], 'validators');
+            }
+        } else {
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 
-        return new JsonResponse($output);
+        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
     }
 
     /**
@@ -280,6 +312,12 @@ class UserController extends Controller
      *  section="User",
      *  parameters={
      *      {"name"="user_id", "dataType"="string", "required"=true},
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RemainingTime",
      *  }
      * )
      *
@@ -289,11 +327,12 @@ class UserController extends Controller
      */
     public function getVerificationRemainingTimeAction(Request $request)
     {
-        $em     = $this->getDoctrine()->getEntityManager();
-        $code   = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id')], ['createdAt' => 'desc']);
-        $output = $code->getValidityRemainingSeconds();
+        $em              = $this->getDoctrine()->getEntityManager();
+        $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id')], ['createdAt' => 'desc']);
+        $output          = new RemainingTimeResponse();
+        $output->seconds = $code->getValidityRemainingSeconds();
 
-        return new JsonResponse($output);
+        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
     }
 
     /**
@@ -322,12 +361,12 @@ class UserController extends Controller
      */
     public function updatePhoneNumberAction(Request $request)
     {
-        $em     = $this->getDoctrine()->getEntityManager();
-        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
 
         if ($user) {
             if ($user->getPhone() == $request->get('phone')) {
-                $output = new FailResponse();
+                $output          = new FailResponse();
                 $output->message = $this->get('translator')->trans('same_phone_validation', [], 'validators');
             } else {
                 $user->setPhone($request->get('phone'));
@@ -345,17 +384,19 @@ class UserController extends Controller
                     $phoneVerificationCode->generateCode();
 
                     $user->addPhoneVerificationCode($phoneVerificationCode);
-
                     $em->persist($user);
-                    $em->flush();
 
-                    $output = new SuccessResponse();
-
-                    $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+                    if ($this->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
+                        $em->flush();
+                        $output = new SuccessResponse();
+                    } else {
+                        $output          = new FailResponse();
+                        $output->message = $this->get('translator')->trans('verification_message_not_sent', [], 'validators');
+                    }
                 }
             }
         } else {
-            $output = new FailResponse();
+            $output          = new FailResponse();
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 

@@ -6,3 +6,4 @@
 "password_not_valid": "ادخل كلمة مرور على الأقل 6 أحرف،  تحتوي على الأقل حرف واحد ورقم واحد."
 "same_phone_validation": "هذا الرقم مطابق للرقم الحالي"
 "user_not_found": "هذا المستخدم غير موجود"
+"verification_message_not_sent": "حدث خطأ أثناء إرسال رسالة التأكيد"

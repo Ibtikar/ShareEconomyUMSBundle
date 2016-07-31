@@ -6,3 +6,4 @@
 "password_not_valid": "Please enter password with at lease 6 characters, one letter, and one number of them."
 "same_phone_validation": "This number is identical to the current one"
 "user_not_found": "User not found"
+"verification_message_not_sent": "something went wrong while trying to send the verification message"
