@@ -28,3 +28,8 @@ ibtikar_share_economy_ums_resend_verification_code:
     path:     /resend-verification-code
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:resendVerificationCode }
     methods:  GET
+
+ibtikar_share_economy_ums_get_verification_remaining_time:
+    path:     /verification-remaining-time
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getVerificationRemainingTime }
+    methods:  GET

@@ -179,6 +179,30 @@ class UserController extends Controller
     }
 
     /**
+     * get verification code remaining validity time in seconds
+     *
+     * @ApiDoc(
+     *  description="get verification code remaining validity time in seconds",
+     *  section="User",
+     *  parameters={
+     *      {"name"="user_id", "dataType"="string", "required"=true},
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function getVerificationRemainingTimeAction(Request $request)
+    {
+        $em     = $this->getDoctrine()->getEntityManager();
+        $code   = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id')], ['createdAt' => 'desc']);
+        $output = $code->getValidityRemainingSeconds();
+
+        return new JsonResponse($output);
+    }
+
+    /**
      *
      * @param type $user
      * @param type $code
