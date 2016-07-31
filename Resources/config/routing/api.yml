@@ -1,0 +1,3 @@
+ibtikar_share_economy_ums_api_user:
+    resource: "@IbtikarShareEconomyUMSBundle/Resources/config/routing/API/user.yml"
+    prefix:   /

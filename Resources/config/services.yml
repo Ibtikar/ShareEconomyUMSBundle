@@ -2,6 +2,7 @@ services:
 
     api_operations:
         class: Ibtikar\ShareEconomyUMSBundle\Service\APIOperations
+        arguments: [ '@translator', '%locale%' ]
 
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener

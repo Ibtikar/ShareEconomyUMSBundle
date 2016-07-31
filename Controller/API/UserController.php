@@ -5,6 +5,8 @@ namespace Ibtikar\ShareEconomyUMSBundle\Controller\API;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Filesystem\Filesystem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
@@ -38,6 +40,97 @@ class UserController extends Controller
     {
         // The security layer will intercept this request it should never reach here
         return new JsonResponse(array('code' => 401, 'message' => 'Bad credentials'));
+    }
+
+    /**
+     * Edit my profile picture
+     *
+     * @ApiDoc(
+     *  authentication=true,
+     *  tags={
+     *      "testing"="red"
+     *  },
+     *  section="User",
+     *  parameters={
+     *      {"name"="file", "dataType"="string", "required"=true, "format"="{base64 encoded string}"}
+     *  },
+     *  statusCodes={
+     *      200="Returned on success"
+     *  },
+     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     * )
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editProfilePictureAction(Request $request)
+    {
+        $user = $this->getUser();
+        $APIOperations = $this->get('api_operations');
+        $locale = $request->get('locale');
+        if ($locale) {
+            $APIOperations->setLocale($locale);
+        }
+        $tempUrlPath = null;
+        $fileSystem = new Filesystem();
+        $image = $request->get('file');
+        if ($image) {
+            $imageString = base64_decode($image);
+            if ($imageString) {
+                $imageRandomName = uniqid();
+                $uploadDirectory = $user->getUploadRootDir() . '/api-temp/';
+                $fileSystem->mkdir($uploadDirectory, 0755);
+                $uploadPath = $uploadDirectory . $imageRandomName;
+                if (@file_put_contents($uploadPath, $imageString)) {
+                    $fileWithoutExtension = new File($uploadPath, false);
+                    $imageExtension = $fileWithoutExtension->guessExtension();
+                    if ($imageExtension) {
+                        $tempUrlPath = "$uploadPath.$imageExtension";
+                        $fileSystem->rename($uploadPath, $tempUrlPath);
+                        $file = new File($tempUrlPath, false);
+                        $user->setFile($file);
+                    }
+                }
+            }
+        }
+        $errorsObjects = $this->get('validator')->validate($user, null, array('image', 'image-required'));
+        if (count($errorsObjects) > 0) {
+            if ($tempUrlPath) {
+                $fileSystem->remove($tempUrlPath);
+            }
+            return $APIOperations->getValidationErrorsJsonResponse($errorsObjects);
+        }
+        try {
+            $this->getDoctrine()->getManager()->flush();
+            if ($tempUrlPath) {
+                @unlink($tempUrlPath);
+            }
+            return new JsonResponse($APIOperations->getUserData($this->getUser()));
+        } catch (\Exception $e) {
+            return $APIOperations->getErrorResponse($e->getMessage());
+        }
+    }
+
+    /**
+     * Remove my profile picture
+     *
+     * @ApiDoc(
+     *  authentication=true,
+     *  tags={
+     *      "testing"="red"
+     *  },
+     *  section="User",
+     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     * )
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function removeProfilePictureAction()
+    {
+        $user = $this->getUser();
+        $user->removeImage();
+        $this->getDoctrine()->getManager()->flush($user);
+        return new JsonResponse($this->getUserData($this->getUser()));
     }
 
     /**

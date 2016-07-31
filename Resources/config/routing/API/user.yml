@@ -1,0 +1,14 @@
+ibtikar_share_economy_ums_api_user_login:
+    path:     /login
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:login }
+    methods:  POST
+
+ibtikar_share_economy_ums_api_user_edit_profile_picture:
+    path:     /auth/edit-profile-picture
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:editProfilePicture }
+    methods:  [POST]
+
+ibtikar_share_economy_ums_api_user_remove_profile_picture:
+    path:     /auth/remove-profile-picture
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:removeProfilePicture }
+    methods:  [POST]
