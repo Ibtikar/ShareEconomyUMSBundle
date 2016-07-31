@@ -20,6 +20,10 @@ class AuthenticationFailureListener
     /** @var $locale string */
     private $locale;
 
+    /**
+     * @param TranslatorInterface $translator
+     * @param string $locale
+     */
     public function __construct(TranslatorInterface $translator, $locale)
     {
         $this->translator = $translator;
