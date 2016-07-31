@@ -153,7 +153,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="phone", type="string", length=255)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone"})
      */
     private $phone;
 
@@ -742,23 +742,5 @@ class User implements AdvancedUserInterface, EquatableInterface
     public function generateNewEmailVerificationToken()
     {
         return $this->setEmailVerificationToken(bin2hex(random_bytes(32)));
-    }
-
-    /**
-     * serialize user object needed information for the API
-     *
-     * @return array
-     */
-    public function serializeForApi()
-    {
-        return [
-            'fullName'        => $this->getFullName(),
-            'phone'           => $this->getPhone(),
-            'email'           => $this->getEmail(),
-            'created'         => $this->getCreated(),
-            'updated'         => $this->getUpdated(),
-            'isEmailVerified' => $this->getEmailVerified(),
-            'isPhoneVerified' => $this->getIsPhoneVerified()
-        ];
     }
 }

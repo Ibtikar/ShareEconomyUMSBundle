@@ -33,3 +33,8 @@ ibtikar_share_economy_ums_get_verification_remaining_time:
     path:     /verification-remaining-time
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getVerificationRemainingTime }
     methods:  GET
+    
+ibtikar_share_economy_ums_update_phone_number:
+    path:     /update-phone-number
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:updatePhoneNumber }
+    methods:  POST

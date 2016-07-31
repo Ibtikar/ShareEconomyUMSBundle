@@ -4,3 +4,5 @@
 "phone_exist": "The entered phone number is registered before"
 "fullname_length_not_valid": "Please enter your name between 4 to 25 characters."
 "password_not_valid": "Please enter password with at lease 6 characters, one letter, and one number of them."
+"same_phone_validation": "This number is identical to the current one"
+"user_not_found": "User not found"

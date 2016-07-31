@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\Success as SuccessResponse;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail as FailResponse;
 
 class UserController extends Controller
 {
@@ -91,8 +93,7 @@ class UserController extends Controller
 
             try {
                 // send phone verification code
-                $message = "Verification code for Akly is (".$phoneVerificationCode->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
-                $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
+                $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
 
                 // send verification email
                 $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
@@ -200,6 +201,72 @@ class UserController extends Controller
         $output = $code->getValidityRemainingSeconds();
 
         return new JsonResponse($output);
+    }
+
+    /**
+     * update phone number
+     *
+     * @ApiDoc(
+     *  description="update phone number",
+     *  section="User",
+     *  parameters={
+     *      {"name"="user_id", "dataType"="string", "required"=true},
+     *      {"name"="phone", "dataType"="string", "required"=true},
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function updatePhoneNumberAction(Request $request)
+    {
+        $em     = $this->getDoctrine()->getEntityManager();
+        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+
+        if ($user) {
+            if ($user->getPhone() == $request->get('phone')) {
+                $output = new FailResponse();
+                $output->message = $this->get('translator')->trans('same_phone_validation', [], 'validators');
+            } else {
+                $user->setPhone($request->get('phone'));
+                $validator = $this->get('validator');
+                $errors    = $validator->validate($user, null, ['phone']);
+
+                if (count($errors) > 0) {
+                    $output = new FailResponse();
+
+                    foreach ($errors as $error) {
+                        $output->message = $this->get('translator')->trans($error->getMessage(), [], 'validators');
+                    }
+                } else {
+                    $phoneVerificationCode = new PhoneVerificationCode();
+                    $phoneVerificationCode->generateCode();
+
+                    $user->addPhoneVerificationCode($phoneVerificationCode);
+
+                    $em->persist($user);
+                    $em->flush();
+
+                    $output = new SuccessResponse();
+
+                    $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+                }
+            }
+        } else {
+            $output = new FailResponse();
+            $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
+        }
+
+        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
     }
 
     /**
