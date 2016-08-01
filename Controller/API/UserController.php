@@ -12,6 +12,10 @@ use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\Success as SuccessResponse;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail as FailResponse;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken as UserTokenResponse;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\RemainingTime as RemainingTimeResponse;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess as RegisterUserSuccessResponse;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail as RegisterUserFailResponse;
 
 class UserController extends Controller
 {
