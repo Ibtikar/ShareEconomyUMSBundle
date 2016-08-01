@@ -24,9 +24,6 @@ class UserController extends Controller
      * Login with an existing user
      *
      * @ApiDoc(
-     *  tags={
-     *      "testing"="red"
-     *  },
      *  section="User",
      *  parameters={
      *      {"name"="username", "dataType"="string", "required"=true},
@@ -51,9 +48,6 @@ class UserController extends Controller
      *
      * @ApiDoc(
      *  authentication=true,
-     *  tags={
-     *      "testing"="red"
-     *  },
      *  section="User",
      *  parameters={
      *      {"name"="file", "dataType"="string", "required"=true, "format"="{base64 encoded string}"}
@@ -120,9 +114,6 @@ class UserController extends Controller
      *
      * @ApiDoc(
      *  authentication=true,
-     *  tags={
-     *      "testing"="red"
-     *  },
      *  section="User",
      *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
      * )
