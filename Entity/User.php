@@ -114,7 +114,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="emailVerificationToken", type="string", length=32, nullable=true)
+     * @ORM\Column(name="emailVerificationToken", type="string", length=100, nullable=true)
      */
     private $emailVerificationToken;
 
@@ -152,7 +152,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255)
+     * @ORM\Column(name="phone", type="string", length=255, unique=true)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone"})
      */
