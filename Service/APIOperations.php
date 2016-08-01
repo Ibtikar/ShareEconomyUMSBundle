@@ -32,7 +32,7 @@ class APIOperations
     {
         $this->translator = $translator;
         $this->locale = $locale;
-        $this->assetsDomain = $assetsDomain;
+        $this->assetsDomain = "http://$assetsDomain";
     }
 
     /**
@@ -135,7 +135,9 @@ class APIOperations
         $responseUser->phone = $user->getPhone();
         $responseUser->emailVerified = $user->getEmailVerified();
         $responseUser->isPhoneVerified = $user->getIsPhoneVerified();
-        $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
+        if ($user->getImage()) {
+            $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
+        }
         return $this->getObjectDataAsArray($responseUser);
     }
 }

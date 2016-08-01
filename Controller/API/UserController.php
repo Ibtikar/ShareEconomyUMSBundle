@@ -125,7 +125,7 @@ class UserController extends Controller
         $user = $this->getUser();
         $user->removeImage();
         $this->getDoctrine()->getManager()->flush($user);
-        return new JsonResponse($APIOperations->getUserData($this->getUser()));
+        return new JsonResponse($this->get('api_operations')->getUserData($this->getUser()));
     }
 
     /**
