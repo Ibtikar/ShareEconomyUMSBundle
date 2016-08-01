@@ -61,7 +61,7 @@ class APIOperations
     {
         $errors = array();
         foreach ($errorsObjects as $error) {
-            $errors[$error->getPropertyPath()] = $this->translator->trans($error->getMessage(), array(), 'validation', $this->locale);
+            $errors[$error->getPropertyPath()] = $this->translator->trans($error->getMessage(), array(), 'validators', $this->locale);
         }
         return $this->getErrorsJsonResponse($errors);
     }
