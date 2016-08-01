@@ -13,6 +13,11 @@ ibtikar_share_economy_ums_api_user_remove_profile_picture:
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:removeProfilePicture }
     methods:  [POST]
 
+ibtikar_share_economy_ums_api_user_get_user_info:
+    path:     /user-info/{id}
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getUserInfo }
+    methods:  [GET]
+
 ibtikar_share_economy_ums_register_customer:
     path:     /register-customer
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:registerCustomer }

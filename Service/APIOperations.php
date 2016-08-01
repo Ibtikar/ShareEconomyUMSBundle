@@ -93,6 +93,19 @@ class APIOperations
     }
 
     /**
+     * @param string $message
+     * @return JsonResponse
+     */
+    public function getNotFoundErrorResponse($message = 'Not found.')
+    {
+        return new JsonResponse(array(
+            'status' => 'error',
+            'code' => 404,
+            'message' => $this->translator->trans($message, array(), 'messages', $this->locale)
+        ));
+    }
+
+    /**
      * @param array $data
      * @return JsonResponse
      */

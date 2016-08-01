@@ -129,6 +129,30 @@ class UserController extends Controller
     }
 
     /**
+     * Get User information by user id
+     *
+     * @ApiDoc(
+     *  section="User",
+     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     * )
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function getUserInfoAction(Request $request, $id)
+    {
+        $APIOperations = $this->get('api_operations');
+        $locale = $request->get('locale');
+        if ($locale) {
+            $APIOperations->setLocale($locale);
+        }
+        $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        if ($user) {
+            return new JsonResponse($APIOperations->getUserData($user));
+        }
+        return $APIOperations->getNotFoundErrorResponse();
+    }
+
+    /**
      * Register a customer to the system
      *
      * @ApiDoc(
