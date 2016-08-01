@@ -12,3 +12,32 @@ ibtikar_share_economy_ums_api_user_remove_profile_picture:
     path:     /auth/remove-profile-picture
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:removeProfilePicture }
     methods:  [POST]
+
+ibtikar_share_economy_ums_register_customer:
+    path:     /register-customer
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:registerCustomer }
+    methods:  POST
+
+ibtikar_share_economy_ums_verify_email:
+    path:     /verify-email/{token}
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:verifyEmail }
+
+ibtikar_share_economy_ums_check_verification_code:
+    path:     /check-verification-code
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:checkVerificationCode }
+    methods:  GET
+
+ibtikar_share_economy_ums_resend_verification_code:
+    path:     /resend-verification-code
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:resendVerificationCode }
+    methods:  GET
+
+ibtikar_share_economy_ums_get_verification_remaining_time:
+    path:     /verification-remaining-time
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getVerificationRemainingTime }
+    methods:  GET
+
+ibtikar_share_economy_ums_update_phone_number:
+    path:     /update-phone-number
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:updatePhoneNumber }
+    methods:  POST
