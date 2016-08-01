@@ -22,10 +22,9 @@ class APIOperations
 
     /**
      * @param TranslatorInterface $translator
-     * @param string $locale
      * @param string $assetsDomain
      */
-    public function __construct(TranslatorInterface $translator, $locale, $assetsDomain)
+    public function __construct(TranslatorInterface $translator, $assetsDomain)
     {
         $this->translator = $translator;
         $this->assetsDomain = "http://$assetsDomain";
