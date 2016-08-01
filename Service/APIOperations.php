@@ -20,14 +20,19 @@ class APIOperations
     /** @var $locale string */
     private $locale;
 
+    /** @var $assetsDomain string */
+    private $assetsDomain;
+
     /**
      * @param TranslatorInterface $translator
      * @param string $locale
+     * @param string $assetsDomain
      */
-    public function __construct(TranslatorInterface $translator, $locale)
+    public function __construct(TranslatorInterface $translator, $locale, $assetsDomain)
     {
         $this->translator = $translator;
         $this->locale = $locale;
+        $this->assetsDomain = $assetsDomain;
     }
 
     /**
@@ -130,6 +135,7 @@ class APIOperations
         $responseUser->phone = $user->getPhone();
         $responseUser->emailVerified = $user->getEmailVerified();
         $responseUser->isPhoneVerified = $user->getIsPhoneVerified();
+        $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
         return $this->getObjectDataAsArray($responseUser);
     }
 }

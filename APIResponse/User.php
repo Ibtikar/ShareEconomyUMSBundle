@@ -31,6 +31,11 @@ class User
     public $phone;
 
     /**
+     * @Assert\Type(type="string")
+     */
+    public $image;
+
+    /**
      * @Assert\Type(type="bool")
      */
     public $emailVerified;
