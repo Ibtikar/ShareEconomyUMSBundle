@@ -179,7 +179,7 @@ class UserController extends Controller
 
         if (count($errors) > 0) {
             foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $this->get('translator')->trans($error->getMessage(), [], 'validators');
+                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
             }
 
             $output         = new RegisterUserFailResponse();
@@ -244,6 +244,11 @@ class UserController extends Controller
 
         if ($code) {
             if ($code->isValid()) {
+                $code->setIsVerified(true);
+                $user->setIsPhoneVerified(true);
+
+                $em->flush();
+
                 $output        = new UserTokenResponse();
                 $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
@@ -381,7 +386,7 @@ class UserController extends Controller
                     $output = new FailResponse();
 
                     foreach ($errors as $error) {
-                        $output->message = $this->get('translator')->trans($error->getMessage(), [], 'validators');
+                        $output->message = $error->getMessage();
                     }
                 } else {
                     $phoneVerificationCode = new PhoneVerificationCode();
