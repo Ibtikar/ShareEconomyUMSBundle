@@ -65,10 +65,6 @@ class UserController extends Controller
     {
         $user = $this->getUser();
         $APIOperations = $this->get('api_operations');
-        $locale = $request->get('locale');
-        if ($locale) {
-            $APIOperations->setLocale($locale);
-        }
         $tempUrlPath = null;
         $fileSystem = new Filesystem();
         $image = $request->get('file');
@@ -141,10 +137,6 @@ class UserController extends Controller
     public function getUserInfoAction(Request $request, $id)
     {
         $APIOperations = $this->get('api_operations');
-        $locale = $request->get('locale');
-        if ($locale) {
-            $APIOperations->setLocale($locale);
-        }
         $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         if ($user) {
             return new JsonResponse($APIOperations->getUserData($user));

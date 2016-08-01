@@ -17,17 +17,13 @@ class AuthenticationFailureListener
     /** @var $tranlator TranslatorInterface */
     private $translator;
 
-    /** @var $locale string */
-    private $locale;
-
     /**
      * @param TranslatorInterface $translator
      * @param string $locale
      */
-    public function __construct(TranslatorInterface $translator, $locale)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
-        $this->locale = $locale;
     }
 
     /**
@@ -36,7 +32,6 @@ class AuthenticationFailureListener
     public function onAuthenticationFailureResponse(AuthenticationFailureEvent $event)
     {
         $request = $event->getRequest();
-        $locale = $event->getRequest()->get('locale', $this->locale);
         $exception = $event->getException();
         $errorMessage = $exception->getMessage();
         if (!$request->get('password')) {
@@ -52,7 +47,7 @@ class AuthenticationFailureListener
         $response = new JsonResponse(array(
             'status' => 'error',
             'code' => 401,
-            'message' => $this->translator->trans($errorMessage, array(), 'security', $locale),
+            'message' => $this->translator->trans($errorMessage, array(), 'security'),
         ));
         $event->setResponse($response);
     }

@@ -17,9 +17,6 @@ class APIOperations
     /** @var $tranlator TranslatorInterface */
     private $translator;
 
-    /** @var $locale string */
-    private $locale;
-
     /** @var $assetsDomain string */
     private $assetsDomain;
 
@@ -31,26 +28,7 @@ class APIOperations
     public function __construct(TranslatorInterface $translator, $locale, $assetsDomain)
     {
         $this->translator = $translator;
-        $this->locale = $locale;
         $this->assetsDomain = "http://$assetsDomain";
-    }
-
-    /**
-     * @return string
-     */
-    public function getLocale()
-    {
-        return $this->locale;
-    }
-
-    /**
-     * @param string $locale
-     * @return APIOperations
-     */
-    public function setLocale($locale)
-    {
-        $this->locale = $locale;
-        return $this;
     }
 
     /**
@@ -61,7 +39,7 @@ class APIOperations
     {
         $errors = array();
         foreach ($errorsObjects as $error) {
-            $errors[$error->getPropertyPath()] = $this->translator->trans($error->getMessage(), array(), 'validators', $this->locale);
+            $errors[$error->getPropertyPath()] = $this->translator->trans($error->getMessage(), array(), 'validators');
         }
         return $this->getErrorsJsonResponse($errors);
     }
@@ -88,7 +66,7 @@ class APIOperations
         return new JsonResponse(array(
             'status' => 'error',
             'code' => 500,
-            'message' => $this->translator->trans($message, array(), 'messages', $this->locale)
+            'message' => $this->translator->trans($message, array(), 'messages')
         ));
     }
 
@@ -101,7 +79,7 @@ class APIOperations
         return new JsonResponse(array(
             'status' => 'error',
             'code' => 404,
-            'message' => $this->translator->trans($message, array(), 'messages', $this->locale)
+            'message' => $this->translator->trans($message, array(), 'messages')
         ));
     }
 
