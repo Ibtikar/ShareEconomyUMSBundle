@@ -3,7 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Ibtikar\ShareEconomyUMSBundle\Service\APIOperations;
+use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 
 /**
