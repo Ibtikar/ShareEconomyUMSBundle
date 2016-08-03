@@ -494,6 +494,38 @@ class UserController extends Controller
     }
 
     /**
+     * check if email verified or not
+     *
+     * @ApiDoc(
+     *  description="check if email verified or not",
+     *  section="User",
+     *  parameters={
+     *      {"name"="user_id", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned if emial verified",
+     *      400 = "Returned if email not verified yet."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function isEmailVerifiedAction(Request $request)
+    {
+        $em     = $this->getDoctrine()->getEntityManager();
+        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $output = $user->getEmailVerified() ? new SuccessResponse() : new FailResponse();
+
+        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+    }
+
+    /**
      *
      * @param type $user
      * @param type $code

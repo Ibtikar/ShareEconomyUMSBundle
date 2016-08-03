@@ -51,3 +51,8 @@ ibtikar_share_economy_ums_update_user_info:
     path:     /auth/update-user-info
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:updateUserInfo }
     methods:  POST
+
+ibtikar_share_economy_ums_is_email_verified:
+    path:     /is-email-verified
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:isEmailVerified }
+    methods:  GET
