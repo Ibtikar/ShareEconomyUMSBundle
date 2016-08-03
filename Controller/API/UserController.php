@@ -205,15 +205,89 @@ class UserController extends Controller
             $output       = new RegisterUserSuccessResponse();
             $output->user = $this->get('api_operations')->getUserData($user);
 
-            try {
-                // send phone verification code
-                $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+            // send phone verification code
+            $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+
+            // send verification email
+            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+        }
+
+        return new JsonResponse($output);
+    }
+
+    /**
+     * Update user information
+     *
+     * @ApiDoc(
+     *  authentication=true,
+     *  description="Update user information",
+     *  section="User",
+     *  parameters={
+     *      {"name"="fullName", "dataType"="string", "required"=true},
+     *      {"name"="email", "dataType"="string", "required"=true},
+     *      {"name"="phone", "dataType"="string", "required"=true},
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function updateUserInfoAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $oldEmail = $user->getEmail();
+        $oldPhone = $user->getPhone();
+
+        $user->setFullName($request->get('fullName'));
+        $user->setEmail($request->get('email'));
+        $user->setPhone($request->get('phone'));
+
+        $validator          = $this->get('validator');
+        $errors             = $validator->validate($user, null, ['edit']);
+        $validationMessages = [];
+
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+
+            $output         = new RegisterUserFailResponse();
+            $output->errors = $validationMessages;
+        } else {
+            if ($user->getEmail() !== $oldEmail) {
+                $user->generateNewEmailVerificationToken();
+                $user->setEmailVerified(false);
 
                 // send verification email
                 $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
-            } catch (Exception $ex) {
-
             }
+
+            if ($user->getPhone() !== $oldPhone) {
+                $phoneVerificationCode = new PhoneVerificationCode();
+                $phoneVerificationCode->generateCode();
+
+                $user->addPhoneVerificationCode($phoneVerificationCode);
+
+                // send phone verification code
+                $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
+            $output       = new RegisterUserSuccessResponse();
+            $output->user = $this->get('api_operations')->getUserData($user);
         }
 
         return new JsonResponse($output);
@@ -434,7 +508,7 @@ class UserController extends Controller
             $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $return = false;
         }
 

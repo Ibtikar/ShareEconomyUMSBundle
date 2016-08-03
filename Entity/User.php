@@ -44,8 +44,8 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
-     * @Assert\Email(strict=true, message="invalid_email", groups={"signup"})
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
+     * @Assert\Email(strict=true, message="invalid_email", groups={"signup", "edit"})
      */
     private $email;
 
@@ -62,7 +62,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @Assert\NotBlank(groups={"signup", "password"}, message="fill_mandatory_field")
      * @Assert\Length(min = 6, max = 12, groups={"signup"}, maxMessage="password_not_valid", minMessage="password_not_valid")
-     * @Assert\Regex(pattern="/[a-zA-Z]/", message="password_not_valid", groups={"signup"})
+     * @Assert\Regex(pattern="/[a-zA-Zأ-ي]/", message="password_not_valid", groups={"signup"})
      * @Assert\Regex(pattern="/\d/", message="password_not_valid", groups={"signup"})
      */
     private $userPassword;
@@ -144,8 +144,8 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="fullName", type="string", length=255)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup"})
-     * @Assert\Length(min = 4, max = 25, groups={"signup"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
+     * @Assert\Length(min = 4, max = 25, groups={"signup", "edit"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
      */
     private $fullName;
 
@@ -154,7 +154,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="phone", type="string", length=255, unique=true)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone"})
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit"})
      */
     private $phone;
 
