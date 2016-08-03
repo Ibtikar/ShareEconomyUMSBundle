@@ -30,9 +30,15 @@ class UserController extends Controller
      *      {"name"="password", "dataType"="string", "required"=true}
      *  },
      *  statusCodes={
-     *      200="Returned on success"
+     *      200="Returned on success",
+     *      401="Returned if the login information was not correct",
+     *      403="Returned if the api key is not valid"
      *  },
-     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @return JsonResponse
@@ -53,9 +59,19 @@ class UserController extends Controller
      *      {"name"="file", "dataType"="string", "required"=true, "format"="{base64 encoded string}"}
      *  },
      *  statusCodes={
-     *      200="Returned on success"
+     *      200="Returned on success",
+     *      401="Returned if the authorization header is missing or expired",
+     *      403="Returned if the api key is not valid",
+     *      422="Returned if there is a validation error in the sent data",
+     *      500="Returned if there is an internal server error"
      *  },
-     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
+     *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @param Request $request
@@ -111,7 +127,16 @@ class UserController extends Controller
      * @ApiDoc(
      *  authentication=true,
      *  section="User",
-     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     *  statusCodes={
+     *      200="Returned on success",
+     *      401="Returned if the authorization header is missing or expired",
+     *      403="Returned if the api key is not valid"
+     *  },
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @return JsonResponse
@@ -129,7 +154,14 @@ class UserController extends Controller
      *
      * @ApiDoc(
      *  section="User",
-     *  output="Ibtikar\ShareEconomyUMSBundle\APIResponse\User"
+     *  statusCodes={
+     *      200="Returned on success",
+     *      403="Returned if the api key is not valid"
+     *  },
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\User",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
      * @return JsonResponse
