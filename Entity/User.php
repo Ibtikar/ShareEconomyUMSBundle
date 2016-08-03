@@ -52,18 +52,18 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string $oldPassword
      *
-     * @Assert\NotBlank(groups={"oldPassword"})
-     * @SecurityAssert\UserPassword(groups={"oldPassword"})
+     * @Assert\NotBlank(groups={"changePassword"})
+     * @SecurityAssert\UserPassword(groups={"changePassword"})
      */
     private $oldPassword;
 
     /**
      * @var string $userPassword
      *
-     * @Assert\NotBlank(groups={"signup", "password"}, message="fill_mandatory_field")
-     * @Assert\Length(min = 6, max = 12, groups={"signup"}, maxMessage="password_not_valid", minMessage="password_not_valid")
-     * @Assert\Regex(pattern="/[a-zA-Zأ-ي]/", message="password_not_valid", groups={"signup"})
-     * @Assert\Regex(pattern="/\d/", message="password_not_valid", groups={"signup"})
+     * @Assert\NotBlank(groups={"signup", "changePassword"}, message="fill_mandatory_field")
+     * @Assert\Length(min = 6, max = 12, groups={"signup", "changePassword"}, maxMessage="password_not_valid", minMessage="password_not_valid")
+     * @Assert\Regex(pattern="/[a-zA-Zأ-ي]/", message="password_not_valid", groups={"signup", "changePassword"})
+     * @Assert\Regex(pattern="/\d/", message="password_not_valid", groups={"signup", "changePassword"})
      */
     private $userPassword;
 

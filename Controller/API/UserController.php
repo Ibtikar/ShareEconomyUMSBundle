@@ -526,6 +526,62 @@ class UserController extends Controller
     }
 
     /**
+     * change user password
+     *
+     * @ApiDoc(
+     *  authentication=true,
+     *  description="change user password",
+     *  section="User",
+     *  parameters={
+     *      {"name"="oldPassword", "dataType"="string", "required"=true},
+     *      {"name"="userPassword", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $currentUser = $this->getUser();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($currentUser->getId());
+
+        $user->setOldPassword($request->get('oldPassword'));
+        $user->setUserPassword($request->get('userPassword'));
+
+        $validator          = $this->get('validator');
+        $errors             = $validator->validate($user, null, ['changePassword']);
+        $validationMessages = [];
+
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+
+            $output         = new RegisterUserFailResponse();
+            $output->errors = $validationMessages;
+        } else {
+            $user->setValidPassword();
+            $em->flush();
+
+            $output       = new RegisterUserSuccessResponse();
+            $output->user = $this->get('api_operations')->getUserData($user);
+        }
+
+        return new JsonResponse($output);
+    }
+
+    /**
      *
      * @param type $user
      * @param type $code

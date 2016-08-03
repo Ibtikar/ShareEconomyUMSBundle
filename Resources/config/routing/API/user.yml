@@ -56,3 +56,8 @@ ibtikar_share_economy_ums_is_email_verified:
     path:     /is-email-verified
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:isEmailVerified }
     methods:  GET
+
+ibtikar_share_economy_ums_change_password:
+    path:     /auth/change-password
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:changePassword }
+    methods:  POST
