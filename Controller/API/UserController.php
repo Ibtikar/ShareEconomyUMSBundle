@@ -64,7 +64,7 @@ class UserController extends Controller
     public function editProfilePictureAction(Request $request)
     {
         $user = $this->getUser();
-        $APIOperations = $this->get('api_operations');
+        $userOperations = $this->get('user_operations');
         $tempUrlPath = null;
         $fileSystem = new Filesystem();
         $image = $request->get('file');
@@ -92,16 +92,16 @@ class UserController extends Controller
             if ($tempUrlPath) {
                 $fileSystem->remove($tempUrlPath);
             }
-            return $APIOperations->getValidationErrorsJsonResponse($errorsObjects);
+            return $userOperations->getValidationErrorsJsonResponse($errorsObjects);
         }
         try {
             $this->getDoctrine()->getManager()->flush();
             if ($tempUrlPath) {
                 @unlink($tempUrlPath);
             }
-            return new JsonResponse($APIOperations->getUserData($this->getUser()));
+            return new JsonResponse($userOperations->getUserData($this->getUser()));
         } catch (\Exception $e) {
-            return $APIOperations->getErrorResponse($e->getMessage());
+            return $userOperations->getErrorResponse($e->getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ class UserController extends Controller
         $user = $this->getUser();
         $user->removeImage();
         $this->getDoctrine()->getManager()->flush($user);
-        return new JsonResponse($this->get('api_operations')->getUserData($this->getUser()));
+        return new JsonResponse($this->get('user_operations')->getUserData($this->getUser()));
     }
 
     /**
@@ -136,12 +136,12 @@ class UserController extends Controller
      */
     public function getUserInfoAction(Request $request, $id)
     {
-        $APIOperations = $this->get('api_operations');
+        $userOperations = $this->get('user_operations');
         $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         if ($user) {
-            return new JsonResponse($APIOperations->getUserData($user));
+            return new JsonResponse($userOperations->getUserData($user));
         }
-        return $APIOperations->getNotFoundErrorResponse();
+        return $userOperations->getNotFoundErrorResponse();
     }
 
     /**
@@ -203,7 +203,7 @@ class UserController extends Controller
             $em->flush();
 
             $output       = new RegisterUserSuccessResponse();
-            $output->user = $this->get('api_operations')->getUserData($user);
+            $output->user = $this->get('user_operations')->getUserData($user);
 
             // send phone verification code
             $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
@@ -287,7 +287,7 @@ class UserController extends Controller
             $em->flush();
 
             $output       = new RegisterUserSuccessResponse();
-            $output->user = $this->get('api_operations')->getUserData($user);
+            $output->user = $this->get('user_operations')->getUserData($user);
         }
 
         return new JsonResponse($output);
@@ -341,7 +341,7 @@ class UserController extends Controller
             $output->message = $this->get('translator')->trans('wrong_verification_code');
         }
 
-        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+        return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
     /**
@@ -391,7 +391,7 @@ class UserController extends Controller
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 
-        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+        return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
     /**
@@ -422,7 +422,7 @@ class UserController extends Controller
         $output          = new RemainingTimeResponse();
         $output->seconds = $code->getValidityRemainingSeconds();
 
-        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+        return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
     /**
@@ -490,7 +490,7 @@ class UserController extends Controller
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 
-        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+        return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
     /**
@@ -522,7 +522,7 @@ class UserController extends Controller
         $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
         $output = $user->getEmailVerified() ? new SuccessResponse() : new FailResponse();
 
-        return new JsonResponse($this->get('api_operations')->getObjectDataAsArray($output));
+        return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
     /**
@@ -575,7 +575,7 @@ class UserController extends Controller
             $em->flush();
 
             $output       = new RegisterUserSuccessResponse();
-            $output->user = $this->get('api_operations')->getUserData($user);
+            $output->user = $this->get('user_operations')->getUserData($user);
         }
 
         return new JsonResponse($output);

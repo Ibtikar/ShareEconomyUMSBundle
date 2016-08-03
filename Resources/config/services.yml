@@ -1,5 +1,9 @@
 services:
 
+    user_operations:
+        class: Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
+        arguments: [ '%assets_domain%' ]
+
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener
         arguments: [ '@translator' ]
