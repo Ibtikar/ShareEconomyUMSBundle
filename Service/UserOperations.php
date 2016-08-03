@@ -4,6 +4,7 @@ namespace Ibtikar\ShareEconomyUMSBundle\Service;
 
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse;
@@ -17,9 +18,6 @@ class UserOperations extends APIOperations
     /** @var $securityTokenStorage TokenStorage */
     private $securityTokenStorage;
 
-    /** @var $user User|null */
-    private $user;
-
     /**
      * @param string $assetsDomain
      */
@@ -27,11 +25,18 @@ class UserOperations extends APIOperations
     {
         parent::__construct($assetsDomain);
         $this->securityTokenStorage = $securityTokenStorage;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getLoggedInUser()
+    {
         $token = $this->securityTokenStorage->getToken();
         if ($token && is_object($token)) {
             $user = $token->getUser();
             if (is_object($user) && $user instanceof User) {
-                $this->user = $user;
+                return $user;
             }
         }
     }
@@ -69,13 +74,18 @@ class UserOperations extends APIOperations
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getLoggedInUserDataJsonResponse()
+    public function getLoggedInUserDataJsonResponse(Request $request)
     {
-        if ($this->user) {
-            $userData = $this->getUserData($this->user);
-            $userData['token'] = '';
+        $loggedInUser = $this->getLoggedInUser();
+        if ($loggedInUser) {
+            $userData = $this->getUserData($loggedInUser);
+            $authorizationHeader = $request->headers->get('Authorization');
+            if ($authorizationHeader) {
+                $userData['token'] = str_replace('Bearer ', '', $authorizationHeader);
+            }
             return new JsonResponse($userData);
         }
         return $this->getInvalidCredentialsJsonResponse();

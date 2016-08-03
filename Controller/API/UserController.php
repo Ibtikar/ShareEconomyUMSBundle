@@ -115,7 +115,7 @@ class UserController extends Controller
             if ($tempUrlPath) {
                 @unlink($tempUrlPath);
             }
-            return $userOperations->getLoggedInUserDataJsonResponse();
+            return $userOperations->getLoggedInUserDataJsonResponse($request);
         } catch (\Exception $e) {
             return $userOperations->getErrorJsonResponse($e->getMessage());
         }
@@ -139,14 +139,15 @@ class UserController extends Controller
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
      * @return JsonResponse
      */
-    public function removeProfilePictureAction()
+    public function removeProfilePictureAction(Request $request)
     {
         $user = $this->getUser();
         $user->removeImage();
         $this->getDoctrine()->getManager()->flush($user);
-        return $this->get('user_operations')->getLoggedInUserDataJsonResponse();
+        return $this->get('user_operations')->getLoggedInUserDataJsonResponse($request);
     }
 
     /**
