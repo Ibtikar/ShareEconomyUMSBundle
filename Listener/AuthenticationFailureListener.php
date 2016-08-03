@@ -45,7 +45,7 @@ class AuthenticationFailureListener
             }
         }
         $response = new JsonResponse(array(
-            'status' => 'error',
+            'status' => false,
             'code' => 401,
             'message' => $this->translator->trans($errorMessage, array(), 'security'),
         ));

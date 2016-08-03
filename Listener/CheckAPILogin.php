@@ -41,7 +41,7 @@ class CheckAPILogin
                         return;
                     }
                 }
-                $event->setResponse(new JsonResponse(array('status' => 'error', 'code' => 401, 'message' => 'Invalid credentials')));
+                $event->setResponse(new JsonResponse(array('status' => false, 'code' => 401, 'message' => 'Invalid credentials')));
             }
         }
     }

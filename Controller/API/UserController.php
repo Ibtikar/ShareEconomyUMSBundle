@@ -99,7 +99,7 @@ class UserController extends Controller
             if ($tempUrlPath) {
                 @unlink($tempUrlPath);
             }
-            return new JsonResponse($userOperations->getUserData($this->getUser()));
+            return $userOperations->getLoggedInUserDataJsonResponse($this->getUser());
         } catch (\Exception $e) {
             return $userOperations->getErrorResponse($e->getMessage());
         }
@@ -121,7 +121,7 @@ class UserController extends Controller
         $user = $this->getUser();
         $user->removeImage();
         $this->getDoctrine()->getManager()->flush($user);
-        return new JsonResponse($this->get('user_operations')->getUserData($this->getUser()));
+        return $this->get('user_operations')->getLoggedInUserDataJsonResponse();
     }
 
     /**

@@ -2,9 +2,11 @@
 
 namespace Ibtikar\ShareEconomyUMSBundle\Service;
 
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\User as ResponseUser;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
+use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -12,12 +14,34 @@ use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
 class UserOperations extends APIOperations
 {
 
+    /** @var $securityTokenStorage TokenStorage */
+    private $securityTokenStorage;
+
+    /** @var $user User|null */
+    private $user;
+
     /**
      * @param string $assetsDomain
      */
-    public function __construct($assetsDomain)
+    public function __construct($assetsDomain, TokenStorage $securityTokenStorage)
     {
         parent::__construct($assetsDomain);
+        $this->securityTokenStorage = $securityTokenStorage;
+        $token = $this->securityTokenStorage->getToken();
+        if ($token && is_object($token)) {
+            $user = $token->getUser();
+            if (is_object($user) && $user instanceof User) {
+                $this->user = $user;
+            }
+        }
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getInvalidCredentialsJsonResponse()
+    {
+        return $this->getJsonResponseForObject(new APIResponse\InvalidCredentials());
     }
 
     /**
@@ -26,7 +50,7 @@ class UserOperations extends APIOperations
      */
     public function getUserData(User $user)
     {
-        $responseUser = new ResponseUser();
+        $responseUser = new APIResponse\User();
         $responseUser->id = $user->getId();
         $responseUser->fullName = $user->getFullName();
         $responseUser->email = $user->getEmail();
@@ -37,5 +61,18 @@ class UserOperations extends APIOperations
             $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
         }
         return $this->getObjectDataAsArray($responseUser);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function getLoggedInUserDataJsonResponse()
+    {
+        if ($this->user) {
+            $userData = $this->getUserData($this->user);
+            $userData['token'] = '';
+            return new JsonResponse($userData);
+        }
+        return $this->getInvalidCredentialsJsonResponse();
     }
 }
