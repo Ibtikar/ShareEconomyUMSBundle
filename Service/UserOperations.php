@@ -37,11 +37,16 @@ class UserOperations extends APIOperations
     }
 
     /**
+     * @param string|null $message
      * @return JsonResponse
      */
-    public function getInvalidCredentialsJsonResponse()
+    public function getInvalidCredentialsJsonResponse($message = null)
     {
-        return $this->getJsonResponseForObject(new APIResponse\InvalidCredentials());
+        $errorResponse = new APIResponse\InvalidCredentials();
+        if ($message) {
+            $errorResponse->message = $message;
+        }
+        return $this->getJsonResponseForObject($errorResponse);
     }
 
     /**

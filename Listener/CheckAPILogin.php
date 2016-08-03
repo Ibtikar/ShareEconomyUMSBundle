@@ -6,6 +6,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserTo
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 
 /**
@@ -17,12 +18,17 @@ class CheckAPILogin
     /** @var $securityTokenStorage TokenStorage */
     private $securityTokenStorage;
 
+    /** @var UserOperations $userOperations */
+    private $userOperations;
+
     /**
      * @param TokenStorage $securityTokenStorage
+     * @param UserOperations $userOperations
      */
-    public function __construct(TokenStorage $securityTokenStorage)
+    public function __construct(TokenStorage $securityTokenStorage, UserOperations $userOperations)
     {
         $this->securityTokenStorage = $securityTokenStorage;
+        $this->userOperations = $userOperations;
     }
 
     /**
@@ -41,7 +47,7 @@ class CheckAPILogin
                         return;
                     }
                 }
-                $event->setResponse(new JsonResponse(array('status' => false, 'code' => 401, 'message' => 'Invalid credentials')));
+                $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse());
             }
         }
     }

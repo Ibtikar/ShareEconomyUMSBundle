@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
+use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -17,13 +18,17 @@ class AuthenticationFailureListener
     /** @var $tranlator TranslatorInterface */
     private $translator;
 
+    /** @var UserOperations $userOperations */
+    private $userOperations;
+
     /**
      * @param TranslatorInterface $translator
-     * @param string $locale
+     * @param UserOperations $userOperations
      */
-    public function __construct(TranslatorInterface $translator)
+    public function __construct(TranslatorInterface $translator, UserOperations $userOperations)
     {
         $this->translator = $translator;
+        $this->userOperations = $userOperations;
     }
 
     /**
@@ -44,11 +49,6 @@ class AuthenticationFailureListener
                 }
             }
         }
-        $response = new JsonResponse(array(
-            'status' => false,
-            'code' => 401,
-            'message' => $this->translator->trans($errorMessage, array(), 'security'),
-        ));
-        $event->setResponse($response);
+        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse($this->translator->trans($errorMessage, array(), 'security')));
     }
 }

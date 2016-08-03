@@ -6,7 +6,7 @@ services:
 
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener
-        arguments: [ '@translator' ]
+        arguments: [ '@translator', '@user_operations' ]
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
 
@@ -20,7 +20,7 @@ services:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\CheckAPILogin
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onRequest }
-        arguments: [ '@security.token_storage' ]
+        arguments: [ '@security.token_storage', '@user_operations' ]
 
     ibtikar.shareeconomy.ums.email_sender:
         class:  Ibtikar\ShareEconomyUMSBundle\Service\EmailSender
