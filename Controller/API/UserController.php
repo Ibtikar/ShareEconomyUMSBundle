@@ -115,9 +115,9 @@ class UserController extends Controller
             if ($tempUrlPath) {
                 @unlink($tempUrlPath);
             }
-            return $userOperations->getLoggedInUserDataJsonResponse($this->getUser());
+            return $userOperations->getLoggedInUserDataJsonResponse();
         } catch (\Exception $e) {
-            return $userOperations->getErrorResponse($e->getMessage());
+            return $userOperations->getErrorJsonResponse($e->getMessage());
         }
     }
 
@@ -173,7 +173,7 @@ class UserController extends Controller
         if ($user) {
             return new JsonResponse($userOperations->getUserData($user));
         }
-        return $userOperations->getNotFoundErrorResponse();
+        return $userOperations->getNotFoundErrorJsonResponse();
     }
 
     /**
