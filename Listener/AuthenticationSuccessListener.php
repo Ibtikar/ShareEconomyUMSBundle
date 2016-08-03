@@ -3,7 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
+use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 
 /**
@@ -12,15 +12,15 @@ use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 class AuthenticationSuccessListener
 {
 
-    /** @var APIOperations $APIOperations */
-    private $APIOperations;
+    /** @var UserOperations $userOperations */
+    private $userOperations;
 
     /**
-     * @param APIOperations $APIOperations
+     * @param UserOperations $userOperations
      */
-    public function __construct(APIOperations $APIOperations)
+    public function __construct(UserOperations $userOperations)
     {
-        $this->APIOperations = $APIOperations;
+        $this->userOperations = $userOperations;
     }
 
     /**
@@ -33,7 +33,7 @@ class AuthenticationSuccessListener
         if (!$user instanceof User) {
             return;
         }
-        $userData = $this->APIOperations->getUserData($user);
+        $userData = $this->userOperations->getUserData($user);
         foreach ($userData as $key => $value) {
             $data[$key] = $value;
         }
