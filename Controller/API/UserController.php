@@ -615,6 +615,53 @@ class UserController extends Controller
     }
 
     /**
+     * send forgot password email
+     *
+     * @ApiDoc(
+     *  description="send forgot password email",
+     *  section="User",
+     *  parameters={
+     *      {"name"="email", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function sendResetPasswordEmailAction(Request $request)
+    {
+        $em   = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
+
+        if (!$user) {
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('email_not_registered');
+        } else {
+            if (!$user->canRequestForgetPasswordEmail()) {
+                $output          = new FailResponse();
+                $output->message = $this->get('translator')->trans('reach_max_forget_password_requests_error');
+            } else {
+                $user->generateNewForgetPasswordToken();
+                $em->flush();
+                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
+
+                $output = new SuccessResponse();
+            }
+        }
+
+        return new JsonResponse($output);
+    }
+
+    /**
      *
      * @param type $user
      * @param type $code

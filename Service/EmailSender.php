@@ -37,7 +37,7 @@ class EmailSender
     }
 
     /**
-     * send email verification email
+     * send verification email
      *
      * @param User $user
      * @return type
@@ -45,6 +45,17 @@ class EmailSender
     public function sendEmailVerification(User $user)
     {
         return $this->send($user->getEmail(), 'Please verify your email', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:emailVerification.html.twig', ['user' => $user]));
+    }
+
+    /**
+     * send forget password email
+     *
+     * @param User $user
+     * @return type
+     */
+    public function sendResetPasswordEmail(User $user)
+    {
+        return $this->send($user->getEmail(), 'Reset password', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', ['user' => $user]));
     }
 
 }

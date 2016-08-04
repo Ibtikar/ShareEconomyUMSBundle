@@ -37,4 +37,14 @@ class UserController extends Controller
 
     }
 
+    /**
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function resetPasswordAction(Request $request)
+    {
+
+    }
+
 }

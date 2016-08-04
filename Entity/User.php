@@ -25,10 +25,12 @@ use Doctrine\ORM\Mapping as ORM;
 class User implements AdvancedUserInterface, EquatableInterface
 {
 
-    const ROLE_SUPER_ADMIN      = 'ROLE_SUPER_ADMIN';
-    const ROLE_ADMIN            = 'ROLE_ADMIN';
-    const ROLE_CUSTOMER         = 'ROLE_CUSTOMER';
-    const ROLE_SERVICE_PROVIDER = 'ROLE_SERVICE_PROVIDER';
+    const ROLE_SUPER_ADMIN                         = 'ROLE_SUPER_ADMIN';
+    const ROLE_ADMIN                               = 'ROLE_ADMIN';
+    const ROLE_CUSTOMER                            = 'ROLE_CUSTOMER';
+    const ROLE_SERVICE_PROVIDER                    = 'ROLE_SERVICE_PROVIDER';
+    const MAX_FORGET_PASSWORD_REQUESTS_PER_DAY     = 5;
+    const MAX_VERIFICATION_EMAILS_REQUESTS_PER_DAY = 5;
 
     /**
      * @var int
@@ -138,6 +140,34 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @ORM\Column(name="changePasswordTokenExpiryTime", type="datetime", nullable=true)
      */
     private $changePasswordTokenExpiryTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastForgetPasswordRequestDate", type="datetime", nullable=true)
+     */
+    private $lastForgetPasswordRequestDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="forgetPasswordRequests", type="smallint", nullable=true)
+     */
+    private $forgetPasswordRequests = 0;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastEmailVerificationRequestDate", type="datetime", nullable=true)
+     */
+    private $lastEmailVerificationRequestDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="verificationEmailRequests", type="smallint", nullable=true)
+     */
+    private $verificationEmailRequests = 0;
 
     /**
      * @var string
@@ -692,6 +722,102 @@ class User implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
+     * Set lastForgetPasswordRequestDate
+     *
+     * @param \DateTime $lastForgetPasswordRequestDate
+     *
+     * @return User
+     */
+    public function setLastForgetPasswordRequestDate($lastForgetPasswordRequestDate)
+    {
+        $this->lastForgetPasswordRequestDate = $lastForgetPasswordRequestDate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastForgetPasswordRequestDate
+     *
+     * @return \DateTime
+     */
+    public function getLastForgetPasswordRequestDate()
+    {
+        return $this->lastForgetPasswordRequestDate;
+    }
+
+    /**
+     * Set forgetPasswordRequests
+     *
+     * @param integer $forgetPasswordRequests
+     *
+     * @return User
+     */
+    public function setForgetPasswordRequests($forgetPasswordRequests)
+    {
+        $this->forgetPasswordRequests = $forgetPasswordRequests;
+
+        return $this;
+    }
+
+    /**
+     * Get forgetPasswordRequests
+     *
+     * @return integer
+     */
+    public function getForgetPasswordRequests()
+    {
+        return $this->forgetPasswordRequests;
+    }
+
+    /**
+     * Set lastEmailVerificationRequestDate
+     *
+     * @param \DateTime $lastEmailVerificationRequestDate
+     *
+     * @return User
+     */
+    public function setLastEmailVerificationRequestDate($lastEmailVerificationRequestDate)
+    {
+        $this->lastEmailVerificationRequestDate = $lastEmailVerificationRequestDate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastEmailVerificationRequestDate
+     *
+     * @return \DateTime
+     */
+    public function getLastEmailVerificationRequestDate()
+    {
+        return $this->lastEmailVerificationRequestDate;
+    }
+
+    /**
+     * Set verificationEmailRequests
+     *
+     * @param integer $verificationEmailRequests
+     *
+     * @return User
+     */
+    public function setVerificationEmailRequests($verificationEmailRequests)
+    {
+        $this->verificationEmailRequests = $verificationEmailRequests;
+
+        return $this;
+    }
+
+    /**
+     * Get verificationEmailRequests
+     *
+     * @return integer
+     */
+    public function getVerificationEmailRequests()
+    {
+        return $this->verificationEmailRequests;
+    }
+
+    /**
      * Set fullName
      *
      * @param string $fullName
@@ -936,10 +1062,77 @@ class User implements AdvancedUserInterface, EquatableInterface
      * generate random email verification token
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     * @return string
      */
     public function generateNewEmailVerificationToken()
     {
-        return $this->setEmailVerificationToken(bin2hex(random_bytes(32)));
+        $now = new \DateTime();
+
+        if (null !== $this->getLastEmailVerificationRequestDate() && $this->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) {
+            $this->setVerificationEmailRequests($this->getVerificationEmailRequests() + 1);
+        } else {
+            $this->setVerificationEmailRequests(1);
+            $this->setLastEmailVerificationRequestDate($now);
+        }
+
+        $this->setEmailVerificationTokenExpiryTime(new \DateTime('+1 day'));
+        $this->setEmailVerificationToken(bin2hex(random_bytes(32)));
+    }
+
+    /**
+     * generate random forget password token
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function generateNewForgetPasswordToken()
+    {
+        $now = new \DateTime();
+
+        if (null !== $this->getLastForgetPasswordRequestDate() && $this->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) {
+            $this->setForgetPasswordRequests($this->getForgetPasswordRequests() + 1);
+        } else {
+            $this->setForgetPasswordRequests(1);
+            $this->setLastForgetPasswordRequestDate($now);
+        }
+
+        $this->setChangePasswordTokenExpiryTime(new \DateTime('+1 day'));
+        $this->setChangePasswordToken(bin2hex(random_bytes(32)));
+    }
+
+    /**
+     * check the ability of requesting new forget password email
+     *
+     * @return boolean
+     */
+    public function canRequestForgetPasswordEmail()
+    {
+        $now    = new \DateTime();
+        $return = true;
+
+        if (null !== $this->getLastForgetPasswordRequestDate()) {
+            if (($this->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) && $this->getForgetPasswordRequests() >= self::MAX_FORGET_PASSWORD_REQUESTS_PER_DAY) {
+                $return = false;
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * check the ability of requesting new forget password email
+     *
+     * @return boolean
+     */
+    public function canRequestVerificationEmail()
+    {
+        $now    = new \DateTime();
+        $return = true;
+
+        if (null !== $this->getLastEmailVerificationRequestDate()) {
+            if (($this->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) && $this->getVerificationEmailRequests() >= self::MAX_VERIFICATION_EMAILS_REQUESTS_PER_DAY) {
+                $return = false;
+            }
+        }
+
+        return $return;
     }
 }

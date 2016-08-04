@@ -1,2 +1,4 @@
 "wrong_verification_code": "Invalid Verification Code."
 "expired_verification_code": "Verification code is expired."
+"email_not_registered": "The entered email is not registered, please enter again."
+"reach_max_forget_password_requests_error": "You reached the maximum tries of requesting new reset password email"

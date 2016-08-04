@@ -1,2 +1,4 @@
 "wrong_verification_code": "رقم تفعيل خاطئ"
 "expired_verification_code": "انتهت صلاحية رقم التفعيل"
+"email_not_registered": "البريد الالكتروني المدخل غير مسجل لدينا يرجى الإدخال مرة اخرى"
+"reach_max_forget_password_requests_error": "لقد استنفذت جميع المحاولات المسموح بها لطلب تعيين كلمة مرور جديدة"
