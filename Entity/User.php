@@ -130,7 +130,7 @@ class User implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="changePasswordToken", type="string", length=32, nullable=true)
+     * @ORM\Column(name="changePasswordToken", type="string", length=100, nullable=true)
      */
     private $changePasswordToken;
 
