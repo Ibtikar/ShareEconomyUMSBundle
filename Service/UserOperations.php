@@ -86,7 +86,9 @@ class UserOperations extends APIOperations
             if ($authorizationHeader) {
                 $userData['token'] = str_replace('Bearer ', '', $authorizationHeader);
             }
-            return new JsonResponse($userData);
+            $loggedInUserResponse = new APIResponse\SuccessLoggedInUser();
+            $loggedInUserResponse->user = $userData;
+            return $this->getJsonResponseForObject($loggedInUserResponse);
         }
         return $this->getInvalidCredentialsJsonResponse();
     }

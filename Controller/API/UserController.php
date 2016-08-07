@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse as UMSApiResponse;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\Success as SuccessResponse;
@@ -35,7 +36,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
@@ -66,7 +67,7 @@ class UserController extends Controller
      *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
      *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
@@ -133,7 +134,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
@@ -160,7 +161,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\User",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessUser",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
      * )
@@ -172,7 +173,9 @@ class UserController extends Controller
         $userOperations = $this->get('user_operations');
         $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         if ($user) {
-            return new JsonResponse($userOperations->getUserData($user));
+            $data = $userOperations->getObjectDataAsArray(new UMSApiResponse\SuccessUser());
+            $data['user'] = $userOperations->getUserData($user);
+            return new JsonResponse($data);
         }
         return $userOperations->getNotFoundErrorJsonResponse();
     }
