@@ -662,6 +662,57 @@ class UserController extends Controller
     }
 
     /**
+     * resend verification email
+     *
+     * @ApiDoc(
+     *  description="Resend verification email",
+     *  section="User",
+     *  parameters={
+     *      {"name"="email", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *      400 = "Validation failed."
+     *  },
+     *  responseMap = {
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function resendVerificationEmailAction(Request $request)
+    {
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
+
+        if (!$user) {
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
+        } else if ($user->getEmailVerified()) {
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('user_already_verified');
+        } else if (!$user->canRequestVerificationEmail()) {
+            $output          = new FailResponse();
+            $output->message = $this->get('translator')->trans('reach_max_verification_email_requests_error');
+        } else {
+            $user->generateNewEmailVerificationToken();
+            $em->flush();
+
+            // send verification email
+            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+
+            $em->flush();
+            $output = new SuccessResponse();
+        }
+
+        return $this->get('api_operations')->getJsonResponseForObject($output);
+    }
+
+    /**
      *
      * @param type $user
      * @param type $code
