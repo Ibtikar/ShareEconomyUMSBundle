@@ -2,7 +2,7 @@
 
 namespace Ibtikar\ShareEconomyUMSBundle\Service;
 
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
@@ -15,16 +15,38 @@ use Ibtikar\ShareEconomyUMSBundle\APIResponse;
 class UserOperations extends APIOperations
 {
 
-    /** @var $securityTokenStorage TokenStorage */
-    private $securityTokenStorage;
+    /** @var $container ContainerAwareInterface */
+    private $container;
+
+    public function __construct($container)
+    {
+        $this->container = $container;
+        parent::__construct($container->getParameter('assets_domain'));
+        $this->securityTokenStorage = $container->get('security.token_storage');
+    }
 
     /**
-     * @param string $assetsDomain
+     * Gets a container service by its id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
      */
-    public function __construct($assetsDomain, TokenStorage $securityTokenStorage)
+    public function get($id)
     {
-        parent::__construct($assetsDomain);
-        $this->securityTokenStorage = $securityTokenStorage;
+        return $this->container->get($id);
+    }
+
+    /**
+     * Gets a container configuration parameter by its name.
+     *
+     * @param string $name The parameter name
+     *
+     * @return mixed
+     */
+    public function getParameter($name)
+    {
+        return $this->container->getParameter($name);
     }
 
     /**
@@ -32,7 +54,7 @@ class UserOperations extends APIOperations
      */
     public function getLoggedInUser()
     {
-        $token = $this->securityTokenStorage->getToken();
+        $token = $this->container->get('security.token_storage')->getToken();
         if ($token && is_object($token)) {
             $user = $token->getUser();
             if (is_object($user) && $user instanceof User) {
@@ -91,5 +113,29 @@ class UserOperations extends APIOperations
             return $this->getJsonResponseForObject($loggedInUserResponse);
         }
         return $this->getInvalidCredentialsJsonResponse();
+    }
+
+    /**
+     * @param string $userEmail
+     * @return string
+     */
+    public function sendResetPasswordEmail($userEmail)
+    {
+        $translator = $this->get('translator');
+        if (!$userEmail) {
+            return $translator->trans('fill_mandatory_field', array(), 'validators');
+        }
+        $em = $this->get('doctrine')->getManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $userEmail]);
+        if (!$user) {
+            return $translator->trans('email_not_registered');
+        }
+        if (!$user->canRequestForgetPasswordEmail()) {
+            return $translator->trans('reach_max_forget_password_requests_error');
+        }
+        $user->generateNewForgetPasswordToken();
+        $em->flush($user);
+        $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
+        return 'success';
     }
 }

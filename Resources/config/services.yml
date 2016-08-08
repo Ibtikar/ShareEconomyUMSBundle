@@ -2,7 +2,7 @@ services:
 
     user_operations:
         class: Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
-        arguments: [ '%assets_domain%', '@security.token_storage' ]
+        arguments: [ '@service_container' ]
 
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener

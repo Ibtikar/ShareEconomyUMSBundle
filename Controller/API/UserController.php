@@ -642,26 +642,13 @@ class UserController extends Controller
      */
     public function sendResetPasswordEmailAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
-
-        if (!$user) {
-            $output          = new FailResponse();
-            $output->message = $this->get('translator')->trans('email_not_registered');
-        } else {
-            if (!$user->canRequestForgetPasswordEmail()) {
-                $output          = new FailResponse();
-                $output->message = $this->get('translator')->trans('reach_max_forget_password_requests_error');
-            } else {
-                $user->generateNewForgetPasswordToken();
-                $em->flush();
-                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
-
-                $output = new SuccessResponse();
-            }
+        /** @var Ibtikar\ShareEconomyUMSBundle\Service\UserOperations $userOperations */
+        $userOperations = $this->get('user_operations');
+        $message = $userOperations->sendResetPasswordEmail($request->get('email'));
+        if ($message === 'success') {
+            return $userOperations->getSuccessJsonResponse();
         }
-
-        return new JsonResponse($output);
+        return $userOperations->getSingleErrorJsonResponse($message);
     }
 
     /**
