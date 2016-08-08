@@ -3,8 +3,8 @@
     <p>Dear {{ user.fullName }};</p>
     <p>
         Please verify your email by clicking on the following link:<br>
-        <a href="{{ url('ibtikar_share_economy_ums_verify_email', {'token':user.emailVerificationToken}) }}">
-            {{ url('ibtikar_share_economy_ums_verify_email', {'token':user.emailVerificationToken}) }}
+        <a href="{{ url('ibtikar_share_economy_ums_verify_email', {'email':user.email, 'token':user.emailVerificationToken}) }}">
+            {{ url('ibtikar_share_economy_ums_verify_email', {'email':user.email, 'token':user.emailVerificationToken}) }}
         </a>
     </p>
 {% endblock %}

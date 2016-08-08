@@ -1,0 +1,5 @@
+{% for label, flashes in app.session.flashbag.all %}
+    {% for flash in flashes %}
+        {{ label }}: {{ flash }}
+    {% endfor %}
+{% endfor %}

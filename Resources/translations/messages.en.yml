@@ -3,3 +3,4 @@
 "email_not_registered": "The entered email is not registered, please enter again."
 "reach_max_forget_password_requests_error": "You reached the maximum tries of requesting new reset password email"
 "user_already_verified": "This email already verified"
+"reach_max_verification_email_requests_error": "You reached the maximum tries of requesting verification email"

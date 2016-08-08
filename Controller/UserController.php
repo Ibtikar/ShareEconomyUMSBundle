@@ -34,7 +34,29 @@ class UserController extends Controller
      */
     public function verifyEmailAction(Request $request)
     {
+        $em   = $this->getDoctrine()->getEntityManager();
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email'), 'emailVerificationToken' => $request->get('token')]);
 
+        if (!$user) {
+            return $this->createNotFoundException();
+        }
+
+        $now = new \DateTime();
+
+        if ($user->getEmailVerificationTokenExpiryTime() < $now) {
+            $this->addFlash('error', 'انتهت صلاحية استخدام هذا الرابط, من فضلك قم بطلب رابط تأكيد جديد.');
+        } else {
+            $user->setEmailVerified(true);
+            $user->setEmailVerificationToken(null);
+            $user->setEmailVerificationTokenExpiryTime(null);
+            $em->flush();
+
+            $this->addFlash('success', 'تم تفعيل البريد الإلكتروني بنجاح.');
+        }
+
+        $layout = $this->getParameter('ibtikar_share_economy_ums.frontend_layout');
+
+        return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $layout]);
     }
 
     /**

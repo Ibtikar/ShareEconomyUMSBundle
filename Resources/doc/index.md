@@ -25,10 +25,15 @@ Installation steps
 
 5.Update the security.yml file to match this [file](http://github.com/Ibtikar/share-economy-UMS/tree/master/Resources/doc/security.yml)
 
-6.Add the next line to your .gitignore file
+6.Configure the bundle templates: add the following lines to your project config.yml
+    
+    ibtikar_share_economy_cms:
+        frontend_layout: "AppBundle:Frontend:layout.html.twig"
+
+7.Add the next line to your .gitignore file
 
     /src/Ibtikar/ShareEconomyUMSBundle
 
-7.Run doctrine migrations command
+8.Run doctrine migrations command
 
     bin/console doctrine:migrations:migrate --configuration=src/Ibtikar/ShareEconomyUMSBundle/Resources/config/migrations.yml
