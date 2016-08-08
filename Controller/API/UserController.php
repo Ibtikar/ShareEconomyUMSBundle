@@ -626,13 +626,15 @@ class UserController extends Controller
      *  parameters={
      *      {"name"="email", "dataType"="string", "required"=true}
      *  },
-     *  statusCodes = {
-     *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *  statusCodes={
+     *      200="Returned on success",
+     *      403="Returned if the api key is not valid",
+     *      422="Returned if there is a validation error in the sent data"
      *  },
      *  responseMap = {
-     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\Fail"
      *  }
      * )
      *
