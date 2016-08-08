@@ -3,6 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 
@@ -28,15 +29,18 @@ class AuthenticationSuccessListener
      */
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
-        $data = $event->getData();
+        $eventData = $event->getData();
         $user = $event->getUser();
         if (!$user instanceof User) {
             return;
         }
+        $loggedInUserResponse = new SuccessLoggedInUser();
+        $responseData = $this->userOperations->getObjectDataAsArray($loggedInUserResponse);
+        $responseData['user'] = array('token' => $eventData['token']);
         $userData = $this->userOperations->getUserData($user);
         foreach ($userData as $key => $value) {
-            $data[$key] = $value;
+            $responseData['user'][$key] = $value;
         }
-        $event->setData($data);
+        $event->setData($responseData);
     }
 }

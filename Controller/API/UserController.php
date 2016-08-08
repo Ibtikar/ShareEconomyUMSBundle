@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Ibtikar\ShareEconomyUMSBundle\APIResponse as UMSApiResponse;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\Success as SuccessResponse;
@@ -35,7 +36,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
@@ -66,7 +67,7 @@ class UserController extends Controller
      *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
      *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\ValidationErrors",
@@ -133,7 +134,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\LoggedInUser",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
@@ -160,7 +161,7 @@ class UserController extends Controller
      *      403="Returned if the api key is not valid"
      *  },
      *  responseMap = {
-     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\User",
+     *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessUser",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
      *  }
      * )
@@ -172,7 +173,9 @@ class UserController extends Controller
         $userOperations = $this->get('user_operations');
         $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         if ($user) {
-            return new JsonResponse($userOperations->getUserData($user));
+            $data = $userOperations->getObjectDataAsArray(new UMSApiResponse\SuccessUser());
+            $data['user'] = $userOperations->getUserData($user);
+            return new JsonResponse($data);
         }
         return $userOperations->getNotFoundErrorJsonResponse();
     }
@@ -623,13 +626,15 @@ class UserController extends Controller
      *  parameters={
      *      {"name"="email", "dataType"="string", "required"=true}
      *  },
-     *  statusCodes = {
-     *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *  statusCodes={
+     *      200="Returned on success",
+     *      403="Returned if the api key is not valid",
+     *      422="Returned if there is a validation error in the sent data"
      *  },
      *  responseMap = {
-     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\Fail"
      *  }
      * )
      *
@@ -639,26 +644,13 @@ class UserController extends Controller
      */
     public function sendResetPasswordEmailAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
-
-        if (!$user) {
-            $output          = new FailResponse();
-            $output->message = $this->get('translator')->trans('email_not_registered');
-        } else {
-            if (!$user->canRequestForgetPasswordEmail()) {
-                $output          = new FailResponse();
-                $output->message = $this->get('translator')->trans('reach_max_forget_password_requests_error');
-            } else {
-                $user->generateNewForgetPasswordToken();
-                $em->flush();
-                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
-
-                $output = new SuccessResponse();
-            }
+        /** @var Ibtikar\ShareEconomyUMSBundle\Service\UserOperations $userOperations */
+        $userOperations = $this->get('user_operations');
+        $message = $userOperations->sendResetPasswordEmail($request->get('email'));
+        if ($message === 'success') {
+            return $userOperations->getSuccessJsonResponse();
         }
-
-        return new JsonResponse($output);
+        return $userOperations->getSingleErrorJsonResponse($message);
     }
 
     /**
