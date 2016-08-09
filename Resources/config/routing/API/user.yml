@@ -24,24 +24,33 @@ ibtikar_share_economy_ums_register_customer:
     methods:  POST
 
 ibtikar_share_economy_ums_check_verification_code:
-    path:     /check-verification-code
+    path:     /check-verification-code/{id}/{code}
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:checkVerificationCode }
     methods:  GET
+    requirements:
+        id:  \d+
+        code:  \d+
 
 ibtikar_share_economy_ums_resend_verification_code:
-    path:     /resend-verification-code
+    path:     /resend-verification-code/{id}
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:resendVerificationCode }
     methods:  GET
+    requirements:
+        id:  \d+
 
 ibtikar_share_economy_ums_get_verification_remaining_time:
-    path:     /verification-remaining-time
+    path:     /verification-remaining-time/{id}
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getVerificationRemainingTime }
     methods:  GET
+    requirements:
+        id:  \d+
 
 ibtikar_share_economy_ums_update_phone_number:
-    path:     /update-phone-number
+    path:     /update-phone-number/{id}
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:updatePhoneNumber }
     methods:  POST
+    requirements:
+        id:  \d+
     
 ibtikar_share_economy_ums_update_user_info:
     path:     /auth/update-user-info
@@ -49,9 +58,11 @@ ibtikar_share_economy_ums_update_user_info:
     methods:  POST
 
 ibtikar_share_economy_ums_is_email_verified:
-    path:     /is-email-verified
+    path:     /is-email-verified/{id}
     defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:isEmailVerified }
     methods:  GET
+    requirements:
+        id:  \d+
 
 ibtikar_share_economy_ums_change_password:
     path:     /auth/change-password

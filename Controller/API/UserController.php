@@ -332,7 +332,6 @@ class UserController extends Controller
      *  description="Check phone verification code validity",
      *  section="User",
      *  parameters={
-     *      {"name"="user_id", "dataType"="string", "required"=true},
      *      {"name"="code", "dataType"="string", "required"=true}
      *  },
      *  statusCodes = {
@@ -349,15 +348,15 @@ class UserController extends Controller
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return JsonResponse
      */
-    public function checkVerificationCodeAction(Request $request)
+    public function checkVerificationCodeAction(Request $request, $id, $code)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
-        $code = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id'), 'code' => $request->get('code')]);
+        $em               = $this->getDoctrine()->getEntityManager();
+        $user             = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code]);
 
-        if ($code) {
-            if ($code->isValid()) {
-                $code->setIsVerified(true);
+        if ($verificationCode) {
+            if ($verificationCode->isValid()) {
+                $verificationCode->setIsVerified(true);
                 $user->setIsPhoneVerified(true);
 
                 $em->flush();
@@ -382,9 +381,6 @@ class UserController extends Controller
      * @ApiDoc(
      *  description="Resend phone verification code validity",
      *  section="User",
-     *  parameters={
-     *      {"name"="user_id", "dataType"="string", "required"=true}
-     *  },
      *  statusCodes = {
      *      200 = "Returned on success",
      *      400 = "Validation failed."
@@ -399,10 +395,10 @@ class UserController extends Controller
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return JsonResponse
      */
-    public function resendVerificationCodeAction(Request $request)
+    public function resendVerificationCodeAction(Request $request, $id)
     {
         $em   = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
 
         if ($user) {
             if ($user->getIsPhoneVerified()){
@@ -437,9 +433,6 @@ class UserController extends Controller
      * @ApiDoc(
      *  description="get verification code remaining validity time in seconds",
      *  section="User",
-     *  parameters={
-     *      {"name"="user_id", "dataType"="string", "required"=true},
-     *  },
      *  statusCodes = {
      *      200 = "Returned on success",
      *  },
@@ -452,10 +445,10 @@ class UserController extends Controller
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return JsonResponse
      */
-    public function getVerificationRemainingTimeAction(Request $request)
+    public function getVerificationRemainingTimeAction(Request $request, $id)
     {
         $em              = $this->getDoctrine()->getEntityManager();
-        $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id')], ['createdAt' => 'desc']);
+        $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
         $output          = new UMSApiResponse\RemainingTime();
         $output->seconds = $code->getValidityRemainingSeconds();
 
@@ -469,8 +462,7 @@ class UserController extends Controller
      *  description="update phone number",
      *  section="User",
      *  parameters={
-     *      {"name"="user_id", "dataType"="string", "required"=true},
-     *      {"name"="phone", "dataType"="string", "required"=true},
+     *      {"name"="phone", "dataType"="string", "required"=true}
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
@@ -486,10 +478,10 @@ class UserController extends Controller
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return JsonResponse
      */
-    public function updatePhoneNumberAction(Request $request)
+    public function updatePhoneNumberAction(Request $request, $id)
     {
         $em             = $this->getDoctrine()->getEntityManager();
-        $user           = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $user           = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
 
         if ($user) {
             if ($user->getPhone() == $request->get('phone')) {
@@ -529,9 +521,6 @@ class UserController extends Controller
      * @ApiDoc(
      *  description="check if email verified or not",
      *  section="User",
-     *  parameters={
-     *      {"name"="user_id", "dataType"="string", "required"=true}
-     *  },
      *  statusCodes = {
      *      200 = "Returned if emial verified",
      *      400 = "Returned if email not verified yet."
@@ -546,10 +535,10 @@ class UserController extends Controller
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return JsonResponse
      */
-    public function isEmailVerifiedAction(Request $request)
+    public function isEmailVerifiedAction(Request $request, $id)
     {
         $em     = $this->getDoctrine()->getEntityManager();
-        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         $output = $user->getEmailVerified() ? new UMSApiResponse\Success() : new UMSApiResponse\Fail();
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
