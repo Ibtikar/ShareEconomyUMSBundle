@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * PhoneVerificationCode
  *
  * @ORM\Table(name="phone_verification_code", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\PhoneVerificationCodeRepository")
  */
 class PhoneVerificationCode
 {
@@ -170,7 +170,7 @@ class PhoneVerificationCode
      */
     public function generateCode()
     {
-        $this->setCode(mt_rand(10000, 99999));
+        $this->setCode(mt_rand(1000, 9999));
     }
 
     /**

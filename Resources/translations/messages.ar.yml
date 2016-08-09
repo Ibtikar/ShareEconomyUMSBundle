@@ -4,3 +4,6 @@
 "reach_max_forget_password_requests_error": "لقد استنفذت جميع المحاولات المسموح بها لطلب تعيين كلمة مرور جديدة"
 "user_already_verified": "هذا البريد الإلكتروني محقق منه بالفعل"
 "reach_max_verification_email_requests_error": "لقد استنفذت جميع المحاولات المسموح بها لطلب تحقيق بريدك"
+"something_went_wrong": "حدث خطأ. يرجى إعادة المحاولة في وقت لاحق"
+"reach_max_phone_verification_requests_error": "لقد استنفذت جميع المحاولات المسموح بها لطلب تحقيق تليفونك"
+"phone_already_verified": "هذا التليفون محقق منه بالفعل"

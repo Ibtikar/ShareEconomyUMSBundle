@@ -4,3 +4,6 @@
 "reach_max_forget_password_requests_error": "You reached the maximum tries of requesting new reset password email"
 "user_already_verified": "This email already verified"
 "reach_max_verification_email_requests_error": "You reached the maximum tries of requesting verification email"
+"something_went_wrong": "something went wrong please try again later"
+"reach_max_phone_verification_requests_error": "You reached the maximum tries of requesting phone verification code"
+"phone_already_verified": "Your phone is already verified"

@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse;
 
 /**
@@ -17,6 +18,8 @@ class UserOperations extends APIOperations
 
     /** @var $container ContainerAwareInterface */
     private $container;
+
+    const MAX_DAILY_VERIFICATION_CODE_REQUESTS = 5;
 
     public function __construct($container)
     {
@@ -137,5 +140,78 @@ class UserOperations extends APIOperations
         $em->flush($user);
         $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
         return 'success';
+    }
+
+    /**
+     * add new verification code to the user
+     *
+     * @param User $user
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return PhoneVerificationCode
+     */
+    public function addNewVerificationCode(User $user)
+    {
+        $phoneVerificationCode = new PhoneVerificationCode();
+        $phoneVerificationCode->generateCode();
+
+        $user->addPhoneVerificationCode($phoneVerificationCode);
+
+        return $phoneVerificationCode;
+    }
+
+    /**
+     * validate object and return error messages array
+     *
+     * @param type $object
+     * @param type $groups
+     * @return array
+     */
+    public function validateObject($object, $groups)
+    {
+        $validationMessages = [];
+        $errors             = $this->get('validator')->validate($object, null, $groups);
+
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
+                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
+            }
+        }
+
+        return $validationMessages;
+    }
+
+    /**
+     * send phone verification code SMS
+     *
+     * @param type $user
+     * @param type $code
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return boolean
+     */
+    public function sendVerificationCodeMessage(User $user, $code)
+    {
+        try {
+            $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
+            $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
+            $return  = true;
+        } catch (\Exception $ex) {
+            $return = false;
+        }
+
+        return $return;
+    }
+
+    /**
+     * check if the user reached the max todays requests
+     *
+     * @param User $user
+     * @return boolean
+     */
+    public function canRequestPhoneVerificationCode(User $user)
+    {
+        $em         = $this->get('doctrine')->getManager();
+        $codesCount = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->countTodaysCodes($user);
+
+        return $codesCount < self::MAX_DAILY_VERIFICATION_CODE_REQUESTS;
     }
 }

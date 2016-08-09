@@ -10,16 +10,21 @@ use Symfony\Component\Filesystem\Filesystem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse as UMSApiResponse;
 use Ibtikar\ShareEconomyUMSBundle\Entity\User;
-use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\Success as SuccessResponse;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail as FailResponse;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken as UserTokenResponse;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\RemainingTime as RemainingTimeResponse;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess as RegisterUserSuccessResponse;
-use Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail as RegisterUserFailResponse;
 
 class UserController extends Controller
 {
+    /**
+     *
+     * @var Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
+     */
+    public $userOperations;
+
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+
+        $this->userOperations = $this->get('user_operations');
+    }
 
     /**
      * Login with an existing user
@@ -216,36 +221,37 @@ class UserController extends Controller
         $user->setRoles([User::ROLE_CUSTOMER]);
         $user->setSystemUser(false);
 
-        $validator          = $this->get('validator');
-        $errors             = $validator->validate($user, null, ['signup']);
-        $validationMessages = [];
+        $validationMessages = $this->userOperations->validateObject($user, ['signup']);
 
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
-            }
-
-            $output         = new RegisterUserFailResponse();
+        if (count($validationMessages)) {
+            $output         = new UMSApiResponse\RegisterUserFail();
             $output->errors = $validationMessages;
         } else {
-            $phoneVerificationCode = new PhoneVerificationCode();
-            $phoneVerificationCode->generateCode();
-
-            $user->addPhoneVerificationCode($phoneVerificationCode);
+            $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
             $user->generateNewEmailVerificationToken();
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
-            $em->flush();
 
-            $output       = new RegisterUserSuccessResponse();
-            $output->user = $this->get('user_operations')->getUserData($user);
+            try {
+                $em->flush();
 
-            // send phone verification code
-            $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+                $output       = new UMSApiResponse\RegisterUserSuccess();
+                $output->user = $this->get('user_operations')->getUserData($user);
+            } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $exc) {
+                return $this->registerCustomerAction($request);
+            } catch (\Exception $exc) {
+                $output          = new UMSApiResponse\Fail();
+                $output->message = $this->get('translator')->trans("something_went_wrong");
+            }
 
-            // send verification email
-            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+            if ($output->status) {
+                // send phone verification code
+                $this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode);
+
+                // send verification email
+                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+            }
         }
 
         return new JsonResponse($output);
@@ -279,25 +285,18 @@ class UserController extends Controller
      */
     public function updateUserInfoAction(Request $request)
     {
-        $user = $this->getUser();
-
-        $oldEmail = $user->getEmail();
-        $oldPhone = $user->getPhone();
+        $user           = $this->getUser();
+        $oldEmail       = $user->getEmail();
+        $oldPhone       = $user->getPhone();
 
         $user->setFullName($request->get('fullName'));
         $user->setEmail($request->get('email'));
         $user->setPhone($request->get('phone'));
 
-        $validator          = $this->get('validator');
-        $errors             = $validator->validate($user, null, ['edit']);
-        $validationMessages = [];
+        $validationMessages = $this->userOperations->validateObject($user, ['edit']);
 
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
-            }
-
-            $output         = new RegisterUserFailResponse();
+        if (count($validationMessages)) {
+            $output         = new UMSApiResponse\RegisterUserFail();
             $output->errors = $validationMessages;
         } else {
             if ($user->getEmail() !== $oldEmail) {
@@ -309,20 +308,17 @@ class UserController extends Controller
             }
 
             if ($user->getPhone() !== $oldPhone) {
-                $phoneVerificationCode = new PhoneVerificationCode();
-                $phoneVerificationCode->generateCode();
-
-                $user->addPhoneVerificationCode($phoneVerificationCode);
+                $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
 
                 // send phone verification code
-                $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+                $this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode);
             }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
-            $output       = new RegisterUserSuccessResponse();
+            $output       = new UMSApiResponse\RegisterUserSuccess();
             $output->user = $this->get('user_operations')->getUserData($user);
         }
 
@@ -366,14 +362,14 @@ class UserController extends Controller
 
                 $em->flush();
 
-                $output        = new UserTokenResponse();
+                $output        = new UMSApiResponse\UserToken();
                 $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
-                $output          = new FailResponse();
+                $output          = new UMSApiResponse\Fail();
                 $output->message = $this->get('translator')->trans('expired_verification_code');
             }
         } else {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('wrong_verification_code');
         }
 
@@ -409,21 +405,26 @@ class UserController extends Controller
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
 
         if ($user) {
-            $phoneVerificationCode = new PhoneVerificationCode();
-            $phoneVerificationCode->generateCode();
-
-            $user->addPhoneVerificationCode($phoneVerificationCode);
-            $em->persist($user);
-
-            if ($this->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
-                $em->flush();
-                $output = new SuccessResponse();
+            if ($user->getIsPhoneVerified()){
+                $output          = new UMSApiResponse\Fail();
+                $output->message = $this->get('translator')->trans('phone_already_verified');
+            } elseif (!$this->userOperations->canRequestPhoneVerificationCode($user)){
+                $output          = new UMSApiResponse\Fail();
+                $output->message = $this->get('translator')->trans('reach_max_phone_verification_requests_error');
             } else {
-                $output          = new FailResponse();
-                $output->message = $this->get('translator')->trans('verification_message_not_sent', [], 'validators');
+                $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
+                $em->persist($user);
+
+                if ($this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
+                    $em->flush();
+                    $output = new UMSApiResponse\Success();
+                } else {
+                    $output          = new UMSApiResponse\Fail();
+                    $output->message = $this->get('translator')->trans('verification_message_not_sent', [], 'validators');
+                }
             }
         } else {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 
@@ -455,7 +456,7 @@ class UserController extends Controller
     {
         $em              = $this->getDoctrine()->getEntityManager();
         $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $request->get('user_id')], ['createdAt' => 'desc']);
-        $output          = new RemainingTimeResponse();
+        $output          = new UMSApiResponse\RemainingTime();
         $output->seconds = $code->getValidityRemainingSeconds();
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
@@ -487,42 +488,35 @@ class UserController extends Controller
      */
     public function updatePhoneNumberAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
+        $em             = $this->getDoctrine()->getEntityManager();
+        $user           = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
 
         if ($user) {
             if ($user->getPhone() == $request->get('phone')) {
-                $output          = new FailResponse();
+                $output          = new UMSApiResponse\Fail();
                 $output->message = $this->get('translator')->trans('same_phone_validation', [], 'validators');
             } else {
                 $user->setPhone($request->get('phone'));
-                $validator = $this->get('validator');
-                $errors    = $validator->validate($user, null, ['phone']);
+                $validationMessages = $this->userOperations->validateObject($user, ['phone']);
 
-                if (count($errors) > 0) {
-                    $output = new FailResponse();
-
-                    foreach ($errors as $error) {
-                        $output->message = $error->getMessage();
-                    }
+                if (count($validationMessages)) {
+                    $output = new UMSApiResponse\Fail();
+                    $output->message = $validationMessages['phone'];
                 } else {
-                    $phoneVerificationCode = new PhoneVerificationCode();
-                    $phoneVerificationCode->generateCode();
-
-                    $user->addPhoneVerificationCode($phoneVerificationCode);
+                    $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
                     $em->persist($user);
 
-                    if ($this->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
+                    if ($this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode)) {
                         $em->flush();
-                        $output = new SuccessResponse();
+                        $output = new UMSApiResponse\Success();
                     } else {
-                        $output          = new FailResponse();
+                        $output          = new UMSApiResponse\Fail();
                         $output->message = $this->get('translator')->trans('verification_message_not_sent', [], 'validators');
                     }
                 }
             }
         } else {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         }
 
@@ -556,7 +550,7 @@ class UserController extends Controller
     {
         $em     = $this->getDoctrine()->getEntityManager();
         $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($request->get('user_id'));
-        $output = $user->getEmailVerified() ? new SuccessResponse() : new FailResponse();
+        $output = $user->getEmailVerified() ? new UMSApiResponse\Success() : new UMSApiResponse\Fail();
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
     }
@@ -595,22 +589,16 @@ class UserController extends Controller
         $user->setOldPassword($request->get('oldPassword'));
         $user->setUserPassword($request->get('userPassword'));
 
-        $validator          = $this->get('validator');
-        $errors             = $validator->validate($user, null, ['changePassword']);
-        $validationMessages = [];
+        $validationMessages = $this->userOperations->validateObject($user, ['changePassword']);
 
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
-            }
-
-            $output         = new RegisterUserFailResponse();
+        if (count($validationMessages)) {
+            $output         = new UMSApiResponse\RegisterUserFail();
             $output->errors = $validationMessages;
         } else {
             $user->setValidPassword();
             $em->flush();
 
-            $output       = new RegisterUserSuccessResponse();
+            $output       = new UMSApiResponse\RegisterUserSuccess();
             $output->user = $this->get('user_operations')->getUserData($user);
         }
 
@@ -644,13 +632,11 @@ class UserController extends Controller
      */
     public function sendResetPasswordEmailAction(Request $request)
     {
-        /** @var Ibtikar\ShareEconomyUMSBundle\Service\UserOperations $userOperations */
-        $userOperations = $this->get('user_operations');
-        $message = $userOperations->sendResetPasswordEmail($request->get('email'));
+        $message = $this->userOperations->sendResetPasswordEmail($request->get('email'));
         if ($message === 'success') {
-            return $userOperations->getSuccessJsonResponse();
+            return $this->userOperations->getSuccessJsonResponse();
         }
-        return $userOperations->getSingleErrorJsonResponse($message);
+        return $this->userOperations->getSingleErrorJsonResponse($message);
     }
 
     /**
@@ -682,13 +668,13 @@ class UserController extends Controller
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
 
         if (!$user) {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('user_not_found', [], 'validators');
         } else if ($user->getEmailVerified()) {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('user_already_verified');
         } else if (!$user->canRequestVerificationEmail()) {
-            $output          = new FailResponse();
+            $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('reach_max_verification_email_requests_error');
         } else {
             $user->generateNewEmailVerificationToken();
@@ -698,31 +684,9 @@ class UserController extends Controller
             $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
 
             $em->flush();
-            $output = new SuccessResponse();
+            $output = new UMSApiResponse\Success();
         }
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
-    }
-
-    /**
-     *
-     * @param type $user
-     * @param type $code
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     * @return boolean
-     */
-    private function sendVerificationCodeMessage($user, $code)
-    {
-        $return = false;
-
-        try {
-            $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
-            $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
-            $return  = true;
-        } catch (\Exception $ex) {
-            $return = false;
-        }
-
-        return $return;
     }
 }
