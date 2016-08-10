@@ -64,6 +64,7 @@ class UserController extends Controller
         }
         return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
                 'form' => $form->createView(),
+                'title' => 'Forgot your password',
         ));
     }
 
@@ -144,6 +145,7 @@ class UserController extends Controller
         }
         return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
                 'form' => $form->createView(),
+                'title' => 'Reset your password',
         ));
     }
 }
