@@ -137,6 +137,7 @@ class UserController extends Controller
             if ($form->isValid()) {
                 $user->setValidPassword();
                 $user->setChangePasswordToken(null);
+                $user->setForgetPasswordRequests(0);
                 $user->setChangePasswordTokenExpiryTime(null);
                 $em->flush($user);
                 $this->addFlash('success', $translator->trans('Password changed sucessfully.'));
