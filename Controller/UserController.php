@@ -55,15 +55,14 @@ class UserController extends Controller
                 $loginCredentials = $data['loginCredentials'];
                 $message = $this->get('user_operations')->sendResetPasswordEmail($loginCredentials);
                 if ($message === 'success') {
-                    $successMessage = $message;
+                    $this->addFlash('success', $message);
                 } else {
-                    $errorMessage = $message;
+                    $this->addFlash('error', $message);
                 }
+                return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $this->getParameter('ibtikar_share_economy_ums.frontend_layout')]);
             }
         }
-        return $this->render('IbtikarShareEconomyUMSBundle:User:forgotPassword.html.twig', array(
-                'successMessage' => $successMessage,
-                'errorMessage' => $errorMessage,
+        return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
                 'form' => $form->createView(),
         ));
     }
@@ -110,7 +109,6 @@ class UserController extends Controller
         if (!$user) {
             throw $this->createNotFoundException();
         }
-        $successMessage = '';
         $currentTime = new \DateTime();
         $translator = $this->get('translator');
         $layout = $this->getParameter('ibtikar_share_economy_ums.frontend_layout');
@@ -144,8 +142,7 @@ class UserController extends Controller
                 return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $layout]);
             }
         }
-        return $this->render('IbtikarShareEconomyUMSBundle:User:resetPassword.html.twig', array(
-                'successMessage' => $successMessage,
+        return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
                 'form' => $form->createView(),
         ));
     }
