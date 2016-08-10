@@ -21,11 +21,13 @@ class UserOperations extends APIOperations
 
     const MAX_DAILY_VERIFICATION_CODE_REQUESTS = 5;
 
+    /**
+     * @param ContainerAwareInterface $container
+     */
     public function __construct($container)
     {
         $this->container = $container;
         parent::__construct($container->getParameter('assets_domain'));
-        $this->securityTokenStorage = $container->get('security.token_storage');
     }
 
     /**
@@ -213,5 +215,19 @@ class UserOperations extends APIOperations
         $codesCount = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->countTodaysCodes($user);
 
         return $codesCount < self::MAX_DAILY_VERIFICATION_CODE_REQUESTS;
+    }
+
+    /**
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param User $user
+     * @return boolean
+     */
+    public function verifyUserEmail(User $user)
+    {
+        $user->setEmailVerified(true);
+        $user->setEmailVerificationToken(null);
+        $user->setEmailVerificationTokenExpiryTime(null);
+        $this->get('doctrine')->getManager()->flush($user);
+        return true;
     }
 }
