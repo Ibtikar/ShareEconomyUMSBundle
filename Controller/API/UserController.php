@@ -456,6 +456,29 @@ class UserController extends Controller
     }
 
     /**
+     * get last phone verification code
+     *
+     * @ApiDoc(
+     *  description="get last phone verification code",
+     *  section="User",
+     *  statusCodes = {
+     *      200 = "Returned on success",
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function getLastPhoneVerificationCodeAction(Request $request, $id)
+    {
+        $em   = $this->getDoctrine()->getEntityManager();
+        $code = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
+
+        return new JsonResponse(['code' => $code->getCode()]);
+    }
+
+    /**
      * update phone number
      *
      * @ApiDoc(

@@ -44,6 +44,13 @@ ibtikar_share_economy_ums_get_verification_remaining_time:
     methods:  GET
     requirements:
         id:  \d+
+        
+ibtikar_share_economy_ums_get_last_phone_verification_code:
+    path:     /get-last-phone-verification-code/{id}
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:API/User:getLastPhoneVerificationCode }
+    methods:  GET
+    requirements:
+        id:  \d+
 
 ibtikar_share_economy_ums_update_phone_number:
     path:     /update-phone-number/{id}
