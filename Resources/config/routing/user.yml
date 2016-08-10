@@ -1,0 +1,18 @@
+ibtikar_share_economy_ums_login:
+    path:     /login
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:login }
+
+ibtikar_share_economy_ums_forgot_password:
+    path:     /forgot-password
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:forgotPassword }
+
+ibtikar_share_economy_ums_logout:
+    path:     /logout
+
+ibtikar_share_economy_ums_reset_password:
+    path:     /reset-password/{email}/{token}
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:resetPassword }
+
+ibtikar_share_economy_ums_verify_email:
+    path:     /verify-email/{email}/{token}
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:User:verifyEmail }

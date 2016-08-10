@@ -49,7 +49,7 @@ class PhoneVerificationCode
     /**
      * @var \Ibtikar\ShareEconomyUMSBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\User", inversedBy="phoneVerificationCodes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * })
