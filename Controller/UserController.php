@@ -79,7 +79,7 @@ class UserController extends Controller
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email'), 'emailVerificationToken' => $request->get('token')]);
 
         if (!$user) {
-            return $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
 
         $now = new \DateTime();
