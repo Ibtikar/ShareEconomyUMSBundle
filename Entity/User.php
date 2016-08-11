@@ -65,7 +65,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\NotBlank(groups={"signup", "changePassword", "resetPassword"}, message="fill_mandatory_field")
      * @Assert\Length(min = 6, max = 12, groups={"signup", "changePassword", "resetPassword"}, maxMessage="password_not_valid", minMessage="password_not_valid")
      * @Assert\Regex(pattern="/[a-zA-Zأ-ي]/", message="password_not_valid", groups={"signup", "changePassword", "resetPassword"})
-     * @Assert\Regex(pattern="/\d/", message="password_not_valid", groups={"signup", "changePassword", "resetPassword"})
+     * @Assert\Regex(pattern="/[0-9٠-٩]/", message="password_not_valid", groups={"signup", "changePassword", "resetPassword"})
      */
     private $userPassword;
 
