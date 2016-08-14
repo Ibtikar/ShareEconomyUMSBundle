@@ -193,6 +193,12 @@ class UserOperations extends APIOperations
     public function sendVerificationCodeMessage(User $user, $code)
     {
         try {
+            $message = $this->get('translator')->trans('Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes', array(
+                '%project%' => $this->getParameter('nexmo_from_name'),
+                '%code%' => $code->getCode(),
+                '%validationTimeInMinutes%' => PhoneVerificationCode::CODE_EXPIRY_MINUTES
+            ));
+            echo $message;exit;
             $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;

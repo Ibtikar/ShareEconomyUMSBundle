@@ -1,3 +1,4 @@
+"Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes": "Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes"
 "wrong_verification_code": "Invalid Verification Code."
 "expired_verification_code": "Verification code is expired."
 "email_not_registered": "The entered email is not registered, please enter again."
