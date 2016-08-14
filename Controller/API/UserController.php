@@ -331,9 +331,6 @@ class UserController extends Controller
      * @ApiDoc(
      *  description="Check phone verification code validity",
      *  section="User",
-     *  parameters={
-     *      {"name"="code", "dataType"="string", "required"=true}
-     *  },
      *  statusCodes = {
      *      200 = "Returned on success",
      *      400 = "Validation failed."
@@ -352,7 +349,7 @@ class UserController extends Controller
     {
         $em               = $this->getDoctrine()->getEntityManager();
         $user             = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
-        $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code]);
+        $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code, 'isVerified' => false]);
 
         if ($verificationCode) {
             if ($verificationCode->isValid()) {
