@@ -198,7 +198,6 @@ class UserOperations extends APIOperations
                 '%code%' => $code->getCode(),
                 '%validationTimeInMinutes%' => PhoneVerificationCode::CODE_EXPIRY_MINUTES
             ));
-            echo $message;exit;
             $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;
