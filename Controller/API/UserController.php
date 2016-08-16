@@ -336,7 +336,7 @@ class UserController extends Controller
      *      400 = "Validation failed."
      *  },
      *  responseMap = {
-     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken",
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\User",
      *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
      *  }
      * )
@@ -358,7 +358,7 @@ class UserController extends Controller
 
                 $em->flush();
 
-                $output        = new UMSApiResponse\UserToken();
+                $output        = new UMSApiResponse\User();
                 $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
                 $output          = new UMSApiResponse\Fail();

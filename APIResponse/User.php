@@ -45,4 +45,9 @@ class User
      */
     public $isPhoneVerified;
 
+    /**
+     * @Assert\NotBlank
+     */
+    public $token;
+
 }
