@@ -13,8 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PhoneVerificationCode
 {
-    const CODE_EXPIRY_MINUTES = 5;
-
     /**
      * @var integer
      *
@@ -55,6 +53,13 @@ class PhoneVerificationCode
      * })
      */
     private $user;
+
+    public function __construct()
+    {
+        if (is_null($this->id)) {
+            $this->setCode(mt_rand(1000, 9999));
+        }
+    }
 
     /**
      * Get id
@@ -160,43 +165,5 @@ class PhoneVerificationCode
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * generate random verification code
-     *
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     * @return integer
-     */
-    public function generateCode()
-    {
-        $this->setCode(mt_rand(1000, 9999));
-    }
-
-    /**
-     * check code validity
-     *
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     * @return boolean
-     */
-    public function isValid()
-    {
-        $minCreationTime = new \DateTime('- ' . self::CODE_EXPIRY_MINUTES . ' minutes');
-
-        return $minCreationTime < $this->getCreatedAt();
-    }
-
-    /**
-     * get validity remaining seconds
-     *
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     * @return integer
-     */
-    public function getValidityRemainingSeconds()
-    {
-        $now = new \DateTime();
-        $diff = $now->format('U') - $this->getCreatedAt()->format('U');
-
-        return $diff > ( self::CODE_EXPIRY_MINUTES * 60 ) ? 0 : ( self::CODE_EXPIRY_MINUTES * 60 ) - $diff ;
     }
 }

@@ -30,17 +30,21 @@ class AuthenticationSuccessListener
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
         $eventData = $event->getData();
-        $user = $event->getUser();
+        $user      = $event->getUser();
+
         if (!$user instanceof User) {
             return;
         }
+
         $loggedInUserResponse = new SuccessLoggedInUser();
-        $responseData = $this->userOperations->getObjectDataAsArray($loggedInUserResponse);
-        $responseData['user'] = array('token' => $eventData['token']);
-        $userData = $this->userOperations->getUserData($user);
+        $responseData         = $this->userOperations->getObjectDataAsArray($loggedInUserResponse);
+        $userData             = $this->userOperations->getUserData($user);
+
         foreach ($userData as $key => $value) {
             $responseData['user'][$key] = $value;
         }
+
+        $responseData['user']['token'] = $eventData['token'];
         $event->setData($responseData);
     }
 }

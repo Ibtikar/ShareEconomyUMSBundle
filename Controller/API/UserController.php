@@ -228,7 +228,7 @@ class UserController extends Controller
             $output->errors = $validationMessages;
         } else {
             $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
-            $user->generateNewEmailVerificationToken();
+            $this->userOperations->generateNewEmailVerificationToken($user);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
@@ -300,7 +300,7 @@ class UserController extends Controller
             $output->errors = $validationMessages;
         } else {
             if ($user->getEmail() !== $oldEmail) {
-                $user->generateNewEmailVerificationToken();
+                $this->userOperations->generateNewEmailVerificationToken($user);
                 $user->setEmailVerified(false);
 
                 // send verification email
@@ -320,6 +320,7 @@ class UserController extends Controller
 
             $output       = new UMSApiResponse\RegisterUserSuccess();
             $output->user = $this->get('user_operations')->getUserData($user);
+            $output->user['token'] = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
         }
 
         return new JsonResponse($output);
@@ -352,13 +353,13 @@ class UserController extends Controller
         $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code, 'isVerified' => false]);
 
         if ($verificationCode) {
-            if ($verificationCode->isValid()) {
+            if ($this->get('phone_verification_code_business')->isValidCode($verificationCode)) {
                 $verificationCode->setIsVerified(true);
                 $user->setIsPhoneVerified(true);
 
                 $em->flush();
 
-                $output        = new UMSApiResponse\User();
+                $output        = $this->userOperations->getUserObjectResponse($user);
                 $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
                 $output          = new UMSApiResponse\Fail();
@@ -447,7 +448,7 @@ class UserController extends Controller
         $em              = $this->getDoctrine()->getEntityManager();
         $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
         $output          = new UMSApiResponse\RemainingTime();
-        $output->seconds = $code->getValidityRemainingSeconds();
+        $output->seconds = $this->get('phone_verification_code_business')->getValidityRemainingSeconds($code);
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
     }
@@ -607,8 +608,9 @@ class UserController extends Controller
             $user->setValidPassword();
             $em->flush();
 
-            $output       = new UMSApiResponse\RegisterUserSuccess();
-            $output->user = $this->get('user_operations')->getUserData($user);
+            $output              = new UMSApiResponse\RegisterUserSuccess();
+            $output->user        = $this->get('user_operations')->getUserData($user);
+            $output->user['token'] = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
         }
 
         return new JsonResponse($output);
@@ -682,11 +684,11 @@ class UserController extends Controller
         } else if ($user->getEmailVerified()) {
             $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('user_already_verified');
-        } else if (!$user->canRequestVerificationEmail()) {
+        } else if (!$this->userOperations->canRequestVerificationEmail($user)) {
             $output          = new UMSApiResponse\Fail();
             $output->message = $this->get('translator')->trans('reach_max_verification_email_requests_error');
         } else {
-            $user->generateNewEmailVerificationToken();
+            $this->userOperations->generateNewEmailVerificationToken($user);
             $em->flush();
 
             // send verification email

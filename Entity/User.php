@@ -29,8 +29,6 @@ class User implements AdvancedUserInterface, EquatableInterface
     const ROLE_ADMIN                               = 'ROLE_ADMIN';
     const ROLE_CUSTOMER                            = 'ROLE_CUSTOMER';
     const ROLE_SERVICE_PROVIDER                    = 'ROLE_SERVICE_PROVIDER';
-    const MAX_FORGET_PASSWORD_REQUESTS_PER_DAY     = 5;
-    const MAX_VERIFICATION_EMAILS_REQUESTS_PER_DAY = 5;
 
     /**
      * @var int
@@ -39,7 +37,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -49,7 +47,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
      * @Assert\Email(strict=true, message="invalid_email", groups={"signup", "edit"})
      */
-    private $email;
+    protected $email;
 
     /**
      * @var string $oldPassword
@@ -57,7 +55,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\NotBlank(groups={"changePassword"})
      * @SecurityAssert\UserPassword(groups={"changePassword"})
      */
-    private $oldPassword;
+    protected $oldPassword;
 
     /**
      * @var string $userPassword
@@ -67,7 +65,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\Regex(pattern="/[a-zA-Zأ-ي]/", message="password_not_valid", groups={"signup", "changePassword", "resetPassword"})
      * @Assert\Regex(pattern="/[0-9٠-٩]/", message="password_not_valid", groups={"signup", "changePassword", "resetPassword"})
      */
-    private $userPassword;
+    protected $userPassword;
 
     /**
      * @var string
@@ -76,98 +74,98 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @Assert\NotBlank
      */
-    private $password;
+    protected $password;
 
     /**
      * @var string
      *
      * @ORM\Column(name="salt", type="string", length=32)
      */
-    private $salt;
+    protected $salt;
 
     /**
      * @var array
      *
      * @ORM\Column(name="roles", type="simple_array", nullable=true)
      */
-    private $roles;
+    protected $roles;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="enabled", type="boolean")
      */
-    private $enabled = true;
+    protected $enabled = true;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="emailVerified", type="boolean")
      */
-    private $emailVerified = false;
+    protected $emailVerified = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="isPhoneVerified", type="boolean")
      */
-    private $isPhoneVerified = false;
+    protected $isPhoneVerified = false;
 
     /**
      * @var string
      *
      * @ORM\Column(name="emailVerificationToken", type="string", length=100, nullable=true)
      */
-    private $emailVerificationToken;
+    protected $emailVerificationToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="emailVerificationTokenExpiryTime", type="datetime", nullable=true)
      */
-    private $emailVerificationTokenExpiryTime;
+    protected $emailVerificationTokenExpiryTime;
 
     /**
      * @var string
      *
      * @ORM\Column(name="changePasswordToken", type="string", length=100, nullable=true)
      */
-    private $changePasswordToken;
+    protected $changePasswordToken;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="changePasswordTokenExpiryTime", type="datetime", nullable=true)
      */
-    private $changePasswordTokenExpiryTime;
+    protected $changePasswordTokenExpiryTime;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastForgetPasswordRequestDate", type="datetime", nullable=true)
      */
-    private $lastForgetPasswordRequestDate;
+    protected $lastForgetPasswordRequestDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="forgetPasswordRequests", type="smallint", nullable=true)
      */
-    private $forgetPasswordRequests = 0;
+    protected $forgetPasswordRequests = 0;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="lastEmailVerificationRequestDate", type="datetime", nullable=true)
      */
-    private $lastEmailVerificationRequestDate;
+    protected $lastEmailVerificationRequestDate;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="verificationEmailRequests", type="smallint", nullable=true)
      */
-    private $verificationEmailRequests = 0;
+    protected $verificationEmailRequests = 0;
 
     /**
      * @var string
@@ -177,7 +175,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
      * @Assert\Length(min = 4, max = 25, groups={"signup", "edit"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
      */
-    private $fullName;
+    protected $fullName;
 
     /**
      * @var string
@@ -186,14 +184,14 @@ class User implements AdvancedUserInterface, EquatableInterface
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit"})
      */
-    private $phone;
+    protected $phone;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="systemUser", type="boolean")
      */
-    private $systemUser;
+    protected $systemUser;
 
     /**
      * @var \DateTime $created
@@ -201,7 +199,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private $created;
+    protected $created;
 
     /**
      * @var \DateTime $updated
@@ -209,7 +207,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private $updated;
+    protected $updated;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -217,20 +215,20 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @ORM\OneToMany(targetEntity="PhoneVerificationCode", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid
      */
-    private $phoneVerificationCodes;
+    protected $phoneVerificationCodes;
 
     /**
      * @var string $image
      *
      * @ORM\Column(name="image", type="string", length=20, nullable=true)
      */
-    private $image;
+    protected $image;
 
     /**
      * a temp variable for storing the old image name to delete the old image after the update
      * @var string $temp
      */
-    private $temp;
+    protected $temp;
 
     /**
      * @var UploadedFile $file
@@ -238,7 +236,7 @@ class User implements AdvancedUserInterface, EquatableInterface
      * @Assert\NotBlank(groups={"image-required"})
      * @Assert\Image(minWidth=300, minHeight=300, mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, groups={"image", "Default"})
      */
-    private $file;
+    protected $file;
 
     public function __construct()
     {
@@ -1058,81 +1056,4 @@ class User implements AdvancedUserInterface, EquatableInterface
         return $this->phoneVerificationCodes;
     }
 
-    /**
-     * generate random email verification token
-     *
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     */
-    public function generateNewEmailVerificationToken()
-    {
-        $now = new \DateTime();
-
-        if (null !== $this->getLastEmailVerificationRequestDate() && $this->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) {
-            $this->setVerificationEmailRequests($this->getVerificationEmailRequests() + 1);
-        } else {
-            $this->setVerificationEmailRequests(1);
-            $this->setLastEmailVerificationRequestDate($now);
-        }
-
-        $this->setEmailVerificationTokenExpiryTime(new \DateTime('+1 day'));
-        $this->setEmailVerificationToken(bin2hex(random_bytes(32)));
-    }
-
-    /**
-     * generate random forget password token
-     *
-     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
-     */
-    public function generateNewForgetPasswordToken()
-    {
-        $now = new \DateTime();
-
-        if (null !== $this->getLastForgetPasswordRequestDate() && $this->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) {
-            $this->setForgetPasswordRequests($this->getForgetPasswordRequests() + 1);
-        } else {
-            $this->setForgetPasswordRequests(1);
-            $this->setLastForgetPasswordRequestDate($now);
-        }
-
-        $this->setChangePasswordTokenExpiryTime(new \DateTime('+1 day'));
-        $this->setChangePasswordToken(bin2hex(random_bytes(32)));
-    }
-
-    /**
-     * check the ability of requesting new forget password email
-     *
-     * @return boolean
-     */
-    public function canRequestForgetPasswordEmail()
-    {
-        $now    = new \DateTime();
-        $return = true;
-
-        if (null !== $this->getLastForgetPasswordRequestDate()) {
-            if (($this->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) && $this->getForgetPasswordRequests() >= self::MAX_FORGET_PASSWORD_REQUESTS_PER_DAY) {
-                $return = false;
-            }
-        }
-
-        return $return;
-    }
-
-    /**
-     * check the ability of requesting new forget password email
-     *
-     * @return boolean
-     */
-    public function canRequestVerificationEmail()
-    {
-        $now    = new \DateTime();
-        $return = true;
-
-        if (null !== $this->getLastEmailVerificationRequestDate()) {
-            if (($this->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) && $this->getVerificationEmailRequests() >= self::MAX_VERIFICATION_EMAILS_REQUESTS_PER_DAY) {
-                $return = false;
-            }
-        }
-
-        return $return;
-    }
 }

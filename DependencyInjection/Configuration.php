@@ -25,6 +25,18 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('frontend_layout')
                     ->defaultValue(null)
                 ->end()
+                ->scalarNode('max_daily_forget_passwords_requests')
+                    ->defaultValue(5)
+                ->end()
+                ->scalarNode('max_daily_verification_code_requests')
+                    ->defaultValue(5)
+                ->end()
+                ->scalarNode('max_daily_verification_email_requests')
+                    ->defaultValue(5)
+                ->end()
+                ->scalarNode('verification_code_expiry_minutes')
+                    ->defaultValue(5)
+                ->end()
             ->end();
 
         return $treeBuilder;

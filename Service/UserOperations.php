@@ -18,8 +18,7 @@ class UserOperations extends APIOperations
 
     /** @var $container ContainerAwareInterface */
     private $container;
-
-    const MAX_DAILY_VERIFICATION_CODE_REQUESTS = 5;
+    private $configParams;
 
     /**
      * @param ContainerAwareInterface $container
@@ -27,6 +26,8 @@ class UserOperations extends APIOperations
     public function __construct($container)
     {
         $this->container = $container;
+        $this->configParams = $container->getParameter('ibtikar.shareeconomy.ums.parameters');
+
         parent::__construct($container->getParameter('assets_domain'));
     }
 
@@ -87,6 +88,17 @@ class UserOperations extends APIOperations
      */
     public function getUserData(User $user)
     {
+        $responseUser = $this->getUserObjectResponse($user);
+        return $this->getObjectDataAsArray($responseUser);
+    }
+
+    /**
+     *
+     * @param User $user
+     * @return \Ibtikar\ShareEconomyUMSBundle\APIResponse\User
+     */
+    public function getUserObjectResponse(User $user)
+    {
         $responseUser = new APIResponse\User();
         $responseUser->id = $user->getId();
         $responseUser->fullName = $user->getFullName();
@@ -97,7 +109,8 @@ class UserOperations extends APIOperations
         if ($user->getImage()) {
             $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
         }
-        return $this->getObjectDataAsArray($responseUser);
+
+        return $responseUser;
     }
 
     /**
@@ -135,10 +148,10 @@ class UserOperations extends APIOperations
         if (!$user) {
             return $translator->trans('email_not_registered');
         }
-        if (!$user->canRequestForgetPasswordEmail()) {
+        if (!$this->canRequestForgetPasswordEmail($user)) {
             return $translator->trans('reach_max_forget_password_requests_error');
         }
-        $user->generateNewForgetPasswordToken();
+        $this->generateNewForgetPasswordToken($user);
         $em->flush($user);
         $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
         return 'success';
@@ -154,8 +167,6 @@ class UserOperations extends APIOperations
     public function addNewVerificationCode(User $user)
     {
         $phoneVerificationCode = new PhoneVerificationCode();
-        $phoneVerificationCode->generateCode();
-
         $user->addPhoneVerificationCode($phoneVerificationCode);
 
         return $phoneVerificationCode;
@@ -196,9 +207,9 @@ class UserOperations extends APIOperations
             $message = $this->get('translator')->trans('Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes', array(
                 '%project%' => $this->getParameter('nexmo_from_name'),
                 '%code%' => $code->getCode(),
-                '%validationTimeInMinutes%' => PhoneVerificationCode::CODE_EXPIRY_MINUTES
+                '%validationTimeInMinutes%' => $this->configParams['verification_code_expiry_minutes']
             ));
-            $message = "Verification code for Akly is (".$code->getCode().") valid for ".PhoneVerificationCode::CODE_EXPIRY_MINUTES." minutes";
+            $message = "Verification code for Akly is (".$code->getCode().") valid for ".$this->configParams['verification_code_expiry_minutes']." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;
         } catch (\Exception $ex) {
@@ -219,7 +230,7 @@ class UserOperations extends APIOperations
         $em         = $this->get('doctrine')->getManager();
         $codesCount = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->countTodaysCodes($user);
 
-        return $codesCount < self::MAX_DAILY_VERIFICATION_CODE_REQUESTS;
+        return $codesCount < $this->configParams['max_daily_verification_code_requests'];
     }
 
     /**
@@ -234,5 +245,83 @@ class UserOperations extends APIOperations
         $user->setEmailVerificationTokenExpiryTime(null);
         $this->get('doctrine')->getManager()->flush($user);
         return true;
+    }
+
+    /**
+     * generate random email verification token
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function generateNewEmailVerificationToken(User $user)
+    {
+        $now = new \DateTime();
+
+        if (null !== $user->getLastEmailVerificationRequestDate() && $user->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) {
+            $user->setVerificationEmailRequests($user->getVerificationEmailRequests() + 1);
+        } else {
+            $user->setVerificationEmailRequests(1);
+            $user->setLastEmailVerificationRequestDate($now);
+        }
+
+        $user->setEmailVerificationTokenExpiryTime(new \DateTime('+1 day'));
+        $user->setEmailVerificationToken(bin2hex(random_bytes(32)));
+    }
+
+    /**
+     * generate random forget password token
+     *
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     */
+    public function generateNewForgetPasswordToken(User $user)
+    {
+        $now = new \DateTime();
+
+        if (null !== $user->getLastForgetPasswordRequestDate() && $user->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) {
+            $user->setForgetPasswordRequests($user->getForgetPasswordRequests() + 1);
+        } else {
+            $user->setForgetPasswordRequests(1);
+            $user->setLastForgetPasswordRequestDate($now);
+        }
+
+        $user->setChangePasswordTokenExpiryTime(new \DateTime('+1 day'));
+        $user->setChangePasswordToken(bin2hex(random_bytes(32)));
+    }
+
+    /**
+     * check the ability of requesting new forget password email
+     *
+     * @return boolean
+     */
+    public function canRequestForgetPasswordEmail(User $user)
+    {
+        $now    = new \DateTime();
+        $return = true;
+
+        if (null !== $user->getLastForgetPasswordRequestDate()) {
+            if (($user->getLastForgetPasswordRequestDate()->format('Ymd') == $now->format('Ymd')) && $user->getForgetPasswordRequests() >= $this->configParams['max_daily_forget_passwords_requests']) {
+                $return = false;
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * check the ability of requesting new forget password email
+     *
+     * @return boolean
+     */
+    public function canRequestVerificationEmail(User $user)
+    {
+        $now    = new \DateTime();
+        $return = true;
+
+        if (null !== $user->getLastEmailVerificationRequestDate()) {
+            if (($user->getLastEmailVerificationRequestDate()->format('Ymd') == $now->format('Ymd')) && $user->getVerificationEmailRequests() >= $this->configParams['max_daily_forget_passwords_requests']) {
+                $return = false;
+            }
+        }
+
+        return $return;
     }
 }

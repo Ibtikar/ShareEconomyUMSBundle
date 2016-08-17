@@ -35,6 +35,10 @@ Installation steps
     
     ibtikar_share_economy_cms:
         frontend_layout: "AppBundle:Frontend:layout.html.twig"
+        max_daily_forget_passwords_requests: 5
+        max_daily_verification_code_requests: 5
+        max_daily_verification_email_requests: 5
+        verification_code_expiry_minutes: 5
 
 8.Add the next line to your .gitignore file
 

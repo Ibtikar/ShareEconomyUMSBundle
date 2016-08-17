@@ -1,8 +1,11 @@
 services:
-
     user_operations:
         class: Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
         arguments: [ '@service_container' ]
+        
+    phone_verification_code_business:
+        class: Ibtikar\ShareEconomyUMSBundle\Service\PhoneVerificationCodeBusiness
+        arguments: [ %ibtikar_share_economy_ums.verification_code_expiry_minutes% ]
 
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener
