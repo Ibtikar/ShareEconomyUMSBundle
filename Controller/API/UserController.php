@@ -695,7 +695,6 @@ class UserController extends Controller
             // send verification email
             $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
 
-            $em->flush();
             $output = new UMSApiResponse\Success();
         }
 
