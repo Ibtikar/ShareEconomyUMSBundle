@@ -308,6 +308,7 @@ class UserController extends Controller
             }
 
             if ($user->getPhone() !== $oldPhone) {
+                $user->setIsPhoneVerified(false);
                 $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
 
                 // send phone verification code
