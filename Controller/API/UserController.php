@@ -337,7 +337,7 @@ class UserController extends Controller
      *      400 = "Validation failed."
      *  },
      *  responseMap = {
-     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\User",
+     *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken",
      *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
      *  }
      * )
