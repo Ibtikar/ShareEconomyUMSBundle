@@ -359,7 +359,7 @@ class UserController extends Controller
 
                 $em->flush();
 
-                $output        = $this->userOperations->getUserObjectResponse($user);
+                $output        = new UMSApiResponse\UserToken();
                 $output->token = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);
             } else {
                 $output          = new UMSApiResponse\Fail();
