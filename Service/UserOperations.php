@@ -107,7 +107,7 @@ class UserOperations extends APIOperations
         $responseUser->emailVerified = $user->getEmailVerified();
         $responseUser->isPhoneVerified = $user->getIsPhoneVerified();
         if ($user->getImage()) {
-            $responseUser->image = $this->assetsDomain . '/' . $user->getWebPath();
+            $responseUser->image = $this->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost() . '/' . $user->getWebPath();
         }
 
         return $responseUser;
