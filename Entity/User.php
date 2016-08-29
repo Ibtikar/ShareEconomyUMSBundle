@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Entity\AdditionalUserMappingData;
 
 /**
  * User
@@ -22,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"}, message="email_exist")
  * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist")
  */
-class User implements AdvancedUserInterface, EquatableInterface
+class User extends AdditionalUserMappingData implements AdvancedUserInterface, EquatableInterface
 {
 
     const ROLE_SUPER_ADMIN                         = 'ROLE_SUPER_ADMIN';
