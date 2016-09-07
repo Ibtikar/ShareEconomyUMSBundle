@@ -22,13 +22,36 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        # the api login without cookies
+        api_login:
+            pattern:  ^/api/login$
+            stateless: true
+            gfreeau_get_jwt: ~
+
+        # the api urls
+        api:
+            pattern:   ^/api/(?!doc)
+            stateless: true
+            anonymous: true
+            lexik_jwt: ~
+
         main:
             pattern:    ^/
             anonymous: ~
             provider: database_provider
+            logout:
+                path: ibtikar_share_economy_ums_logout
+                target: ibtikar_share_economy_ums_login
             form_login:
                 login_path: ibtikar_share_economy_ums_login
                 check_path: ibtikar_share_economy_ums_login
+            remember_me:
+#                secure: '%secureURL%'
+#                name: '%cookiesNamePrefix%SRM'
+#                domain: '%cookies_domain%'
+                secret: '%secret%'
+                # the next lifetime is in seconds (7days) max 86391359
+                lifetime: 604800
 
             # activate different ways to authenticate
 
