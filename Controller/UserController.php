@@ -75,7 +75,7 @@ class UserController extends Controller
      */
     public function verifyEmailAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email'), 'emailVerificationToken' => $request->get('token')]);
 
         if (!$user) {

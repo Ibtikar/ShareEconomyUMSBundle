@@ -349,7 +349,7 @@ class UserController extends Controller
      */
     public function checkVerificationCodeAction(Request $request, $id, $code)
     {
-        $em               = $this->getDoctrine()->getEntityManager();
+        $em               = $this->getDoctrine()->getManager();
         $user             = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code, 'isVerified' => false]);
 
@@ -396,7 +396,7 @@ class UserController extends Controller
      */
     public function resendVerificationCodeAction(Request $request, $id)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
 
         if ($user) {
@@ -448,7 +448,7 @@ class UserController extends Controller
      */
     public function getVerificationRemainingTimeAction(Request $request, $id)
     {
-        $em              = $this->getDoctrine()->getEntityManager();
+        $em              = $this->getDoctrine()->getManager();
         $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
         if (!$code) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();
@@ -476,7 +476,7 @@ class UserController extends Controller
      */
     public function getLastPhoneVerificationCodeAction(Request $request, $id)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $code = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
 
         return new JsonResponse(['code' => $code->getCode()]);
@@ -507,7 +507,7 @@ class UserController extends Controller
      */
     public function updatePhoneNumberAction(Request $request, $id)
     {
-        $em             = $this->getDoctrine()->getEntityManager();
+        $em             = $this->getDoctrine()->getManager();
         $user           = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
 
         if ($user) {
@@ -564,7 +564,7 @@ class UserController extends Controller
      */
     public function isEmailVerifiedAction(Request $request, $id)
     {
-        $em     = $this->getDoctrine()->getEntityManager();
+        $em     = $this->getDoctrine()->getManager();
         $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
         $output = $user->getEmailVerified() ? new UMSApiResponse\Success() : new UMSApiResponse\Fail();
 
@@ -681,7 +681,7 @@ class UserController extends Controller
      */
     public function resendVerificationEmailAction(Request $request)
     {
-        $em   = $this->getDoctrine()->getEntityManager();
+        $em   = $this->getDoctrine()->getManager();
         $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
 
         if (!$user) {
