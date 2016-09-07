@@ -434,9 +434,11 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned on success",
+     *      404="Returned if the page was not found"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RemainingTime",
+     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound"
      *  }
      * )
      *
@@ -448,6 +450,9 @@ class UserController extends Controller
     {
         $em              = $this->getDoctrine()->getEntityManager();
         $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
+        if (!$code) {
+            return $this->get('api_operations')->getNotFoundErrorJsonResponse();
+        }
         $output          = new UMSApiResponse\RemainingTime();
         $output->seconds = $this->get('phone_verification_code_business')->getValidityRemainingSeconds($code);
 
