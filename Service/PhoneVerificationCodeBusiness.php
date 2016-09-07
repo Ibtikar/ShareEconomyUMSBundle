@@ -24,6 +24,7 @@ class PhoneVerificationCodeBusiness
      * check code validity
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @param PhoneVerificationCode $verificationCode
      * @return boolean
      */
     public function isValidCode(PhoneVerificationCode $verificationCode)
@@ -37,6 +38,7 @@ class PhoneVerificationCodeBusiness
      * get validity remaining seconds
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @param PhoneVerificationCode $verificationCode
      * @return integer
      */
     public function getValidityRemainingSeconds(PhoneVerificationCode $verificationCode)
