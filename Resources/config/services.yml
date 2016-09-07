@@ -2,10 +2,10 @@ services:
     user_operations:
         class: Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
         arguments: [ '@service_container' ]
-        
+
     phone_verification_code_business:
         class: Ibtikar\ShareEconomyUMSBundle\Service\PhoneVerificationCodeBusiness
-        arguments: [ %ibtikar_share_economy_ums.verification_code_expiry_minutes% ]
+        arguments: [ "%ibtikar_share_economy_ums.verification_code_expiry_minutes%" ]
 
     jwt.authentication_failure_listener:
         class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationFailureListener
@@ -27,4 +27,4 @@ services:
 
     ibtikar.shareeconomy.ums.email_sender:
         class:  Ibtikar\ShareEconomyUMSBundle\Service\EmailSender
-        arguments:  ["@doctrine.orm.entity_manager", "@mailer", "@templating", %mailer_user%, '@logger']
+        arguments:  ["@doctrine.orm.entity_manager", "@mailer", "@templating", "%mailer_user%", '@logger']
