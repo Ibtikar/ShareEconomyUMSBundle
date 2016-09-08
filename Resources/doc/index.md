@@ -26,19 +26,20 @@ Installation steps
 5.Update the security.yml file to match this [file](http://github.com/Ibtikar/share-economy-UMS/tree/master/Resources/doc/security.yml)
 
 6.In config.yml configure the new custom MySQL functions needed
-    
+
     dql:
         datetime_functions:
           DATE: DoctrineExtensions\Query\Mysql\Date
 
 7.Configure the bundle templates: add the following lines to your project config.yml
-    
+
     ibtikar_share_economy_cms:
         frontend_layout: "AppBundle:Frontend:layout.html.twig"
         max_daily_forget_passwords_requests: 5
         max_daily_verification_code_requests: 5
         max_daily_verification_email_requests: 5
         verification_code_expiry_minutes: 5
+        user_class: AppBundle\Entity\User
 
 8.Add the next line to your .gitignore file
 

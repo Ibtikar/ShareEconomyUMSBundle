@@ -176,7 +176,7 @@ class UserController extends Controller
     public function getUserInfoAction(Request $request, $id)
     {
         $userOperations = $this->get('user_operations');
-        $user = $this->getDoctrine()->getManager()->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         if ($user) {
             $data = $userOperations->getObjectDataAsArray(new UMSApiResponse\SuccessUser());
             $data['user'] = $userOperations->getUserData($user);
@@ -350,7 +350,7 @@ class UserController extends Controller
     public function checkVerificationCodeAction(Request $request, $id, $code)
     {
         $em               = $this->getDoctrine()->getManager();
-        $user             = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $user             = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code, 'isVerified' => false]);
 
         if ($verificationCode) {
@@ -397,7 +397,7 @@ class UserController extends Controller
     public function resendVerificationCodeAction(Request $request, $id)
     {
         $em   = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
 
         if ($user) {
             if ($user->getIsPhoneVerified()){
@@ -448,14 +448,17 @@ class UserController extends Controller
      */
     public function getVerificationRemainingTimeAction(Request $request, $id)
     {
-        $em              = $this->getDoctrine()->getManager();
-        $code            = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
+        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\User */
+        $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
+        if (!$user) {
+            return $this->get('api_operations')->getNotFoundErrorJsonResponse();
+        }
+        $code = $user->getPhoneVerificationCodes()->first();
         if (!$code) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();
         }
         $output          = new UMSApiResponse\RemainingTime();
         $output->seconds = $this->get('phone_verification_code_business')->getValidityRemainingSeconds($code);
-
         return $this->get('api_operations')->getJsonResponseForObject($output);
     }
 
@@ -476,9 +479,15 @@ class UserController extends Controller
      */
     public function getLastPhoneVerificationCodeAction(Request $request, $id)
     {
-        $em   = $this->getDoctrine()->getManager();
-        $code = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id], ['createdAt' => 'desc']);
-
+        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\User */
+        $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
+        if (!$user) {
+            return $this->get('api_operations')->getNotFoundErrorJsonResponse();
+        }
+        $code = $user->getPhoneVerificationCodes()->first();
+        if (!$code) {
+            return $this->get('api_operations')->getNotFoundErrorJsonResponse();
+        }
         return new JsonResponse(['code' => $code->getCode()]);
     }
 
@@ -508,7 +517,7 @@ class UserController extends Controller
     public function updatePhoneNumberAction(Request $request, $id)
     {
         $em             = $this->getDoctrine()->getManager();
-        $user           = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $user           = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
 
         if ($user) {
             if ($user->getPhone() == $request->get('phone')) {
@@ -565,7 +574,7 @@ class UserController extends Controller
     public function isEmailVerifiedAction(Request $request, $id)
     {
         $em     = $this->getDoctrine()->getManager();
-        $user   = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($id);
+        $user   = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         $output = $user->getEmailVerified() ? new UMSApiResponse\Success() : new UMSApiResponse\Fail();
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
@@ -600,7 +609,7 @@ class UserController extends Controller
     {
         $em   = $this->getDoctrine()->getManager();
         $currentUser = $this->getUser();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->find($currentUser->getId());
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($currentUser->getId());
 
         $user->setOldPassword($request->get('oldPassword'));
         $user->setUserPassword($request->get('userPassword'));
@@ -682,7 +691,7 @@ class UserController extends Controller
     public function resendVerificationEmailAction(Request $request)
     {
         $em   = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email')]);
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->findOneBy(['email' => $request->get('email')]);
 
         if (!$user) {
             $output          = new UMSApiResponse\Fail();

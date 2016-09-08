@@ -12,18 +12,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Entity\AdditionalUserMappingData;
 
 /**
  * User
  *
+ * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"}, message="email_exist")
  * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist")
  */
-class User extends AdditionalUserMappingData implements AdvancedUserInterface, EquatableInterface
+class User implements AdvancedUserInterface, EquatableInterface
 {
 
     const ROLE_SUPER_ADMIN                         = 'ROLE_SUPER_ADMIN';
@@ -213,7 +211,13 @@ class User extends AdditionalUserMappingData implements AdvancedUserInterface, E
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\OneToMany(targetEntity="PhoneVerificationCode", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\OrderBy({"id"="DESC"})
+     * @ORM\JoinTable(name="users_verification_codes",
+     *  joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
+     *  inverseJoinColumns={@ORM\JoinColumn(name="phone_verification_code_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     *
      * @Assert\Valid
      */
     protected $phoneVerificationCodes;

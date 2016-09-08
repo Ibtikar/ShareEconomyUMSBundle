@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PhoneVerificationCode
  *
- * @ORM\Table(name="phone_verification_code", indexes={@ORM\Index(name="user_id", columns={"user_id"})})
+ * @ORM\Table(name="phone_verification_code")
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\PhoneVerificationCodeRepository")
  */
 class PhoneVerificationCode
@@ -43,16 +43,6 @@ class PhoneVerificationCode
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
-
-    /**
-     * @var \Ibtikar\ShareEconomyUMSBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\User", inversedBy="phoneVerificationCodes")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     */
-    private $user;
 
     public function __construct()
     {
@@ -143,27 +133,4 @@ class PhoneVerificationCode
         return $this->createdAt;
     }
 
-    /**
-     * Set user
-     *
-     * @param \Ibtikar\ShareEconomyUMSBundle\Entity\User $user
-     *
-     * @return PhoneVerificationCode
-     */
-    public function setUser(\Ibtikar\ShareEconomyUMSBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Ibtikar\ShareEconomyUMSBundle\Entity\User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
 }

@@ -22,6 +22,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('user_class')
+                    ->cannotBeEmpty()
+                    ->isRequired()
+                ->end()
                 ->scalarNode('frontend_layout')
                     ->defaultValue(null)
                 ->end()
