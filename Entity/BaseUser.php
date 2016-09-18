@@ -1036,7 +1036,6 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     public function addPhoneVerificationCode(PhoneVerificationCode $phoneVerificationCode)
     {
         $this->phoneVerificationCodes[] = $phoneVerificationCode;
-        $phoneVerificationCode->setUser($this);
 
         return $this;
     }

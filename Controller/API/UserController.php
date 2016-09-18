@@ -351,7 +351,7 @@ class UserController extends Controller
     {
         $em               = $this->getDoctrine()->getManager();
         $user             = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
-        $verificationCode = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->findOneBy(['user' => $id, 'code' => $code, 'isVerified' => false]);
+        $verificationCode = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->getPhoneVerificationCode($id, $code);
 
         if ($verificationCode) {
             if ($this->get('phone_verification_code_business')->isValidCode($verificationCode)) {

@@ -144,7 +144,7 @@ class UserOperations extends APIOperations
             return $translator->trans('fill_mandatory_field', array(), 'validators');
         }
         $em = $this->get('doctrine')->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $userEmail]);
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->findOneBy(['email' => $userEmail]);
         if (!$user) {
             return $translator->trans('email_not_registered');
         }
@@ -160,11 +160,11 @@ class UserOperations extends APIOperations
     /**
      * add new verification code to the user
      *
-     * @param User $user
+     * @param BaseUser $user
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return PhoneVerificationCode
      */
-    public function addNewVerificationCode(User $user)
+    public function addNewVerificationCode(BaseUser $user)
     {
         $phoneVerificationCode = new PhoneVerificationCode();
         $user->addPhoneVerificationCode($phoneVerificationCode);
@@ -228,7 +228,7 @@ class UserOperations extends APIOperations
     public function canRequestPhoneVerificationCode(BaseUser $user)
     {
         $em         = $this->get('doctrine')->getManager();
-        $codesCount = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->countTodaysCodes($user);
+        $codesCount = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->countTodaysCodes($user);
 
         return $codesCount < $this->configParams['max_daily_verification_code_requests'];
     }

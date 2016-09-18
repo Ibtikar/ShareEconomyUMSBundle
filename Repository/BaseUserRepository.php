@@ -13,4 +13,39 @@ namespace Ibtikar\ShareEconomyUMSBundle\Repository;
 class BaseUserRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    public function countTodaysCodes($user)
+    {
+        $firstOfToday    = new \DateTime('midnight');
+        $firstOfTomorrow = new \DateTime('tomorrow midnight');
+
+        return $this->createQueryBuilder('u')
+                ->leftJoin('u.phoneVerificationCodes', 'p')
+                ->select('count(p.id)')
+                ->where('u.id = :userID')
+                ->andWhere('p.createdAt >= :firstOfToday')
+                ->andWhere('p.createdAt < :firstOfTomorrow')
+                ->setParameters(['userID' => $user->getId(), 'firstOfToday' => $firstOfToday->format('Y-m-d H:i:s'), 'firstOfTomorrow' => $firstOfTomorrow->format('Y-m-d H:i:s')])
+                ->getQuery()
+                ->getSingleScalarResult();
+    }
+
+    public function getPhoneVerificationCode($userId, $code)
+    {
+        $return = null;
+        $user   = $this->createQueryBuilder('u')
+            ->select('u, p')
+            ->leftJoin('u.phoneVerificationCodes', 'p')
+            ->where('u.id = :userID')
+            ->andWhere('p.code = :code')
+            ->andWhere('p.isVerified = :no')
+            ->setParameters(['userID' => $userId, 'code' => $code, 'no' => false])
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (null !== $user->getPhoneVerificationCodes()) {
+            $return = $user->getPhoneVerificationCodes()->first();
+        }
+
+        return $return;
+    }
 }

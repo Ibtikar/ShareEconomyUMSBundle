@@ -76,7 +76,7 @@ class UserController extends Controller
     public function verifyEmailAction(Request $request)
     {
         $em   = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(['email' => $request->get('email'), 'emailVerificationToken' => $request->get('token')]);
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->findOneBy(['email' => $request->get('email'), 'emailVerificationToken' => $request->get('token')]);
 
         if (!$user) {
             throw $this->createNotFoundException();
@@ -106,7 +106,7 @@ class UserController extends Controller
     public function resetPasswordAction(Request $request, $email, $token)
     {
         $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('IbtikarShareEconomyUMSBundle:User')->findOneBy(array('email' => $email, 'changePasswordToken' => $token));
+        $user = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->findOneBy(array('email' => $email, 'changePasswordToken' => $token));
         if (!$user) {
             throw $this->createNotFoundException();
         }
