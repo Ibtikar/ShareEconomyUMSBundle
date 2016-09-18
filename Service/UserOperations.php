@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Ibtikar\ShareEconomyToolsBundle\Service\APIOperations;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 use Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse;
 
@@ -56,14 +56,14 @@ class UserOperations extends APIOperations
     }
 
     /**
-     * @return User|null
+     * @return BaseUser|null
      */
     public function getLoggedInUser()
     {
         $token = $this->container->get('security.token_storage')->getToken();
         if ($token && is_object($token)) {
             $user = $token->getUser();
-            if (is_object($user) && $user instanceof User) {
+            if (is_object($user) && $user instanceof BaseUser) {
                 return $user;
             }
         }
@@ -83,10 +83,10 @@ class UserOperations extends APIOperations
     }
 
     /**
-     * @param User $user
+     * @param BaseUser $user
      * @return array
      */
-    public function getUserData(User $user)
+    public function getUserData(BaseUser $user)
     {
         $responseUser = $this->getUserObjectResponse($user);
         return $this->getObjectDataAsArray($responseUser);
@@ -94,10 +94,10 @@ class UserOperations extends APIOperations
 
     /**
      *
-     * @param User $user
+     * @param BaseUser $user
      * @return \Ibtikar\ShareEconomyUMSBundle\APIResponse\User
      */
-    public function getUserObjectResponse(User $user)
+    public function getUserObjectResponse(BaseUser $user)
     {
         $responseUser = new APIResponse\User();
         $responseUser->id = $user->getId();
@@ -196,12 +196,12 @@ class UserOperations extends APIOperations
     /**
      * send phone verification code SMS
      *
-     * @param type $user
+     * @param BaseUser $user
      * @param type $code
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
      * @return boolean
      */
-    public function sendVerificationCodeMessage(User $user, $code)
+    public function sendVerificationCodeMessage(BaseUser $user, $code)
     {
         try {
             $message = $this->get('translator')->trans('Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes', array(
@@ -222,10 +222,10 @@ class UserOperations extends APIOperations
     /**
      * check if the user reached the max todays requests
      *
-     * @param User $user
+     * @param BaseUser $user
      * @return boolean
      */
-    public function canRequestPhoneVerificationCode(User $user)
+    public function canRequestPhoneVerificationCode(BaseUser $user)
     {
         $em         = $this->get('doctrine')->getManager();
         $codesCount = $em->getRepository('IbtikarShareEconomyUMSBundle:PhoneVerificationCode')->countTodaysCodes($user);
@@ -235,10 +235,10 @@ class UserOperations extends APIOperations
 
     /**
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
-     * @param User $user
+     * @param BaseUser $user
      * @return boolean
      */
-    public function verifyUserEmail(User $user)
+    public function verifyUserEmail(BaseUser $user)
     {
         $user->setEmailVerified(true);
         $user->setEmailVerificationToken(null);
@@ -251,8 +251,9 @@ class UserOperations extends APIOperations
      * generate random email verification token
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @param BaseUser $user
      */
-    public function generateNewEmailVerificationToken(User $user)
+    public function generateNewEmailVerificationToken(BaseUser $user)
     {
         $now = new \DateTime();
 
@@ -271,8 +272,9 @@ class UserOperations extends APIOperations
      * generate random forget password token
      *
      * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @param BaseUser $user
      */
-    public function generateNewForgetPasswordToken(User $user)
+    public function generateNewForgetPasswordToken(BaseUser $user)
     {
         $now = new \DateTime();
 
@@ -290,9 +292,10 @@ class UserOperations extends APIOperations
     /**
      * check the ability of requesting new forget password email
      *
+     * @param BaseUser $user
      * @return boolean
      */
-    public function canRequestForgetPasswordEmail(User $user)
+    public function canRequestForgetPasswordEmail(BaseUser $user)
     {
         $now    = new \DateTime();
         $return = true;
@@ -309,9 +312,10 @@ class UserOperations extends APIOperations
     /**
      * check the ability of requesting new forget password email
      *
+     * @param BaseUser $user
      * @return boolean
      */
-    public function canRequestVerificationEmail(User $user)
+    public function canRequestVerificationEmail(BaseUser $user)
     {
         $now    = new \DateTime();
         $return = true;

@@ -4,7 +4,7 @@ namespace Ibtikar\ShareEconomyUMSBundle\Service;
 
 use Swift_Message;
 use Swift_Attachment;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 use Psr\Log\LoggerInterface;
 
 class EmailSender
@@ -50,10 +50,10 @@ class EmailSender
     /**
      * send verification email
      *
-     * @param User $user
+     * @param BaseUser $user
      * @return type
      */
-    public function sendEmailVerification(User $user)
+    public function sendEmailVerification(BaseUser $user)
     {
         return $this->send($user->getEmail(), 'Please verify your email', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:emailVerification.html.twig', ['user' => $user]));
     }
@@ -61,10 +61,10 @@ class EmailSender
     /**
      * send forget password email
      *
-     * @param User $user
+     * @param BaseUser $user
      * @return type
      */
-    public function sendResetPasswordEmail(User $user)
+    public function sendResetPasswordEmail(BaseUser $user)
     {
         return $this->send($user->getEmail(), 'Reset password', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', ['user' => $user]));
     }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Filesystem\Filesystem;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse as UMSApiResponse;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use AppBundle\Entity\User;
 
 class UserController extends Controller
 {
@@ -448,7 +448,7 @@ class UserController extends Controller
      */
     public function getVerificationRemainingTimeAction(Request $request, $id)
     {
-        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\User */
+        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
         $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         if (!$user) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();
@@ -479,7 +479,7 @@ class UserController extends Controller
      */
     public function getLastPhoneVerificationCodeAction(Request $request, $id)
     {
-        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\User */
+        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
         $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         if (!$user) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();

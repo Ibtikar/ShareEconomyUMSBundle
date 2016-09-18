@@ -5,9 +5,8 @@ namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -43,7 +42,7 @@ class CheckAPILogin
                 $token = $this->securityTokenStorage->getToken();
                 if ($token && $token instanceof JWTUserToken) {
                     $user = $token->getUser();
-                    if (is_object($user) && $user instanceof User) {
+                    if (is_object($user) && $user instanceof BaseUser) {
                         return;
                     }
                 }

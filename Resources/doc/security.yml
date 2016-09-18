@@ -3,7 +3,7 @@
 security:
 
     encoders:
-        Ibtikar\ShareEconomyUMSBundle\Entity\User:
+        Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser:
             algorithm: sha512
             encode-as-base64: true
             iterations: 10
@@ -12,7 +12,7 @@ security:
     providers:
         database_provider:
             entity:
-                class: IbtikarShareEconomyUMSBundle:User
+                class: IbtikarShareEconomyUMSBundle:BaseUser
                 property: email
 
 

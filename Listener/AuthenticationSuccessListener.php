@@ -5,7 +5,7 @@ namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
-use Ibtikar\ShareEconomyUMSBundle\Entity\User;
+use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -32,7 +32,7 @@ class AuthenticationSuccessListener
         $eventData = $event->getData();
         $user      = $event->getUser();
 
-        if (!$user instanceof User) {
+        if (!$user instanceof BaseUser) {
             return;
         }
 

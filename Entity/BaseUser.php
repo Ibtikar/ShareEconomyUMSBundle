@@ -21,7 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"}, message="email_exist")
  * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist")
  */
-class User implements AdvancedUserInterface, EquatableInterface
+class BaseUser implements AdvancedUserInterface, EquatableInterface
 {
 
     const ROLE_SUPER_ADMIN                         = 'ROLE_SUPER_ADMIN';
