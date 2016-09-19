@@ -5,13 +5,13 @@ Installation steps
 
     "extra": {
         "installer-paths": {
-            "src/Ibtikar/ShareEconomyUMSBundle/": ["Ibtikar/share-economy-UMS"]
+            "src/Ibtikar/ShareEconomyUMSBundle/": ["Ibtikar/ShareEconomyUMSBundle"]
         }
     }
 
 2.Require the package using composer by running
 
-    composer require Ibtikar/share-economy-UMS
+    composer require Ibtikar/ShareEconomyUMSBundle
 
 3.Add to your appkernel the next line
     new Ibtikar\ShareEconomyUMSBundle\IbtikarShareEconomyUMSBundle(),
@@ -23,7 +23,7 @@ Installation steps
         prefix:   /
 
 
-5.Update the security.yml file to match this [file](http://github.com/Ibtikar/share-economy-UMS/tree/master/Resources/doc/security.yml)
+5.Update the security.yml file to match this [file](http://github.com/Ibtikar/ShareEconomyUMSBundle/tree/master/Resources/doc/security.yml)
 
 6.In config.yml configure the new custom MySQL functions needed
 
