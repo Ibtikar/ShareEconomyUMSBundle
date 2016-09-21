@@ -27,6 +27,7 @@ class UserOperations extends APIOperations
     {
         $this->container = $container;
         $this->configParams = $container->getParameter('ibtikar.shareeconomy.ums.parameters');
+        parent::__construct($container->get('validator'));
     }
 
     /**
