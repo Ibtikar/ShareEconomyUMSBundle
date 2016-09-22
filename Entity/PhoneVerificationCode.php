@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * PhoneVerificationCode
  *
- * @ORM\Table(name="phone_verification_code")
+ * @ORM\Table(name="phone_verification_code", indexes={@ORM\Index(name="created_at", columns={"created_at"})})
  * @ORM\Entity(repositoryClass="Ibtikar\ShareEconomyUMSBundle\Repository\PhoneVerificationCodeRepository")
  */
 class PhoneVerificationCode

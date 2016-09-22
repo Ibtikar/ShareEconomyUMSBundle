@@ -28,7 +28,7 @@ class UserOperations extends APIOperations
         $this->container = $container;
         $this->configParams = $container->getParameter('ibtikar.shareeconomy.ums.parameters');
 
-        parent::__construct($container->getParameter('assets_domain'));
+        parent::__construct($container->getParameter('assets_domain'), $container->get('validator'));
     }
 
     /**
@@ -170,27 +170,6 @@ class UserOperations extends APIOperations
         $user->addPhoneVerificationCode($phoneVerificationCode);
 
         return $phoneVerificationCode;
-    }
-
-    /**
-     * validate object and return error messages array
-     *
-     * @param type $object
-     * @param type $groups
-     * @return array
-     */
-    public function validateObject($object, $groups)
-    {
-        $validationMessages = [];
-        $errors             = $this->get('validator')->validate($object, null, $groups);
-
-        if (count($errors) > 0) {
-            foreach ($errors as $error) {
-                $validationMessages[$error->getPropertyPath()] = $error->getMessage();
-            }
-        }
-
-        return $validationMessages;
     }
 
     /**
