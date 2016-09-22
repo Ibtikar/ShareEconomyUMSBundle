@@ -1,9 +1,9 @@
 {
-    "name": "Ibtikar/share-economy-UMS",
+    "name": "Ibtikar/ShareEconomyUMSBundle",
     "type": "laravel-library",
     "description": "Ibtikar share economy user management system",
     "keywords": ["User management"],
-    "homepage": "https://github.com/Ibtikar/share-economy-UMS",
+    "homepage": "https://github.com/Ibtikar/ShareEconomyUMSBundle",
     "license": "MIT",
     "authors": [
         {
@@ -21,8 +21,7 @@
         "composer/installers": "~1.0",
         "egulias/email-validator": "~1.2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "javihgil/nexmo-bundle": "^0.9.2",
-        "beberlei/DoctrineExtensions": "^1.0"
+        "javihgil/nexmo-bundle": "^0.9.2"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "~1.3",

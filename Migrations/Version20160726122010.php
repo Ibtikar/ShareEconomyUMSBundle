@@ -53,7 +53,7 @@ EOF;
                 --
 
                 INSERT INTO `user` (`email`, `phone`, `password`, `salt`, `roles`, `enabled`, `emailVerified`, `emailVerificationToken`, `emailVerificationTokenExpiryTime`, `changePasswordToken`, `changePasswordTokenExpiryTime`, `systemUser`, `created`, `updated`, `fullName`) VALUES
-                    ('admin@ibtikar.net', '0123456789', 'S2CVsPxiIXtZp5409nvRz6B6RVptkryAhV94UqwvuamEyD56NEwMu23sC0lq2n//68+FovLT6XjGteMbFl54Tw==', '32bbba04283e1ada5776eaf3edc98a0b', 'ROLE_SUPER_ADMIN', 1, 1, NULL, NULL, NULL, NULL, 1, '2016-07-26 10:45:12', '2016-07-26 10:45:12', 'Sofra Admin');
+                    ('admin@ibtikar.net', '0123456789', 'S2CVsPxiIXtZp5409nvRz6B6RVptkryAhV94UqwvuamEyD56NEwMu23sC0lq2n//68+FovLT6XjGteMbFl54Tw==', '32bbba04283e1ada5776eaf3edc98a0b', 'ROLE_SUPER_ADMIN', 1, 1, NULL, NULL, NULL, NULL, 1, '2016-07-26 10:45:12', '2016-07-26 10:45:12', 'Ibtikar Admin');
 
 EOF;
 
