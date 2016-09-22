@@ -42,7 +42,7 @@ class BaseUserRepository extends \Doctrine\ORM\EntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        if (null !== $user->getPhoneVerificationCodes()) {
+        if (null !== $user && null !== $user->getPhoneVerificationCodes()) {
             $return = $user->getPhoneVerificationCodes()->first();
         }
 
