@@ -29,6 +29,7 @@ Installation steps
 
     ibtikar_share_economy_ums:
         frontend_layout: "AppBundle:Frontend:layout.html.twig"
+        authentication_success_listener_class: Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationSuccessListener
         max_daily_forget_passwords_requests: 5
         max_daily_verification_code_requests: 5
         max_daily_verification_email_requests: 5

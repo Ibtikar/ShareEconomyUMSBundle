@@ -22,6 +22,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('authentication_success_listener_class')
+                    ->cannotBeEmpty()
+                    ->defaultValue('Ibtikar\ShareEconomyUMSBundle\Listener\AuthenticationSuccessListener')
+                ->end()
                 ->scalarNode('user_class')
                     ->cannotBeEmpty()
                     ->isRequired()
