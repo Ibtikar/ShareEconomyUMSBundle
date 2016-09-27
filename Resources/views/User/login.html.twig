@@ -1,27 +1,51 @@
-{% extends '::base.html.twig' %}
+{% extends "IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin.html.twig" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}{% trans %}Login page{% endtrans %}{% endblock %}
 
 {% block body %}
-{% if error %}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
-<form action="{{ path('ibtikar_share_economy_ums_login') }}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" />
+                        <form action="{{ path('ibtikar_share_economy_ums_login') }}" method="post">
+                            {% if error %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="alert alert-danger no-border">
+                                        <button data-dismiss="alert" class="close" type="button"><span>×</span><span class="sr-only">{% trans %}Close{% endtrans %}</span></button>
+                                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="_password" />
-    <input type="checkbox" id="remember_me" name="_remember_me" checked />
-    <label for="remember_me">Keep me logged in</label>
-    {#
-        If you want to control the URL the user
-        is redirected to on success (more details below)
-        <input type="hidden" name="_target_path" value="/account" />
-    #}
+                            <div class="form-group has-feedback-right">
+                                <input type="text" name="_username" value="{{ last_username }}" class="form-control" placeholder="{% trans %}Email{% endtrans %}">
+                                <div class="form-control-feedback">
+                                    <i class="icon-user text-muted"></i>
+                                </div>
+                            </div>
 
-    <button type="submit">login</button>
-</form>
+                            <div class="form-group has-feedback has-feedback-right">
+                                <input type="text" class="form-control" placeholder="{% trans %}Password{% endtrans %}" name="_password">
+                                <div class="form-control-feedback">
+                                    <i class="icon-lock2 text-muted"></i>
+                                </div>
+                            </div>
 
-<a href="{{ url('ibtikar_share_economy_ums_forgot_password') }}">Forgot your password ?</a>
+                            <div class="form-group login-options">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" class="styled" checked="checked" name="_remember_me">
+                                            {% trans %}Remember me{% endtrans %}
+                                        </label>
+                                    </div>
+
+                                    <div class="col-sm-6 text-right">
+                                        <a href="{{ url('ibtikar_share_economy_ums_forgot_password') }}">{% trans %}Forgot your password ?{% endtrans %}</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">{% trans %}Login{% endtrans %}<i class="icon-circle-left2 position-right"></i></button>
+                            </div>
+                        </form>
 {% endblock %}

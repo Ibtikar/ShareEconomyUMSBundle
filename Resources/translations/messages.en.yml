@@ -8,3 +8,16 @@
 "something_went_wrong": "something went wrong please try again later"
 "reach_max_phone_verification_requests_error": "You reached the maximum tries of requesting phone verification code"
 "phone_already_verified": "Your phone is already verified"
+
+# template translations
+
+# base template
+"Welcome to your dashboard": "Welcome to your dashboard"
+# login page
+"Close": "Close"
+"Email": "Email"
+"Password": "Password"
+"Remember me": "Remember me"
+"Forgot your password ?": "Forgot your password ?"
+"Login page": "Login page"
+"Login": "Login"

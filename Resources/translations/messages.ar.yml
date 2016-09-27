@@ -8,3 +8,16 @@
 "something_went_wrong": "حدث خطأ. يرجى إعادة المحاولة في وقت لاحق"
 "reach_max_phone_verification_requests_error": "لقد استنفذت جميع المحاولات المسموح بها لطلب تحقيق تليفونك"
 "phone_already_verified": "هذا التليفون محقق منه بالفعل"
+
+# template translations
+
+# base template
+"Welcome to your dashboard": "أهلا بك فى لوحة التحكم"
+# login page
+"Close": "إغلاق"
+"Email": "البريد الألكترونى"
+"Password": "كلمة المرور"
+"Remember me": "تذكرني"
+"Forgot your password ?": "نسيت كلمة المرور ؟"
+"Login page": "صفحة الدخول"
+"Login": "دخول"
