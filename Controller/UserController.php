@@ -41,30 +41,28 @@ class UserController extends Controller
      */
     public function forgotPasswordAction(Request $request)
     {
-        $errorMessage = null;
-        $successMessage = null;
+        $translator = $this->get('translator');
         $formBuilder = $this->createFormBuilder()
             ->setMethod('POST')
-            ->add('loginCredentials', formInputsTypes\EmailType::class, array('attr' => array('autocomplete' => 'off'), 'constraints' => array(new Constraints\NotBlank(), new Constraints\Email())))
-            ->add('save', formInputsTypes\SubmitType::class);
+            ->add('email', formInputsTypes\EmailType::class, array('attr' => array('autocomplete' => 'off'), 'constraints' => array(new Constraints\NotBlank(), new Constraints\Email())))
+            ->add('retrieveYourPassword', formInputsTypes\SubmitType::class);
         $form = $formBuilder->getForm();
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                $loginCredentials = $data['loginCredentials'];
-                $message = $this->get('user_operations')->sendResetPasswordEmail($loginCredentials);
+                $email = $data['email'];
+                $message = $this->get('user_operations')->sendResetPasswordEmail($email);
                 if ($message === 'success') {
-                    $this->addFlash('success', $message);
+                    $this->addFlash('success', $translator->trans('A message have been sent to your email with a link to change your password page'));
                 } else {
                     $this->addFlash('error', $message);
                 }
-                return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $this->getParameter('ibtikar_share_economy_ums.frontend_layout')]);
             }
         }
-        return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
+        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin_form.html.twig', array(
                 'form' => $form->createView(),
-                'title' => 'Forgot your password',
+                'title' => $translator->trans('Forgot your password'),
         ));
     }
 

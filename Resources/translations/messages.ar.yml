@@ -21,3 +21,8 @@
 "Forgot your password ?": "نسيت كلمة المرور ؟"
 "Login page": "صفحة الدخول"
 "Login": "دخول"
+
+# Forgot password page
+"Forgot your password": "نسيت كلمة المرور"
+"Retrieve your password": "استعادة كلمة المرور"
+"A message have been sent to your email with a link to change your password page": "تم إرسال رسالة إلى بريدك الألكترونى تحتوى على رابط تغيير كلمة المرور"
