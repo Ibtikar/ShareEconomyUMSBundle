@@ -45,7 +45,7 @@ class UserController extends Controller
         $formBuilder = $this->createFormBuilder()
             ->setMethod('POST')
             ->add('email', formInputsTypes\EmailType::class, array('attr' => array('autocomplete' => 'off'), 'constraints' => array(new Constraints\NotBlank(), new Constraints\Email())))
-            ->add('retrieveYourPassword', formInputsTypes\SubmitType::class);
+            ->add('Retrieve your password', formInputsTypes\SubmitType::class);
         $form = $formBuilder->getForm();
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -81,17 +81,16 @@ class UserController extends Controller
         }
 
         $now = new \DateTime();
+        $translator = $this->get('translator');
 
         if ($user->getEmailVerificationTokenExpiryTime() < $now) {
-            $this->addFlash('error', 'انتهت صلاحية استخدام هذا الرابط, من فضلك قم بطلب رابط تأكيد جديد.');
+            $this->addFlash('error', $translator->trans('The link expired please request a new one.'));
         } else {
             $this->get('user_operations')->verifyUserEmail($user);
-            $this->addFlash('success', 'تم تفعيل البريد الإلكتروني بنجاح.');
+            $this->addFlash('success', $translator->trans('Email verified successfully.'));
         }
 
-        $layout = $this->getParameter('ibtikar_share_economy_ums.frontend_layout');
-
-        return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $layout]);
+        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin.html.twig');
     }
 
     /**
@@ -110,10 +109,9 @@ class UserController extends Controller
         }
         $currentTime = new \DateTime();
         $translator = $this->get('translator');
-        $layout = $this->getParameter('ibtikar_share_economy_ums.frontend_layout');
         if ($user->getChangePasswordTokenExpiryTime() < $currentTime) {
             $this->addFlash('error', $translator->trans('The change password link expired please request a new one.'));
-            return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $layout]);
+            return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin.html.twig');
         }
         if (!$user->getEmailVerified()) {
             $this->get('user_operations')->verifyUserEmail($user);
@@ -128,7 +126,7 @@ class UserController extends Controller
                 'first_options' => array('label' => 'Password', 'attr' => array('autocomplete' => 'off')),
                 'second_options' => array('label' => 'Repeat Password', 'attr' => array('autocomplete' => 'off')),
             ))
-            ->add('Change', formInputsTypes\SubmitType::class);
+            ->add('Reset your password', formInputsTypes\SubmitType::class);
         $form = $formBuilder->getForm();
         if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
@@ -139,12 +137,12 @@ class UserController extends Controller
                 $user->setChangePasswordTokenExpiryTime(null);
                 $em->flush($user);
                 $this->addFlash('success', $translator->trans('Password changed sucessfully.'));
-                return $this->render('IbtikarShareEconomyUMSBundle:User:message.html.twig', ['layout' => $layout]);
+                return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin.html.twig');
             }
         }
-        return $this->render('IbtikarShareEconomyUMSBundle::form.html.twig', array(
+        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin_form.html.twig', array(
                 'form' => $form->createView(),
-                'title' => 'Reset your password',
+                'title' => $translator->trans('Reset your password'),
         ));
     }
 }

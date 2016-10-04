@@ -24,3 +24,13 @@
 "Forgot your password": "Forgot your password"
 "Retrieve your password": "Retrieve your password"
 "A message have been sent to your email with a link to change your password page": "A message have been sent to your email with a link to change your password page"
+
+# Reset password page
+"The change password link expired please request a new one.": "The change password link expired please request a new one."
+"Password changed sucessfully.": "Password changed sucessfully."
+"Reset your password": "Reset your password"
+"Repeat Password": "Repeat Password"
+
+# Verify email page
+"Email verified successfully.": "Email verified successfully."
+"The link expired please request a new one.": "The link expired please request a new one."

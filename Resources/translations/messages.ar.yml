@@ -24,3 +24,13 @@
 "Forgot your password": "نسيت كلمة المرور"
 "Retrieve your password": "استعادة كلمة المرور"
 "A message have been sent to your email with a link to change your password page": "تم إرسال رسالة إلى بريدك الألكترونى تحتوى على رابط تغيير كلمة المرور"
+
+# Reset password page
+"The change password link expired please request a new one.": "انتهت صلاحية الرابط من فضلك قم بطلب رابط اخر."
+"Password changed sucessfully.": "تم تغيير كلمة المرور بنجاح."
+"Reset your password": "تغيير كلمة المرور"
+"Repeat Password": "أعد كلمة المرور"
+
+# Verify email page
+"Email verified successfully.": "تم تفعيل البريد الإلكتروني بنجاح."
+"The link expired please request a new one.": "انتهت صلاحية استخدام هذا الرابط, من فضلك قم بطلب رابط تأكيد جديد."
