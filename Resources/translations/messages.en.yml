@@ -11,8 +11,6 @@
 
 # template translations
 
-# base template
-"Welcome to your dashboard": "Welcome to your dashboard"
 # login page
 "Close": "Close"
 "Email": "Email"
