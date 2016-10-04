@@ -299,26 +299,7 @@ class UserController extends Controller
             $output         = new UMSApiResponse\RegisterUserFail();
             $output->errors = $validationMessages;
         } else {
-            if ($user->getEmail() !== $oldEmail) {
-                $this->userOperations->generateNewEmailVerificationToken($user);
-                $user->setEmailVerified(false);
-
-                // send verification email
-                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
-            }
-
-            if ($user->getPhone() !== $oldPhone) {
-                $user->setIsPhoneVerified(false);
-                $phoneVerificationCode = $this->userOperations->addNewVerificationCode($user);
-
-                // send phone verification code
-                $this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode);
-            }
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
+            $this->userOperations->updateUserInformation($user, $oldEmail, $oldPhone);
             $output       = new UMSApiResponse\RegisterUserSuccess();
             $output->user = $this->get('user_operations')->getUserData($user);
             $output->user['token'] = $this->get('lexik_jwt_authentication.encoder')->encode(['username' => $user->getUsername()]);

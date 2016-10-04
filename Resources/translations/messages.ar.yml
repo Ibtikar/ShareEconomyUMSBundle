@@ -34,3 +34,10 @@
 # Verify email page
 "Email verified successfully.": "تم تفعيل البريد الإلكتروني بنجاح."
 "The link expired please request a new one.": "انتهت صلاحية استخدام هذا الرابط, من فضلك قم بطلب رابط تأكيد جديد."
+
+# Edit my account page
+"Edit my account": "تعديل بياناتى"
+"Save": "حفظ"
+"Done sucessfully.": "تم بنجاح."
+"Full name": "الأسم بالكامل"
+"Phone": "الهاتف"

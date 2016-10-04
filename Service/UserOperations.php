@@ -306,4 +306,34 @@ class UserOperations extends APIOperations
 
         return $return;
     }
+
+    /**
+     * save the user information to the database
+     *
+     * @param BaseUser $user
+     * @param string $oldEmail
+     * @param string $oldPhone
+     * @return boolean
+     */
+    public function updateUserInformation(BaseUser $user, $oldEmail, $oldPhone)
+    {
+        if ($user->getEmail() !== $oldEmail) {
+            $this->generateNewEmailVerificationToken($user);
+            $user->setEmailVerified(false);
+
+            // send verification email
+            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+        }
+
+        if ($user->getPhone() !== $oldPhone) {
+            $user->setIsPhoneVerified(false);
+            $phoneVerificationCode = $this->addNewVerificationCode($user);
+
+            // send phone verification code
+            $this->sendVerificationCodeMessage($user, $phoneVerificationCode);
+        }
+
+        $this->get('doctrine')->getManager()->flush();
+        return true;
+    }
 }

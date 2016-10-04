@@ -145,4 +145,53 @@ class UserController extends Controller
                 'title' => $translator->trans('Reset your password'),
         ));
     }
+
+    /**
+     * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
+     * @param Request $request
+     * @return Response
+     */
+    public function editMyAccountAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $translator = $this->get('translator');
+        $user = $this->getUser();
+        $oldEmail = $user->getEmail();
+        $oldPhone = $user->getPhone();
+        $formBuilder = $this->createFormBuilder($user, array(
+                'validation_groups' => 'edit',
+            ))
+            ->setMethod('POST')
+            ->add('fullName', formInputsTypes\TextType::class)
+            ->add('phone', formInputsTypes\TextType::class)
+            ->add('email', formInputsTypes\EmailType::class)
+            ->add('userPassword', formInputsTypes\RepeatedType::class, array(
+                'type' => formInputsTypes\PasswordType::class,
+                'required' => false,
+                'first_options' => array('label' => 'Password', 'attr' => array('autocomplete' => 'off')),
+                'second_options' => array('label' => 'Repeat Password', 'attr' => array('autocomplete' => 'off')),
+            ))
+            ->add('Save', formInputsTypes\SubmitType::class);
+        $form = $formBuilder->getForm();
+        $refreshUserObject = false;
+        if ($request->getMethod() === 'POST') {
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                // set the password if it is the only sent data from the form
+                $user->setValidPassword();
+                $this->get('user_operations')->updateUserInformation($user, $oldEmail, $oldPhone);
+                $this->addFlash('success', $translator->trans('Done sucessfully.'));
+            } else {
+                $refreshUserObject = true;
+            }
+        }
+        $formView = $form->createView();
+        if ($refreshUserObject) {
+            $em->refresh($user);
+        }
+        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard_form.html.twig', array(
+                'form' => $formView,
+                'title' => $translator->trans('Edit my account'),
+        ));
+    }
 }
