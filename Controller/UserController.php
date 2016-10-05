@@ -163,7 +163,7 @@ class UserController extends Controller
             ))
             ->setMethod('POST')
             ->add('fullName', formInputsTypes\TextType::class)
-            ->add('phone', formInputsTypes\TextType::class)
+//            ->add('phone', formInputsTypes\TextType::class)
             ->add('email', formInputsTypes\EmailType::class)
             ->add('userPassword', formInputsTypes\RepeatedType::class, array(
                 'type' => formInputsTypes\PasswordType::class,
