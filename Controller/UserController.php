@@ -158,10 +158,16 @@ class UserController extends Controller
         $user = $this->getUser();
         $oldEmail = $user->getEmail();
         $oldPhone = $user->getPhone();
+        $userImage = $user->getWebPath();
+        $userImageAlt = $user->__toString();
         $formBuilder = $this->createFormBuilder($user, array(
                 'validation_groups' => 'edit',
             ))
             ->setMethod('POST')
+            ->add('file', formInputsTypes\FileType::class, array(
+                'required' => false,
+                'label' => false,
+                'attr' => array('data-image-type' => 'profile', 'data-image-url' => &$userImage, 'data-image-alt' => &$userImageAlt)))
             ->add('fullName', formInputsTypes\TextType::class)
 //            ->add('phone', formInputsTypes\TextType::class)
             ->add('email', formInputsTypes\EmailType::class)
@@ -180,6 +186,8 @@ class UserController extends Controller
                 // set the password if it is the only sent data from the form
                 $user->setValidPassword();
                 $this->get('user_operations')->updateUserInformation($user, $oldEmail, $oldPhone);
+                $userImage = $user->getWebPath();
+                $userImageAlt = $user->__toString();
                 $this->addFlash('success', $translator->trans('Done sucessfully.'));
             } else {
                 $refreshUserObject = true;
