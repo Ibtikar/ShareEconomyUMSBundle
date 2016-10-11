@@ -187,7 +187,7 @@ class UserOperations extends APIOperations
                 '%code%' => $code->getCode(),
                 '%validationTimeInMinutes%' => $this->configParams['verification_code_expiry_minutes']
             ));
-            $message = "Verification code for Akly is (".$code->getCode().") valid for ".$this->configParams['verification_code_expiry_minutes']." minutes";
+            $message = "Verification code for " . $this->getParameter('nexmo_from_name') . " is (" . $code->getCode() . ") valid for ".$this->configParams['verification_code_expiry_minutes']." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;
         } catch (\Exception $ex) {
