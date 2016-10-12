@@ -3,6 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
@@ -17,11 +18,11 @@ class AuthenticationSuccessListener
     private $userOperations;
 
     /**
-     * @param UserOperations $userOperations
+     * @param ContainerAwareInterface $container
      */
-    public function __construct(UserOperations $userOperations)
+    public function __construct($container)
     {
-        $this->userOperations = $userOperations;
+        $this->userOperations = $container->get('user_operations');
     }
 
     /**
