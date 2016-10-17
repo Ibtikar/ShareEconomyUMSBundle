@@ -429,7 +429,7 @@ class UserController extends Controller
      */
     public function getVerificationRemainingTimeAction(Request $request, $id)
     {
-        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
+        /* @var $user \Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
         $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         if (!$user) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();
@@ -460,7 +460,7 @@ class UserController extends Controller
      */
     public function getLastPhoneVerificationCodeAction(Request $request, $id)
     {
-        /** @var $user Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
+        /* @var $user \Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser */
         $user = $this->getDoctrine()->getManager()->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($id);
         if (!$user) {
             return $this->get('api_operations')->getNotFoundErrorJsonResponse();
