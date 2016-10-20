@@ -2,7 +2,6 @@
 
 namespace Ibtikar\ShareEconomyUMSBundle\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -13,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PhoneVerificationCode
 {
+
+    use \Ibtikar\ShareEconomyToolsBundle\Entity\TrackableTrait;
+
     /**
      * @var integer
      *
@@ -35,14 +37,6 @@ class PhoneVerificationCode
      * @ORM\Column(name="is_verified", type="boolean", nullable=false)
      */
     private $isVerified = false;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     * @Gedmo\Timestampable(on="create")
-     */
-    private $createdAt;
 
     public function __construct()
     {
@@ -108,29 +102,4 @@ class PhoneVerificationCode
     {
         return $this->isVerified;
     }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return PhoneVerificationCode
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
 }

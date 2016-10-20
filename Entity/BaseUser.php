@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,10 +23,12 @@ use Doctrine\ORM\Mapping as ORM;
 class BaseUser implements AdvancedUserInterface, EquatableInterface
 {
 
-    const ROLE_SUPER_ADMIN                         = 'ROLE_SUPER_ADMIN';
-    const ROLE_ADMIN                               = 'ROLE_ADMIN';
-    const ROLE_CUSTOMER                            = 'ROLE_CUSTOMER';
-    const ROLE_SERVICE_PROVIDER                    = 'ROLE_SERVICE_PROVIDER';
+    use \Ibtikar\ShareEconomyToolsBundle\Entity\TrackableTrait;
+
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
+    const ROLE_CUSTOMER = 'ROLE_CUSTOMER';
+    const ROLE_SERVICE_PROVIDER = 'ROLE_SERVICE_PROVIDER';
 
     /**
      * @var int
@@ -193,22 +194,6 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     protected $systemUser;
 
     /**
-     * @var \DateTime $created
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
-     */
-    protected $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
-     */
-    protected $updated;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Ibtikar\ShareEconomyUMSBundle\Entity\PhoneVerificationCode", cascade={"persist", "remove"}, orphanRemoval=true)
@@ -245,7 +230,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
 
     public function __construct()
     {
-        $this->salt                   = md5(uniqid(rand()));
+        $this->salt = md5(uniqid(rand()));
         $this->phoneVerificationCodes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -979,54 +964,6 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     }
 
     /**
-     * Set created
-     *
-     * @param \DateTime $created
-     *
-     * @return User
-     */
-    public function setCreated($created)
-    {
-        $this->created = $created;
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * Set updated
-     *
-     * @param \DateTime $updated
-     *
-     * @return User
-     */
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-
-        return $this;
-    }
-
-    /**
-     * Get updated
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
      * Add phoneVerificationCode
      *
      * @param PhoneVerificationCode $phoneVerificationCode
@@ -1059,5 +996,4 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     {
         return $this->phoneVerificationCodes;
     }
-
 }
