@@ -191,6 +191,7 @@ class UserOperations extends APIOperations
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
             $return  = true;
         } catch (\Exception $ex) {
+            $this->get('logger')->error($exc->getMessage());
             $return = false;
         }
 

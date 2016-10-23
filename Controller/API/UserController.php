@@ -246,11 +246,15 @@ class UserController extends Controller
             }
 
             if ($output->status) {
-                // send phone verification code
-                $this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode);
+                try {
+                    // send phone verification code
+                    $this->userOperations->sendVerificationCodeMessage($user, $phoneVerificationCode);
 
-                // send verification email
-                $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+                    // send verification email
+                    $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+                } catch (\Exception $exc) {
+                    $this->get('logger')->error($exc->getMessage());
+                }
             }
         }
 
