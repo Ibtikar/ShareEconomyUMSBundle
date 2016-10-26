@@ -18,8 +18,8 @@ class Version20161020123230 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE phone_verification_code ADD updated_at DATETIME NOT NULL, ADD version INT DEFAULT 1 NOT NULL');
-        $this->addSql('ALTER TABLE user ADD created_at DATETIME NOT NULL, ADD updated_at DATETIME NOT NULL, ADD version INT DEFAULT 1 NOT NULL, DROP created, DROP updated');
+        $this->addSql('ALTER TABLE phone_verification_code ADD updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ADD version INT DEFAULT 1 NOT NULL');
+        $this->addSql('ALTER TABLE user ADD created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ADD updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, ADD version INT DEFAULT 1 NOT NULL, DROP created, DROP updated');
     }
 
     /**
