@@ -42,7 +42,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @ORM\Column(name="email", type="string", length=190, unique=true)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
      * @Assert\Email(strict=true, message="invalid_email", groups={"signup", "edit"})
@@ -70,7 +70,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=190)
      *
      * @Assert\NotBlank
      */
@@ -170,7 +170,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="fullName", type="string", length=255)
+     * @ORM\Column(name="fullName", type="string", length=190)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
      * @Assert\Length(min = 4, max = 25, groups={"signup", "edit"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
@@ -180,7 +180,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=255, unique=true)
+     * @ORM\Column(name="phone", type="string", length=190, unique=true)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit"})
      */
