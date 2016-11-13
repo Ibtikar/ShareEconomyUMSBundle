@@ -251,6 +251,7 @@ class UserController extends Controller
             } catch (\Exception $exc) {
                 $output          = new UMSApiResponse\Fail();
                 $output->message = $this->get('translator')->trans("something_went_wrong");
+                $this->get('logger')->error($exc->getMessage());
             }
 
             if ($output->status) {
