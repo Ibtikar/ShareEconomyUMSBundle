@@ -2,13 +2,13 @@
 
 namespace Ibtikar\ShareEconomyUMSBundle\APIResponse;
 
-use Ibtikar\ShareEconomyToolsBundle\APIResponse\Success;
+use Ibtikar\ShareEconomyToolsBundle\APIResponse\Success as ToolsSuccessResponse;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
  */
-class SuccessLoggedInUser extends Success
+class SuccessLoggedInUser extends ToolsSuccessResponse
 {
 
     /**

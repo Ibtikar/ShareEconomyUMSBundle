@@ -31,6 +31,29 @@ class UserOperations extends APIOperations
     }
 
     /**
+     * @param User $user
+     * @param string $title
+     * @param string $body
+     * @param array $data
+     */
+    public function sendNotificationToUserDevices(User $user, $title, $body, array $data = array())
+    {
+        /* @var $pushNotificationService \Ibtikar\GoogleServicesBundle\Service\FirebaseCloudMessaging */
+        $pushNotificationService = $this->get('firebase_cloud_messaging');
+        $em = $this->get('doctrine.orm.entity_manager');
+        $userDevices = $em->getRepository('IbtikarGoogleServicesBundle:Device')->findBy(array('user' => $user->getId()));
+        foreach ($userDevices as $userDevice) {
+            $deviceNotificationCount = null;
+            if ($userDevice->getType() === 'ios') {
+                $deviceNotificationCount = ((int) $userDevice->getBadgeNumber()) + 1;
+                $userDevice->setBadgeNumber($deviceNotificationCount);
+            }
+            $pushNotificationService->sendNotificationToDevice($userDevice->getToken(), $title, $body, $data, $deviceNotificationCount);
+        }
+        $em->flush();
+    }
+
+    /**
      * Gets a container service by its id.
      *
      * @param string $id The service id
@@ -187,11 +210,10 @@ class UserOperations extends APIOperations
                 '%code%' => $code->getCode(),
                 '%validationTimeInMinutes%' => $this->configParams['verification_code_expiry_minutes']
             ));
-            $message = "Verification code for " . $this->getParameter('nexmo_from_name') . " is (" . $code->getCode() . ") valid for ".$this->configParams['verification_code_expiry_minutes']." minutes";
             $this->get('jhg_nexmo_sms')->sendText($user->getPhone(), $message);
-            $return  = true;
+            $return = true;
         } catch (\Exception $ex) {
-            $this->get('logger')->error($exc->getMessage());
+            $this->get('logger')->error($ex->getMessage());
             $return = false;
         }
 

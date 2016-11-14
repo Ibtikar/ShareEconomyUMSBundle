@@ -38,12 +38,14 @@ class UserController extends Controller
      *  statusCodes={
      *      200="Returned on success",
      *      401="Returned if the login information was not correct",
-     *      403="Returned if the api key is not valid"
+     *      403="Returned if the api key is not valid",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
-     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -136,12 +138,14 @@ class UserController extends Controller
      *  statusCodes={
      *      200="Returned on success",
      *      401="Returned if the authorization header is missing or expired",
-     *      403="Returned if the api key is not valid"
+     *      403="Returned if the api key is not valid",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessLoggedInUser",
      *      401="Ibtikar\ShareEconomyUMSBundle\APIResponse\InvalidCredentials",
-     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -163,11 +167,13 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes={
      *      200="Returned on success",
-     *      403="Returned if the api key is not valid"
+     *      403="Returned if the api key is not valid",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyUMSBundle\APIResponse\SuccessUser",
-     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey"
+     *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>
@@ -199,11 +205,13 @@ class UserController extends Controller
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -243,6 +251,7 @@ class UserController extends Controller
             } catch (\Exception $exc) {
                 $output          = new UMSApiResponse\Fail();
                 $output->message = $this->get('translator')->trans("something_went_wrong");
+                $this->get('logger')->error($exc->getMessage());
             }
 
             if ($output->status) {
@@ -275,11 +284,13 @@ class UserController extends Controller
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -320,11 +331,13 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\UserToken",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -367,11 +380,13 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -419,11 +434,13 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      404="Returned if the page was not found"
+     *      404 = "Returned if the page was not found",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RemainingTime",
-     *      404="Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound"
+     *      404 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\NotFound",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -455,6 +472,7 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned on success",
+     *      500 = "Returned if there is an internal server error"
      *  }
      * )
      *
@@ -487,11 +505,13 @@ class UserController extends Controller
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -544,11 +564,13 @@ class UserController extends Controller
      *  section="User",
      *  statusCodes = {
      *      200 = "Returned if emial verified",
-     *      400 = "Returned if email not verified yet."
+     *      400 = "Returned if email not verified yet.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -578,11 +600,13 @@ class UserController extends Controller
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserSuccess",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\RegisterUserFail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -628,12 +652,14 @@ class UserController extends Controller
      *  statusCodes={
      *      200="Returned on success",
      *      403="Returned if the api key is not valid",
-     *      422="Returned if there is a validation error in the sent data"
+     *      422="Returned if there is a validation error in the sent data",
+     *      500="Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success",
      *      403="Ibtikar\ShareEconomyToolsBundle\APIResponse\InvalidAPIKey",
-     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\Fail"
+     *      422="Ibtikar\ShareEconomyToolsBundle\APIResponse\Fail",
+     *      500="Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
@@ -661,11 +687,13 @@ class UserController extends Controller
      *  },
      *  statusCodes = {
      *      200 = "Returned on success",
-     *      400 = "Validation failed."
+     *      400 = "Validation failed.",
+     *      500 = "Returned if there is an internal server error"
      *  },
      *  responseMap = {
      *      200 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Success",
-     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail"
+     *      400 = "Ibtikar\ShareEconomyUMSBundle\APIResponse\Fail",
+     *      500 = "Ibtikar\ShareEconomyToolsBundle\APIResponse\InternalServerError"
      *  }
      * )
      *
