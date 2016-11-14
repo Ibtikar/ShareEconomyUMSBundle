@@ -4,12 +4,46 @@ namespace Ibtikar\ShareEconomyUMSBundle\Controller;
 
 use Symfony\Component\Form\Extension\Core\Type as formInputsTypes;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Ibtikar\ShareEconomyDashboardDesignBundle\Controller\DashboardController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints;
 
-class UserController extends Controller
+class UserController extends DashboardController
 {
+
+    protected $listColumns = array(
+        array('fullName'),
+        array('email'),
+        array('createdAt', array('type'=>'date')),
+        array('updatedAt', array('type'=>'date')),
+    );
+
+    protected $defaultSort = array('column' => 'updatedAt', 'sort' => 'desc');
+
+    protected $translationDomain = 'baseuser';
+
+    /**
+     * @author Moemen Hussein <moemen.hussein@ibtikar.net.sa>
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null)
+    {
+        parent::setContainer($container);
+        $this->className = $this->getParameter('ibtikar_share_economy_ums.className');
+        $this->entityBundle = $this->getParameter('ibtikar_share_economy_ums.entityBundle');
+    }
+    /**
+     * @author Moemen Hussein <moemen.hussein@ibtikar.net.sa>
+     * @return type
+     */
+    public function getListQuery() {
+        $query = parent::getListQuery();
+        $user = $this->getUser();
+        $query = $query->where('e.id != '.$user->getId())
+                        ->andWhere('e.systemUser != true');
+        return $query;
+    }
 
     /**
      * @author Mahmoud Mostafa <mahmoud.mostafa@ibtikar.net.sa>

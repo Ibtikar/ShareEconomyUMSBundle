@@ -45,6 +45,12 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('verification_code_expiry_minutes')
                     ->defaultValue(5)
                 ->end()
+                ->scalarNode('className')
+                    ->defaultValue('User')
+                ->end()
+                ->scalarNode('entityBundle')
+                    ->defaultValue('AppBundle')
+                ->end()
             ->end();
 
         return $treeBuilder;
