@@ -187,6 +187,13 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     protected $phone;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="locale", type="string", length=2, nullable=true, options={"fixed": true})
+     */
+    protected $locale;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="systemUser", type="boolean")
@@ -851,6 +858,30 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     *
+     * @return User
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     /**

@@ -727,4 +727,45 @@ class UserController extends Controller
 
         return $this->get('api_operations')->getJsonResponseForObject($output);
     }
+
+    /**
+     * change current user locale
+     *
+     * @ApiDoc(
+     * authentication=true,
+     *  description="change current user locale",
+     *  section="User",
+     *  parameters={
+     *      {"name"="locale", "dataType"="string", "required"=true}
+     *  },
+     *  statusCodes={
+     *      200="Returned on success"
+     *  },
+     *  responseMap = {
+     *      200="Ibtikar\ShareEconomyToolsBundle\APIResponse\Success"
+     *  }
+     * )
+     *
+     * @param Request $request
+     * @author Karim Shendy <kareem.elshendy@ibtikar.net.sa>
+     * @return JsonResponse
+     */
+    public function changeLocaleAction(Request $request)
+    {
+        $locale = $request->request->get('locale', $this->getParameter('locale'));
+
+        if (in_array($locale, $this->getParameter('accepted_locales'))) {
+            $em          = $this->getDoctrine()->getManager();
+            $currentUser = $this->getUser();
+            $user        = $em->getRepository($this->getParameter('ibtikar_share_economy_ums.user_class'))->find($currentUser->getId());
+            $user->setLocale($locale);
+            $em->flush();
+
+            $output = new UMSApiResponse\Success();
+        } else {
+            $output = new UMSApiResponse\Fail();
+        }
+
+        return new JsonResponse($output);
+    }
 }

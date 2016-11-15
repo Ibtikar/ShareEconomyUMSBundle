@@ -128,6 +128,7 @@ class UserOperations extends APIOperations
         $responseUser->phone = $user->getPhone();
         $responseUser->emailVerified = $user->getEmailVerified();
         $responseUser->isPhoneVerified = $user->getIsPhoneVerified();
+        $responseUser->locale = $user->getLocale();
         if ($user->getImage()) {
             $responseUser->image = $this->get('request_stack')->getCurrentRequest()->getSchemeAndHttpHost() . '/' . $user->getWebPath();
         }
