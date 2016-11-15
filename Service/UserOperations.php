@@ -31,12 +31,12 @@ class UserOperations extends APIOperations
     }
 
     /**
-     * @param User $user
+     * @param BaseUser $user
      * @param string $title
      * @param string $body
      * @param array $data
      */
-    public function sendNotificationToUserDevices(User $user, $title, $body, array $data = array())
+    public function sendNotificationToUserDevices(BaseUser $user, $title, $body, array $data = array())
     {
         /* @var $pushNotificationService \Ibtikar\GoogleServicesBundle\Service\FirebaseCloudMessaging */
         $pushNotificationService = $this->get('firebase_cloud_messaging');
