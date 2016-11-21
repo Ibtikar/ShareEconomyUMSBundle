@@ -9,30 +9,33 @@ use Psr\Log\LoggerInterface;
 
 class EmailSender
 {
+
     private $em;
     private $mailer;
     private $templating;
     private $senderEmail;
     private $logger;
+    private $translator;
 
-    public function __construct($em, $mailer, $templating, $senderEmail, LoggerInterface $logger)
+    public function __construct($em, $mailer, $templating, $senderEmail, LoggerInterface $logger, \Symfony\Component\Translation\DataCollectorTranslator $translator)
     {
-        $this->em          = $em;
-        $this->mailer      = $mailer;
-        $this->templating  = $templating;
+        $this->em = $em;
+        $this->mailer = $mailer;
+        $this->templating = $templating;
         $this->senderEmail = $senderEmail;
-        $this->logger      = $logger;
+        $this->logger = $logger;
+        $this->translator = $translator;
     }
 
     public function send($to = "", $subject = "", $content = "", $type = "text/html", $files = array())
     {
         $message = Swift_Message::newInstance()
-            ->setSubject($subject)
-            ->setFrom($this->senderEmail, $this->senderEmail)
-            ->setSender($this->senderEmail, $this->senderEmail)
-            ->setTo($to)
-            ->setContentType($type)
-            ->setBody($content);
+                ->setSubject($subject)
+                ->setFrom($this->senderEmail, $this->senderEmail)
+                ->setSender($this->senderEmail, $this->senderEmail)
+                ->setTo($to)
+                ->setContentType($type)
+                ->setBody($content);
 
         if (!empty($files)) {
             foreach ($files as $name => $path) {
@@ -55,7 +58,7 @@ class EmailSender
      */
     public function sendEmailVerification(BaseUser $user)
     {
-        return $this->send($user->getEmail(), 'Please verify your email', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:emailVerification.html.twig', ['user' => $user]));
+        return $this->send($user->getEmail(), $this->translator->trans('Please verify your email', array(), 'email'), $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:emailVerification.html.twig', ['user' => $user]));
     }
 
     /**
@@ -66,6 +69,6 @@ class EmailSender
      */
     public function sendResetPasswordEmail(BaseUser $user)
     {
-        return $this->send($user->getEmail(), 'Reset password', $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', ['user' => $user]));
+        return $this->send($user->getEmail(), $this->translator->trans('Reset password', array(), 'email'), $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', ['user' => $user]));
     }
 }

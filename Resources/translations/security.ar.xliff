@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2016-11-21T08:30:29Z" source-language="en" target-language="ar" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="82f40cdb7a68e83fcf680c94a2a762f9b2fea3e8" resname="Please fill the mandatory field first.">
+        <source>Please fill the mandatory field first.</source>
+        <target>املأ الحقل أولاً</target>
+        <jms:reference-file line="43">/../src/Ibtikar/ShareEconomyUMSBundle/Listener/AuthenticationFailureListener.php</jms:reference-file>
+        <jms:reference-file line="48">/../src/Ibtikar/ShareEconomyUMSBundle/Listener/AuthenticationFailureListener.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ad86b3f1527dbcb29143c71f10eecceac36ff383" resname="The entered email is not registered, please enter again.">
+        <source>The entered email is not registered, please enter again.</source>
+        <target>البريد الإلكتروني المدخل غير مسجل مسبقا، يرجى المحاولة مرة آخرى</target>
+        <jms:reference-file line="46">/../src/Ibtikar/ShareEconomyUMSBundle/Listener/AuthenticationFailureListener.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="6875a0d379551d6500c16bd395511b5c6b799f61" resname="The presented password is invalid.">
+        <source>The presented password is invalid.</source>
+        <target>ادخل كلمة مرور صحيحة</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

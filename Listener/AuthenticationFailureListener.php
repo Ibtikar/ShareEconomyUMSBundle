@@ -40,15 +40,15 @@ class AuthenticationFailureListener
         $exception = $event->getException();
         $errorMessage = $exception->getMessage();
         if (!$request->get('password')) {
-            $errorMessage = 'Please fill the mandatory field first.';
+            $errorMessage = $this->translator->trans('Please fill the mandatory field first.', array(), 'security');
         } else {
             if ($exception instanceof UsernameNotFoundException) {
-                $errorMessage = 'The entered email is not registered, please enter again.';
+                $errorMessage = $this->translator->trans('The entered email is not registered, please enter again.', array(), 'security');
                 if ($exception->getUsername() === AuthenticationProviderInterface::USERNAME_NONE_PROVIDED) {
-                    $errorMessage = 'Please fill the mandatory field first.';
+                    $errorMessage = $this->translator->trans('Please fill the mandatory field first.', array(), 'security');
                 }
             }
         }
-        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse($this->translator->trans($errorMessage, array(), 'security')));
+        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse($errorMessage));
     }
 }

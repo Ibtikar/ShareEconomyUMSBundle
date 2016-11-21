@@ -27,4 +27,4 @@ services:
 
     ibtikar.shareeconomy.ums.email_sender:
         class:  Ibtikar\ShareEconomyUMSBundle\Service\EmailSender
-        arguments:  ["@doctrine.orm.entity_manager", "@mailer", "@templating", "%mailer_user%", '@logger']
+        arguments:  ["@doctrine.orm.entity_manager", "@mailer", "@templating", "%mailer_user%", '@logger', '@translator']
