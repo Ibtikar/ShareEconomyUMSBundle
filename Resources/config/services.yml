@@ -1,4 +1,18 @@
 services:
+
+    request_set_language:
+        class: Ibtikar\ShareEconomyUMSBundle\Listener\LanguageChangeListener
+        arguments: [ "%accepted_locales%", "%locale%", "@security.token_storage", "@doctrine.orm.entity_manager", "@logger" ]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: changeRequestLocale, priority: 17 }
+            - { name: kernel.event_listener, event: kernel.request, method: changeUserLocale, priority: 7 }
+
+    request_user_update_locale:
+        class: Ibtikar\ShareEconomyUMSBundle\Listener\UserLanguageSetListener
+        arguments: [ "@session" ]
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onInteractiveLogin }
+
     user_operations:
         class: Ibtikar\ShareEconomyUMSBundle\Service\UserOperations
         arguments: [ '@service_container' ]
