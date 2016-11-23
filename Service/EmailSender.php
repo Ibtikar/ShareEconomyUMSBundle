@@ -17,7 +17,7 @@ class EmailSender
     private $logger;
     private $translator;
 
-    public function __construct($em, $mailer, $templating, $senderEmail, LoggerInterface $logger, \Symfony\Component\Translation\DataCollectorTranslator $translator)
+    public function __construct($em, $mailer, $templating, $senderEmail, LoggerInterface $logger, $translator)
     {
         $this->em = $em;
         $this->mailer = $mailer;
