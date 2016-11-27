@@ -12,7 +12,7 @@ use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 class UserLanguageSetListener
 {
 
-    /** @var $session Session */
+    /* @var $session \Symfony\Component\HttpFoundation\Session\Session */
     private $session;
 
     public function __construct(Session $session)

@@ -13,19 +13,19 @@ use Doctrine\ORM\EntityManager;
 class LanguageChangeListener
 {
 
-    /** @var $securityTokenStorage TokenStorage */
+    /* @var $securityTokenStorage \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage */
     private $securityTokenStorage;
 
-    /** @var $acceptedLocales array */
+    /* @var $acceptedLocales array */
     private $acceptedLocales;
 
-    /** @var $defaultLocale string */
+    /* @var $defaultLocale string */
     private $defaultLocale;
 
-    /** @var $em EntityManager */
+    /* @var $em \Doctrine\ORM\EntityManager */
     private $em;
 
-    /** @var $logger \Monolog\Logger */
+    /* @var $logger \Monolog\Logger */
     private $logger;
 
     public function __construct(array $acceptedLocales, $defaultLocale, TokenStorage $securityTokenStorage, EntityManager $em, $logger)

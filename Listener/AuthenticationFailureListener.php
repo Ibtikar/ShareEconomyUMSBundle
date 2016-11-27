@@ -5,7 +5,6 @@ namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 
@@ -15,10 +14,10 @@ use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 class AuthenticationFailureListener
 {
 
-    /** @var $tranlator TranslatorInterface */
+    /* @var $tranlator \Symfony\Component\Translation\TranslatorInterface */
     private $translator;
 
-    /** @var UserOperations $userOperations */
+    /* @var $userOperations \Ibtikar\ShareEconomyUMSBundle\Service\UserOperations */
     private $userOperations;
 
     /**
