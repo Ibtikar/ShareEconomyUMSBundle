@@ -94,7 +94,7 @@ class UserController extends DashboardController
                 }
             }
         }
-        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin_form.html.twig', array(
+        return $this->render('IbtikarShareEconomyUMSBundle:User:forgetPassword.html.twig', array(
                 'form' => $form->createView(),
                 'title' => $translator->trans('Forgot your password'),
         ));

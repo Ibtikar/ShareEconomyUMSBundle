@@ -3,7 +3,7 @@
 {% block title %}{% trans %}Login page{% endtrans %}{% endblock %}
 
 {% block body %}
-                        <form action="{{ path('ibtikar_share_economy_ums_login') }}" method="post">
+                        <form class="dev-js-validation" action="{{ path('ibtikar_share_economy_ums_login') }}" method="post">
                             {% if error %}
                             <div class="row">
                                 <div class="col-md-12">
@@ -16,14 +16,14 @@
                             {% endif %}
 
                             <div class="form-group has-feedback-right">
-                                <input type="text" name="_username" value="{{ last_username }}" class="form-control" placeholder="{% trans %}Email{% endtrans %}">
+                                <input type="text" required name="_username" value="{{ last_username }}" class="form-control" placeholder="{% trans %}Email{% endtrans %}">
                                 <div class="form-control-feedback">
                                     <i class="icon-user text-muted"></i>
                                 </div>
                             </div>
 
                             <div class="form-group has-feedback has-feedback-right">
-                                <input type="password" class="form-control" placeholder="{% trans %}Password{% endtrans %}" name="_password">
+                                <input type="password" required class="form-control" placeholder="{% trans %}Password{% endtrans %}" name="_password">
                                 <div class="form-control-feedback">
                                     <i class="icon-lock2 text-muted"></i>
                                 </div>
@@ -48,4 +48,15 @@
                                 <button type="submit" class="btn btn-primary btn-block">{% trans %}Login{% endtrans %}<i class="icon-circle-left2 position-right"></i></button>
                             </div>
                         </form>
+{% endblock %}
+{% block javascripts %}
+    {{parent()}}
+    <script>
+        var availableMessage = '{% trans %}valid{% endtrans %}';
+        var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
+    </script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/jquery-validation/messages_ar.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/jquery.form.min.js')}}"></script>
+    <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/dev/validation.js')}}"></script>
 {% endblock %}
