@@ -5,7 +5,6 @@ namespace Ibtikar\ShareEconomyUMSBundle\Listener;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 
@@ -15,10 +14,10 @@ use Ibtikar\ShareEconomyUMSBundle\Service\UserOperations;
 class AuthenticationFailureListener
 {
 
-    /** @var $tranlator TranslatorInterface */
+    /* @var $tranlator \Symfony\Component\Translation\TranslatorInterface */
     private $translator;
 
-    /** @var UserOperations $userOperations */
+    /* @var $userOperations \Ibtikar\ShareEconomyUMSBundle\Service\UserOperations */
     private $userOperations;
 
     /**
@@ -40,15 +39,15 @@ class AuthenticationFailureListener
         $exception = $event->getException();
         $errorMessage = $exception->getMessage();
         if (!$request->get('password')) {
-            $errorMessage = 'Please fill the mandatory field first.';
+            $errorMessage = $this->translator->trans('Please fill the mandatory field first.', array(), 'security');
         } else {
             if ($exception instanceof UsernameNotFoundException) {
-                $errorMessage = 'The entered email is not registered, please enter again.';
+                $errorMessage = $this->translator->trans('The entered email is not registered, please enter again.', array(), 'security');
                 if ($exception->getUsername() === AuthenticationProviderInterface::USERNAME_NONE_PROVIDED) {
-                    $errorMessage = 'Please fill the mandatory field first.';
+                    $errorMessage = $this->translator->trans('Please fill the mandatory field first.', array(), 'security');
                 }
             }
         }
-        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse($this->translator->trans($errorMessage, array(), 'security')));
+        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse($errorMessage));
     }
 }

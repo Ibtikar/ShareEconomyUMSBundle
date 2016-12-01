@@ -14,10 +14,10 @@ use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
 class CheckAPILogin
 {
 
-    /** @var $securityTokenStorage TokenStorage */
+    /* @var $securityTokenStorage \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage */
     private $securityTokenStorage;
 
-    /** @var UserOperations $userOperations */
+    /* @var $userOperations \Ibtikar\ShareEconomyUMSBundle\Service\UserOperations */
     private $userOperations;
 
     /**

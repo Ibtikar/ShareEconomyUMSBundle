@@ -34,7 +34,7 @@ class PhoneVerificationCode
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_verified", type="boolean", nullable=false)
+     * @ORM\Column(name="is_verified", type="boolean", options={"default": false})
      */
     private $isVerified = false;
 

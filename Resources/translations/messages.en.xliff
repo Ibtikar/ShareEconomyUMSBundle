@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2016-11-21T08:30:29Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="6656072da69134475e8cfb4256682f482beb1dad" resname="A message have been sent to your email with a link to change your password page">
+        <source>A message have been sent to your email with a link to change your password page</source>
+        <target>A message have been sent to your email with a link to change your password page</target>
+        <jms:reference-file line="91">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="bbfa773e5a63a5ea58c9b6207e608ca0120e592a" resname="Close">
+        <source>Close</source>
+        <target>Close</target>
+        <jms:reference-file line="11">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="2dba4af1a5ec6008f79abb4dc6f24b006c9b179c" resname="Done sucessfully.">
+        <source>Done sucessfully.</source>
+        <target>Done sucessfully.</target>
+        <jms:reference-file line="225">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="10844584e46f8b2b6ea3a5a29599cc2f4bb574b0" resname="Edit my account">
+        <source>Edit my account</source>
+        <target>Edit my account</target>
+        <jms:reference-file line="236">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="84add5b2952787581cb9a8851eef63d1ec75d22b" resname="Email">
+        <source>Email</source>
+        <target>Email</target>
+        <jms:reference-file line="19">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b1a0f17d2bb0af57843aeaf26f79b8cd4b151f8e" resname="Email verified successfully.">
+        <source>Email verified successfully.</source>
+        <target>Email verified successfully.</target>
+        <jms:reference-file line="124">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="119f648c6a473ceeee09568695bd8514ba3ab6d0" resname="Forgot your password">
+        <source>Forgot your password</source>
+        <target>Forgot your password</target>
+        <jms:reference-file line="99">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="043e1782683fbcb5375763042f12bcb5c34d466b" resname="Forgot your password ?">
+        <source>Forgot your password ?</source>
+        <target>Forgot your password ?</target>
+        <jms:reference-file line="42">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="eeb692087d629b32f2f1820369d9756d60c5cba8" resname="Full name">
+        <source>Full name</source>
+        <target>Full name</target>
+      </trans-unit>
+      <trans-unit id="4e5a2893bdcc7d239c1db72e4c4ffbe4bea73174" resname="Login">
+        <source>Login</source>
+        <target>Login</target>
+        <jms:reference-file line="48">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7db42c1e3a768ed337ad0847efacc334f1b111dc" resname="Login page">
+        <source>Login page</source>
+        <target>Login page</target>
+        <jms:reference-file line="3">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="8be3c943b1609fffbfc51aad666d0a04adf83c9d" resname="Password">
+        <source>Password</source>
+        <target>Password</target>
+        <jms:reference-file line="160">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+        <jms:reference-file line="211">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+        <jms:reference-file line="26">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="dcd698b3a78327ae7fa6866d74e1e2857945ddd0" resname="Password changed sucessfully.">
+        <source>Password changed sucessfully.</source>
+        <target>Password changed sucessfully.</target>
+        <jms:reference-file line="173">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="77064d5265236e0ac252f3fc4a5ba7b274b6a583" resname="Phone">
+        <source>Phone</source>
+        <target>Phone</target>
+      </trans-unit>
+      <trans-unit id="ced7b308a348567fbf21dd775ee496dd01207f24" resname="Remember me">
+        <source>Remember me</source>
+        <target>Remember me</target>
+        <jms:reference-file line="37">/../src/Ibtikar/ShareEconomyUMSBundle/Resources/views/User/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="bab9bc458f38d4d574e5baa63c72341db6ddaa30" resname="Repeat Password">
+        <source>Repeat Password</source>
+        <target>Repeat Password</target>
+        <jms:reference-file line="161">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+        <jms:reference-file line="212">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="bf8804f07772036fc47c44e60c9c3ce7073e6891" resname="Reset your password">
+        <source>Reset your password</source>
+        <target>Reset your password</target>
+        <jms:reference-file line="179">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0bac7599b4be63bc94eb4a3cdcbc868f43ebf80a" resname="Retrieve your password">
+        <source>Retrieve your password</source>
+        <target>Retrieve your password</target>
+      </trans-unit>
+      <trans-unit id="efc007a393f66cdb14d57d385822a3d9e36ef873" resname="Save">
+        <source>Save</source>
+        <target>Save</target>
+      </trans-unit>
+      <trans-unit id="ea1196ac5291057d4aedcb8f7f545a2a3618d947" resname="The change password link expired please request a new one.">
+        <source>The change password link expired please request a new one.</source>
+        <target>The change password link expired please request a new one.</target>
+        <jms:reference-file line="147">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="1a396daa7ae4c53a2699a0bb857cf3694fb934a2" resname="The link expired please request a new one.">
+        <source>The link expired please request a new one.</source>
+        <target>The link expired please request a new one.</target>
+        <jms:reference-file line="121">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="d00754f266298ed9ad2990d52a8f7c89e4858378" resname="Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes">
+        <source>Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes</source>
+        <target>Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes</target>
+        <jms:reference-file line="209">/../src/Ibtikar/ShareEconomyUMSBundle/Service/UserOperations.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="7794bd71a2859f2327bb3ee401e5c55cbf98c4aa" resname="email_not_registered">
+        <source>email_not_registered</source>
+        <target>The entered email is not registered, please enter again.</target>
+        <jms:reference-file line="172">/../src/Ibtikar/ShareEconomyUMSBundle/Service/UserOperations.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="c24223e6082a254cc8574a3081b8adcfab99e039" resname="expired_verification_code">
+        <source>expired_verification_code</source>
+        <target>Verification code is expired.</target>
+        <jms:reference-file line="365">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4983367703e1b23c778cd57e7e147cc454c1dc11" resname="phone_already_verified">
+        <source>phone_already_verified</source>
+        <target>Your phone is already verified</target>
+        <jms:reference-file line="405">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="f72a0029d9928fdf4dd7799ad289d1ea863bbbb7" resname="reach_max_forget_password_requests_error">
+        <source>reach_max_forget_password_requests_error</source>
+        <target>You reached the maximum tries of requesting new reset password email</target>
+        <jms:reference-file line="175">/../src/Ibtikar/ShareEconomyUMSBundle/Service/UserOperations.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="acee778846786c4891f30753fa6a5e3d7c7ccdf3" resname="reach_max_phone_verification_requests_error">
+        <source>reach_max_phone_verification_requests_error</source>
+        <target>You reached the maximum tries of requesting phone verification code</target>
+        <jms:reference-file line="408">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="421f53ca3cfcfae8b19ea7fbeba13cdbf566adb0" resname="reach_max_verification_email_requests_error">
+        <source>reach_max_verification_email_requests_error</source>
+        <target>You reached the maximum tries of requesting verification email</target>
+        <jms:reference-file line="717">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ee10987dc341bbfd03e48da07e30e487e3f60bee" resname="something_went_wrong">
+        <source>something_went_wrong</source>
+        <target>something went wrong please try again later</target>
+        <jms:reference-file line="253">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="8ba253550dad07f1acdf0cd38f838ac445f22fc1" resname="user_already_verified">
+        <source>user_already_verified</source>
+        <target>This email already verified</target>
+        <jms:reference-file line="714">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="0c7aaf3dc10902715dba4d8eaccbd1b81e468062" resname="wrong_verification_code">
+        <source>wrong_verification_code</source>
+        <target>Invalid Verification Code.</target>
+        <jms:reference-file line="369">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2016-11-21T08:30:29Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="c99a0a16cc3931445761bb764c2fd0ca49908ba7" resname="The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.">
+        <source>The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.</source>
+        <target>Image size is not suitable (300 X 300)</target>
+      </trans-unit>
+      <trans-unit id="7cafc19486cc4d59ec4e854e57f8bdc5a285a788" resname="The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.">
+        <source>The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.</source>
+        <target>Image size is not suitable (300 X 300)</target>
+      </trans-unit>
+      <trans-unit id="29cc2acaae8a2a23fac5496375b47095f2dcfc12" resname="This file is not a valid image.">
+        <source>This file is not a valid image.</source>
+        <target>Image should be png, or jpg</target>
+      </trans-unit>
+      <trans-unit id="db8cb9ba4dc65d3a3f72774b5336bfe61ebc1f37" resname="email_exist">
+        <source>email_exist</source>
+        <target>The entered email is registered before</target>
+      </trans-unit>
+      <trans-unit id="5238e0562f35d839a6ce7704720aa24fdbc8c350" resname="fill_mandatory_field">
+        <source>fill_mandatory_field</source>
+        <target>Please fill mandatory field first.</target>
+        <jms:reference-file line="167">/../src/Ibtikar/ShareEconomyUMSBundle/Service/UserOperations.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="248b540f985ba8c1ad29509c4e4596e5ca2690a8" resname="fullname_length_not_valid">
+        <source>fullname_length_not_valid</source>
+        <target>Please enter your name between 4 to 25 characters.</target>
+      </trans-unit>
+      <trans-unit id="6717967caa5cbce10ec136a430782bfede254fac" resname="invalid_email">
+        <source>invalid_email</source>
+        <target>Please enter a valid mail</target>
+      </trans-unit>
+      <trans-unit id="0d571345caf6697e6f20884677216c5ffe165c43" resname="password_not_valid">
+        <source>password_not_valid</source>
+        <target>Please enter password with at lease 6 characters, one letter, and one number of them.</target>
+      </trans-unit>
+      <trans-unit id="cf0c25e78470cb6d0a30734e9e2b8a2b97a8dce5" resname="phone_exist">
+        <source>phone_exist</source>
+        <target>The entered phone number is registered before</target>
+      </trans-unit>
+      <trans-unit id="8ad1affde6631c3e7dabfbd60998b6999c696687" resname="same_phone_validation">
+        <source>same_phone_validation</source>
+        <target>This number is identical to the current one</target>
+        <jms:reference-file line="530">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="ea4d5f45145aa15d589ad411c1e935cbce0863d0" resname="user_not_found">
+        <source>user_not_found</source>
+        <target>User not found</target>
+        <jms:reference-file line="423">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+        <jms:reference-file line="553">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+        <jms:reference-file line="711">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="b4a33fbc3db70acb6cb29fe7d46603849257e670" resname="verification_message_not_sent">
+        <source>verification_message_not_sent</source>
+        <target>something went wrong while trying to send the verification message</target>
+        <jms:reference-file line="418">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+        <jms:reference-file line="547">/../src/Ibtikar/ShareEconomyUMSBundle/Controller/API/UserController.php</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -16,7 +16,7 @@ use Ibtikar\ShareEconomyUMSBundle\APIResponse;
 class UserOperations extends APIOperations
 {
 
-    /** @var $container ContainerAwareInterface */
+    /* @var $container \Symfony\Component\DependencyInjection\ContainerAwareInterface */
     private $container;
     private $configParams;
 

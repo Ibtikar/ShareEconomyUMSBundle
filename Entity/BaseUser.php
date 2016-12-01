@@ -93,21 +93,21 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="boolean")
+     * @ORM\Column(name="enabled", type="boolean", options={"default": true})
      */
     protected $enabled = true;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="emailVerified", type="boolean")
+     * @ORM\Column(name="emailVerified", type="boolean", options={"default": false})
      */
     protected $emailVerified = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="isPhoneVerified", type="boolean")
+     * @ORM\Column(name="isPhoneVerified", type="boolean", options={"default": false})
      */
     protected $isPhoneVerified = false;
 
@@ -196,9 +196,9 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var bool
      *
-     * @ORM\Column(name="systemUser", type="boolean")
+     * @ORM\Column(name="systemUser", type="boolean", options={"default": false})
      */
-    protected $systemUser;
+    protected $systemUser = false;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
