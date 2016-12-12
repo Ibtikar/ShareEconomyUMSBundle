@@ -12,8 +12,8 @@ use Doctrine\ORM\EntityManager;
  */
 class LanguageChangeListener
 {
-
     /* @var $securityTokenStorage \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage */
+
     private $securityTokenStorage;
 
     /* @var $acceptedLocales array */
@@ -44,7 +44,7 @@ class LanguageChangeListener
     {
         /* @var $request \Symfony\Component\HttpFoundation\Request */
         $request = $event->getRequest();
-        if (!$request->hasPreviousSession()) {
+        if (!$request->hasPreviousSession() || ((strpos($request->getRequestUri(), '/api/doc') === false && strpos($request->getRequestUri(), '/api/configs/') === false && strpos($request->getRequestUri(), '/api') !== false) )) {
             return;
         }
         $session = $request->getSession();
@@ -62,7 +62,7 @@ class LanguageChangeListener
     {
         /* @var $request \Symfony\Component\HttpFoundation\Request */
         $request = $event->getRequest();
-        if (!$request->hasPreviousSession()) {
+        if (!$request->hasPreviousSession() || ((strpos($request->getRequestUri(), '/api/doc') === false && strpos($request->getRequestUri(), '/api/configs/') === false && strpos($request->getRequestUri(), '/api') !== false) )) {
             return;
         }
         $locale = $request->query->get('_locale');
