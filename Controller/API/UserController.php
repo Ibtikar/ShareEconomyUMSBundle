@@ -125,6 +125,7 @@ class UserController extends Controller
             }
             return $userOperations->getLoggedInUserDataJsonResponse($request);
         } catch (\Exception $e) {
+            $this->get('logger')->critical($e->getMessage());
             return $userOperations->getErrorJsonResponse($e->getMessage());
         }
     }
@@ -251,7 +252,7 @@ class UserController extends Controller
             } catch (\Exception $exc) {
                 $output          = new UMSApiResponse\Fail();
                 $output->message = $this->get('translator')->trans("something_went_wrong");
-                $this->get('logger')->error($exc->getMessage());
+                $this->get('logger')->critical($exc->getMessage());
             }
 
             if ($output->status) {
@@ -262,7 +263,7 @@ class UserController extends Controller
                     // send verification email
                     $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
                 } catch (\Exception $exc) {
-                    $this->get('logger')->error($exc->getMessage());
+                    $this->get('logger')->critical($exc->getMessage());
                 }
             }
         }

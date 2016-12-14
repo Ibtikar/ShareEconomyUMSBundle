@@ -46,7 +46,7 @@ class EmailSender
         try {
             $this->mailer->send($message);
         } catch (\Exception $exc) {
-            $this->logger->error($exc->getTraceAsString());
+            $this->logger->critical($exc->getTraceAsString());
         }
     }
 
