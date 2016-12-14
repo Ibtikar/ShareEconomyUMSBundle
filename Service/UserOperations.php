@@ -50,6 +50,8 @@ class UserOperations extends APIOperations
                 $pushNotificationService->sendNotificationToDevice($userDevice->getToken(), $title, $body, $data, $deviceNotificationCount);
             }
             if ($userDevice->getType() === 'android') {
+                $data['title'] = $title;
+                $data['body'] = $body;
                 $pushNotificationService->sendMessageToDevice($userDevice->getToken(), $data);
             }
         }
