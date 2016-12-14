@@ -47,8 +47,11 @@ class UserOperations extends APIOperations
             if ($userDevice->getType() === 'ios') {
                 $deviceNotificationCount = ((int) $userDevice->getBadgeNumber()) + 1;
                 $userDevice->setBadgeNumber($deviceNotificationCount);
+                $pushNotificationService->sendNotificationToDevice($userDevice->getToken(), $title, $body, $data, $deviceNotificationCount);
             }
-            $pushNotificationService->sendNotificationToDevice($userDevice->getToken(), $title, $body, $data, $deviceNotificationCount);
+            if ($userDevice->getType() === 'android') {
+                $pushNotificationService->sendMessageToDevice($userDevice->getToken(), $data);
+            }
         }
         $em->flush();
     }
