@@ -1,0 +1,40 @@
+'The image height is too small ({{ height }}px)':
+    ' Minimum height expected is {{ min_height }}px':
+        # Desc: The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.
+        '': 'Image size is not suitable (300 X 300)'
+
+'The image width is too small ({{ width }}px)':
+    ' Minimum width expected is {{ min_width }}px':
+        # Desc: The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.
+        '': 'Image size is not suitable (300 X 300)'
+
+'This file is not a valid image':
+    # Desc: This file is not a valid image.
+    '': 'Image should be png, or jpg'
+
+# Desc: email_exist
+email_exist: 'The entered email is registered before'
+
+# Desc: fill_mandatory_field
+fill_mandatory_field: 'Please fill mandatory field first.'
+
+# Desc: fullname_length_not_valid
+fullname_length_not_valid: 'Please enter your name between 4 to 25 characters.'
+
+# Desc: invalid_email
+invalid_email: 'Please enter a valid mail'
+
+# Desc: password_not_valid
+password_not_valid: 'Please enter password with at lease 6 characters, one letter, and one number of them.'
+
+# Desc: phone_exist
+phone_exist: 'The entered phone number is registered before'
+
+# Desc: same_phone_validation
+same_phone_validation: 'This number is identical to the current one'
+
+# Desc: user_not_found
+user_not_found: 'User not found'
+
+# Desc: verification_message_not_sent
+verification_message_not_sent: 'something went wrong while trying to send the verification message'

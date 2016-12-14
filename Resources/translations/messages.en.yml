@@ -1,0 +1,97 @@
+# Desc: A message have been sent to your email with a link to change your password page
+'A message have been sent to your email with a link to change your password page': 'A message have been sent to your email with a link to change your password page'
+
+# Desc: Close
+Close: Close
+
+'Done sucessfully':
+    # Desc: Done sucessfully.
+    '': 'Done sucessfully.'
+
+# Desc: Edit my account
+'Edit my account': 'Edit my account'
+
+# Desc: Email
+Email: Email
+
+'Email verified successfully':
+    # Desc: Email verified successfully.
+    '': 'Email verified successfully.'
+
+# Desc: Forgot your password
+'Forgot your password': 'Forgot your password'
+
+# Desc: Forgot your password ?
+'Forgot your password ?': 'Forgot your password ?'
+
+# Desc: Full name
+'Full name': 'Full name'
+
+# Desc: Login
+Login: Login
+
+# Desc: Login page
+'Login page': 'Login page'
+
+# Desc: Password
+Password: Password
+
+'Password changed sucessfully':
+    # Desc: Password changed sucessfully.
+    '': 'Password changed sucessfully.'
+
+# Desc: Phone
+Phone: Phone
+
+# Desc: Remember me
+'Remember me': 'Remember me'
+
+# Desc: Repeat Password
+'Repeat Password': 'Repeat Password'
+
+# Desc: Reset your password
+'Reset your password': 'Reset your password'
+
+# Desc: Retrieve your password
+'Retrieve your password': 'Retrieve your password'
+
+# Desc: Save
+Save: Save
+
+'The change password link expired please request a new one':
+    # Desc: The change password link expired please request a new one.
+    '': 'The change password link expired please request a new one.'
+
+'The link expired please request a new one':
+    # Desc: The link expired please request a new one.
+    '': 'The link expired please request a new one.'
+
+# Desc: Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes
+'Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes': 'Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes'
+
+# Desc: email_not_registered
+email_not_registered: 'The entered email is not registered, please enter again.'
+
+# Desc: expired_verification_code
+expired_verification_code: 'Verification code is expired.'
+
+# Desc: phone_already_verified
+phone_already_verified: 'Your phone is already verified'
+
+# Desc: reach_max_forget_password_requests_error
+reach_max_forget_password_requests_error: 'You reached the maximum tries of requesting new reset password email'
+
+# Desc: reach_max_phone_verification_requests_error
+reach_max_phone_verification_requests_error: 'You reached the maximum tries of requesting phone verification code'
+
+# Desc: reach_max_verification_email_requests_error
+reach_max_verification_email_requests_error: 'You reached the maximum tries of requesting verification email'
+
+# Desc: something_went_wrong
+something_went_wrong: 'something went wrong please try again later'
+
+# Desc: user_already_verified
+user_already_verified: 'This email already verified'
+
+# Desc: wrong_verification_code
+wrong_verification_code: 'Invalid Verification Code.'
