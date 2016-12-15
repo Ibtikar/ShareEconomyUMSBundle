@@ -45,7 +45,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      * @ORM\Column(name="email", type="string", length=190, unique=true)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
-     * @Assert\Email(strict=true, message="invalid_email", groups={"signup", "edit"})
+     * @Assert\Email(strict=true, checkMX=true, checkHost=true, message="invalid_email", groups={"signup", "edit"})
      */
     protected $email;
 
