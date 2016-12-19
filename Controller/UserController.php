@@ -13,9 +13,9 @@ class UserController extends DashboardController
 {
 
     protected $listColumns = array(
-        array('fullName', array('isSearchable' => true)),
-        array('email', array('isSearchable' => true)),
-        array('phone', array('isSearchable' => true))
+        array('fullName'),
+        array('email'),
+        array('phone')
     );
 
     protected $defaultSort = array('column' => 'fullName', 'sort' => 'asc');
