@@ -1,0 +1,11 @@
+'Please fill the mandatory field first':
+    # Desc: Please fill the mandatory field first.
+    '': 'املأ الحقل أولاً'
+
+'The entered email is not registered, please enter again':
+    # Desc: The entered email is not registered, please enter again.
+    '': 'البريد الإلكتروني المدخل غير مسجل مسبقا، يرجى المحاولة مرة آخرى'
+
+'The presented password is invalid':
+    # Desc: The presented password is invalid.
+    '': 'ادخل كلمة مرور صحيحة'

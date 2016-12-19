@@ -1,0 +1,97 @@
+# Desc: A message have been sent to your email with a link to change your password page
+'A message have been sent to your email with a link to change your password page': 'تم إرسال رسالة إلى بريدك الألكترونى تحتوى على رابط تغيير كلمة المرور'
+
+# Desc: Close
+Close: إغلاق
+
+'Done sucessfully':
+    # Desc: Done sucessfully.
+    '': 'تم بنجاح.'
+
+# Desc: Edit my account
+'Edit my account': 'تعديل بياناتى'
+
+# Desc: Email
+Email: 'البريد الألكترونى'
+
+'Email verified successfully':
+    # Desc: Email verified successfully.
+    '': 'تم تفعيل البريد الإلكتروني بنجاح.'
+
+# Desc: Forgot your password
+'Forgot your password': 'نسيت كلمة المرور'
+
+# Desc: Forgot your password ?
+'Forgot your password ?': 'نسيت كلمة المرور ؟'
+
+# Desc: Full name
+'Full name': 'الأسم بالكامل'
+
+# Desc: Login
+Login: دخول
+
+# Desc: Login page
+'Login page': 'صفحة الدخول'
+
+# Desc: Password
+Password: 'كلمة المرور'
+
+'Password changed sucessfully':
+    # Desc: Password changed sucessfully.
+    '': 'تم تغيير كلمة المرور بنجاح.'
+
+# Desc: Phone
+Phone: الهاتف
+
+# Desc: Remember me
+'Remember me': تذكرني
+
+# Desc: Repeat Password
+'Repeat Password': 'أعد كلمة المرور'
+
+# Desc: Reset your password
+'Reset your password': 'تغيير كلمة المرور'
+
+# Desc: Retrieve your password
+'Retrieve your password': 'استعادة كلمة المرور'
+
+# Desc: Save
+Save: حفظ
+
+'The change password link expired please request a new one':
+    # Desc: The change password link expired please request a new one.
+    '': 'انتهت صلاحية الرابط من فضلك قم بطلب رابط اخر.'
+
+'The link expired please request a new one':
+    # Desc: The link expired please request a new one.
+    '': 'انتهت صلاحية استخدام هذا الرابط, من فضلك قم بطلب رابط تأكيد جديد.'
+
+# Desc: Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes
+'Verification code for %project% is (%code%) valid for %validationTimeInMinutes% minutes': 'كود التفعبل ل%project% ''%code%'' صالح لمدة %validationTimeInMinutes% دقائق'
+
+# Desc: email_not_registered
+email_not_registered: 'البريد الالكتروني المدخل غير مسجل لدينا يرجى الإدخال مرة اخرى'
+
+# Desc: expired_verification_code
+expired_verification_code: 'انتهت صلاحية رقم التفعيل'
+
+# Desc: phone_already_verified
+phone_already_verified: 'هذا التليفون محقق منه بالفعل'
+
+# Desc: reach_max_forget_password_requests_error
+reach_max_forget_password_requests_error: 'لقد استنفذت جميع المحاولات المسموح بها لطلب تعيين كلمة مرور جديدة'
+
+# Desc: reach_max_phone_verification_requests_error
+reach_max_phone_verification_requests_error: 'لقد استنفذت جميع المحاولات المسموح بها لطلب تحقيق تليفونك'
+
+# Desc: reach_max_verification_email_requests_error
+reach_max_verification_email_requests_error: 'لقد استنفذت جميع المحاولات المسموح بها لطلب تحقيق بريدك'
+
+# Desc: something_went_wrong
+something_went_wrong: 'حدث خطأ. يرجى إعادة المحاولة في وقت لاحق'
+
+# Desc: user_already_verified
+user_already_verified: 'هذا البريد الإلكتروني محقق منه بالفعل'
+
+# Desc: wrong_verification_code
+wrong_verification_code: 'رقم تفعيل خاطئ'
