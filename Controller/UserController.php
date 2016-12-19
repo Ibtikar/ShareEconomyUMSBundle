@@ -13,13 +13,12 @@ class UserController extends DashboardController
 {
 
     protected $listColumns = array(
-        array('fullName'),
-        array('email'),
-        array('createdAt', array('type'=>'date')),
-        array('updatedAt', array('type'=>'date')),
+        array('fullName', array('isSearchable' => true)),
+        array('email', array('isSearchable' => true)),
+        array('phone', array('isSearchable' => true))
     );
 
-    protected $defaultSort = array('column' => 'updatedAt', 'sort' => 'desc');
+    protected $defaultSort = array('column' => 'fullName', 'sort' => 'asc');
 
     protected $translationDomain = 'baseuser';
 
