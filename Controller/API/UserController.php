@@ -630,6 +630,11 @@ class UserController extends Controller
             $output         = new UMSApiResponse\RegisterUserFail();
             $output->errors = $validationMessages;
         } else {
+            if ($request->get('oldPassword') == $request->get('userPassword')) {
+                $output = new UMSApiResponse\RegisterUserFail();
+                $output->errors = ['oldPassword' => $this->get('translator')->trans('Old Password is same as new', array(), 'messages')];
+                return new JsonResponse($output);
+            }
             $user->setValidPassword();
             $em->flush();
 

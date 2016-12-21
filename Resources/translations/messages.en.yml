@@ -49,6 +49,8 @@ Phone: Phone
 # Desc: Repeat Password
 'Repeat Password': 'Repeat Password'
 
+'Old Password is same as new': 'Old Password is same as new'
+
 # Desc: Reset your password
 'Reset your password': 'Reset your password'
 

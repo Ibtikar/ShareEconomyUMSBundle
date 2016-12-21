@@ -49,6 +49,8 @@ Phone: الهاتف
 # Desc: Repeat Password
 'Repeat Password': 'أعد كلمة المرور'
 
+'Old Password is same as new': 'كلمة المرور القديمةو الجديدة متشابهان'
+
 # Desc: Reset your password
 'Reset your password': 'تغيير كلمة المرور'
 
