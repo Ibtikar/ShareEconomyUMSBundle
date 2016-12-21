@@ -1,14 +1,14 @@
 # Desc: Click on the following link to reset your password:
-'Click on the following link to reset your password:': 'Click on the following link to reset your password:'   # FIXME
+'Click on the following link to reset your password:': 'انقر على الرابط التالي لإعادة تعيين كلمة المرور الخاصة بك:'   # FIXME
 
 # Desc: Dear
-Dear: عزيزى   # FIXME
+Dear: 'عزيزى'   # FIXME
 
 # Desc: Please verify your email
 'Please verify your email': 'تفعيل الايميل الخاص بك'   # FIXME
 
 # Desc: Please verify your email by clicking on the following link:
-'Please verify your email by clicking on the following link:': 'Please verify your email by clicking on the following link:'   # FIXME
+'Please verify your email by clicking on the following link:': 'يرجى التحقق من البريد الإلكتروني الخاص بك عن طريق النقر على الرابط التالي:'   # FIXME
 
 # Desc: Reset password
-'Reset password': 'Reset password'   # FIXME
+'Reset password': 'اعادة تعيين كلمة السر'   # FIXME
