@@ -27,6 +27,18 @@ invalid_email: 'ادخل بريد الكتروني صحيح'
 # Desc: password_not_valid
 password_not_valid: 'ادخل كلمة مرور على الأقل 6 أحرف،  تحتوي على الأقل حرف واحد ورقم واحد.'
 
+# Desc: password_not_valid
+password_not_valid_min: 'يرجى إدخال كلمة المرور 6 أحرف على الأقل'
+
+# Desc: password_not_valid
+password_not_valid_max: 'يرجى إدخال كلمة المرور 12 حرفا كحد أقصى'
+
+# Desc: password_not_valid
+password_not_valid_no_number: 'يرجى إدخال كلمة المرور مع لا يقل عن 1 رقم'
+
+# Desc: password_not_valid
+password_not_valid_no_text: 'يرجى إدخال كلمة المرور على الأقل 1 حرف'
+
 # Desc: phone_exist
 phone_exist: 'الرقم المدخل مستخدم مسبقاً'
 

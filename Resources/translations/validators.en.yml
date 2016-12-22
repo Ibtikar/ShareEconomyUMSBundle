@@ -27,6 +27,18 @@ invalid_email: 'Please enter a valid mail'
 # Desc: password_not_valid
 password_not_valid: 'Please enter password with at lease 6 characters, one letter, and one number of them.'
 
+# Desc: password_not_valid
+password_not_valid_min: 'Please enter password with at lease 6 characters, one letter, and one number of them.'
+
+# Desc: password_not_valid
+password_not_valid_max: 'Please enter password with at max 12 characters, one letter, and one number of them.'
+
+# Desc: password_not_valid
+password_not_valid_no_number: 'Please enter password with at least 1 number'
+
+# Desc: password_not_valid
+password_not_valid_no_text: 'Please enter password with at max 1 char'
+
 # Desc: phone_exist
 phone_exist: 'The entered phone number is registered before'
 
