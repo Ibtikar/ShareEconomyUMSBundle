@@ -10,5 +10,7 @@
 # Desc: User
 User: Users
 
+user: user
+
 'Email': 'Email'
 Phone: 'Phone'

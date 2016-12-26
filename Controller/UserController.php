@@ -18,6 +18,8 @@ class UserController extends DashboardController
         array('phone')
     );
 
+    protected $listActions = array('delete'=>'');
+
     protected $defaultSort = array('column' => 'fullName', 'sort' => 'asc');
 
     protected $translationDomain = 'baseuser';
