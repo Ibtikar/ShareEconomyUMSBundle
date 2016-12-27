@@ -223,10 +223,15 @@ class UserController extends Controller
     public function registerCustomerAction(Request $request)
     {
         $user = new User();
-        $user->setFullName($request->get('fullName'));
-        $user->setEmail($request->get('email'));
-        $user->setPhone($request->get('phone'));
-        $user->setUserPassword($request->get('userPassword'));
+        $password = $request->get('userPassword');
+        if (trim($request->get('userPassword')) == "") {
+            $password = "";
+        }
+
+        $user->setFullName(trim($request->get('fullName')));
+        $user->setEmail(trim($request->get('email')));
+        $user->setPhone(trim($request->get('phone')));
+        $user->setUserPassword($password);
         $user->setRoles([User::ROLE_CUSTOMER]);
         $user->setSystemUser(false);
 
