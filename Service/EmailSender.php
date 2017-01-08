@@ -10,12 +10,12 @@ use Psr\Log\LoggerInterface;
 class EmailSender
 {
 
-    private $em;
-    private $mailer;
-    private $templating;
-    private $senderEmail;
-    private $logger;
-    private $translator;
+    protected $em;
+    protected $mailer;
+    protected $templating;
+    protected $senderEmail;
+    protected $logger;
+    protected $translator;
 
     public function __construct($em, $mailer, $templating, $senderEmail, LoggerInterface $logger, $translator)
     {

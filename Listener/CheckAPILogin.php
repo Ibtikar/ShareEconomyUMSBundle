@@ -13,8 +13,8 @@ use Ibtikar\ShareEconomyUMSBundle\Entity\BaseUser;
  */
 class CheckAPILogin
 {
-
     /* @var $securityTokenStorage \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage */
+
     private $securityTokenStorage;
 
     /* @var $userOperations \Ibtikar\ShareEconomyUMSBundle\Service\UserOperations */
@@ -42,11 +42,14 @@ class CheckAPILogin
                 $token = $this->securityTokenStorage->getToken();
                 if ($token && $token instanceof JWTUserToken) {
                     $user = $token->getUser();
-                    if (is_object($user) && $user instanceof BaseUser) {
+                    if (is_object($user) && $user instanceof BaseUser && $user->getEnabled()) {
                         return;
+                    } else {
+                        $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse());
                     }
+                } else {
+                    $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse());
                 }
-                $event->setResponse($this->userOperations->getInvalidCredentialsJsonResponse());
             }
         }
     }
