@@ -51,10 +51,6 @@
 {% endblock %}
 {% block javascripts %}
     {{parent()}}
-    <script>
-        var availableMessage = '{% trans %}valid{% endtrans %}';
-        var unAvailableMessage = '{% trans %}not valid{% endtrans %}';
-    </script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/plugins/jquery-validation/jquery.validate.min.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/jquery.form.min.js')}}"></script>
     <script src="{{ asset('bundles/ibtikarshareeconomydashboarddesign/js/dev/validation.js')}}"></script>
