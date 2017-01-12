@@ -184,7 +184,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      * @ORM\Column(name="phone", type="string", length=190, unique=true)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit", "joinrequest"})
-     * @Assert\Regex("/^[+-]?\d+$/")
+     * @Assert\Regex("/^[+-]?\d+$/", groups={"edit"})
      */
     protected $phone;
 
@@ -233,8 +233,8 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      * @var UploadedFile $file
      *
      * @Assert\NotBlank(groups={"image-required"})
-     * @Assert\Image(minWidth=300, minHeight=300, mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, groups={"image", "Default"})
-     * @Assert\Image(maxSize="1M", groups={"joinrequest"})
+     * @Assert\Image(minWidth=300, minHeight=300, mimeTypes={"image/jpg", "image/jpeg", "image/pjpeg", "image/png"}, groups={"image", "Default", "edit"})
+     * @Assert\Image(maxSize="1M", groups={"joinrequest", "edit"})
      */
     protected $file;
 
