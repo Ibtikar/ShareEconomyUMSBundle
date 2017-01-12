@@ -173,8 +173,8 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="fullName", type="string", length=190)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
-     * @Assert\Length(min = 4, max = 25, groups={"signup", "edit"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit", "joinrequest"})
+     * @Assert\Length(min = 4, max = 25, groups={"signup", "edit", "joinrequest"}, maxMessage="fullname_length_not_valid", minMessage="fullname_length_not_valid")
      */
     protected $fullName;
 
@@ -183,7 +183,8 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      *
      * @ORM\Column(name="phone", type="string", length=190, unique=true)
      *
-     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit"})
+     * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit", "joinrequest"})
+     * @Assert\Regex("/^[+-]?\d+$/")
      */
     protected $phone;
 
@@ -233,6 +234,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      *
      * @Assert\NotBlank(groups={"image-required"})
      * @Assert\Image(minWidth=300, minHeight=300, mimeTypes={"image/jpeg", "image/pjpeg", "image/png"}, groups={"image", "Default"})
+     * @Assert\Image(maxSize="1M", groups={"joinrequest"})
      */
     protected $file;
 
