@@ -50,6 +50,30 @@ class EmailSender
         }
     }
 
+    public function sendToMany($to = array(), $subject = "", $content = "", $type = "text/html", $files = array())
+    {
+        $message = Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setFrom($this->senderEmail, $this->senderEmail)
+                ->setSender($this->senderEmail, $this->senderEmail)
+                ->setTo($this->senderEmail, $this->senderEmail)
+                ->setBcc($to)
+                ->setContentType($type)
+                ->setBody($content);
+
+        if (!empty($files)) {
+            foreach ($files as $name => $path) {
+                $message->attach(Swift_Attachment::fromPath($path)->setFilename($name));
+            }
+        }
+
+        try {
+            $this->mailer->send($message);
+        } catch (\Exception $exc) {
+            $this->logger->critical($exc->getTraceAsString());
+        }
+    }
+
     /**
      * send verification email
      *
