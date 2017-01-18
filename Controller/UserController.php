@@ -15,7 +15,7 @@ class UserController extends DashboardController
     protected $listColumns = array(
         array('fullName'),
         array('email'),
-        array('phone')
+        array('phone', array('class' => 'phoneNumberLtr'))
     );
 
     protected $listActions = array('delete'=>'');
