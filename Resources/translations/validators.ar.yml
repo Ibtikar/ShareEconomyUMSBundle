@@ -19,7 +19,7 @@ email_exist: 'البريد الالكتروني المدخل مستخدم مسب
 fill_mandatory_field: ' املأ الحقل أولاً'
 
 # Desc: fullname_length_not_valid
-fullname_length_not_valid: 'ادخل اسمك يتراوح من 4 إلى 25 حرف'
+fullname_length_not_valid: 'ادخل اسم يتراوح من 4 إلى 25 حرف'
 
 # Desc: invalid_email
 invalid_email: 'ادخل بريد الكتروني صحيح'
