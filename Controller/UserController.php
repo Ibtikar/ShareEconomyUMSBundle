@@ -24,6 +24,8 @@ class UserController extends DashboardController
 
     protected $translationDomain = 'baseuser';
 
+    protected $bundle = 'IbtikarShareEconomyDashboardDesignBundle';
+
     /**
      * @author Moemen Hussein <moemen.hussein@ibtikar.net.sa>
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -232,7 +234,7 @@ class UserController extends DashboardController
         if ($refreshUserObject) {
             $em->refresh($user);
         }
-        return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:dashboard_form.html.twig', array(
+        return $this->render($this->bundle.':Layout:dashboard_form.html.twig', array(
                 'form' => $formView,
                 'title' => $translator->trans('Edit my account'),
         ));
