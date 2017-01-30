@@ -15,3 +15,17 @@ User: المستخدمين
 user: مستخدم
 
 Phone: 'التليفون'
+
+Admin Users: المشرفين
+
+Photo: الصورة
+
+Roles: الدور
+
+ROLE_SUPER_ADMIN: سوبر ادمن
+
+ROLE_ADMIN: ادمن
+
+ROLE_FINANCE: المشرف المالى
+
+ROLE_SUPPORT: الدعم

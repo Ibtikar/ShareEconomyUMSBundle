@@ -14,3 +14,17 @@ user: user
 
 'Email': 'Email'
 Phone: 'Phone'
+
+Admin Users: Admin Users
+
+Photo: Photo
+
+Roles: Role
+
+ROLE_SUPER_ADMIN: Super Admin
+
+ROLE_ADMIN: Admin
+
+ROLE_FINANCE: Finance
+
+ROLE_SUPPORT: Support

@@ -1030,4 +1030,23 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     {
         return $this->phoneVerificationCodes;
     }
+
+    /**
+     * Get roles
+     *
+     * @return array
+     */
+    public function getAdminRoles()
+    {
+        return implode(',' , $this->roles);
+    }
+
+    /**
+     * @return type
+     */
+    public static function getRolesList()
+    {
+        return array();
+
+    }
 }
