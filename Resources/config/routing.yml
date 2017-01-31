@@ -5,7 +5,3 @@ ibtikar_share_economy_ums_api_user:
 ibtikar_share_economy_ums_user:
     resource: "@IbtikarShareEconomyUMSBundle/Resources/config/routing/user.yml"
     prefix:   /
-
-ibtikar_share_economy_ums_admin:
-    resource: "@IbtikarShareEconomyUMSBundle/Resources/config/routing/admin.yml"
-    prefix:   /
