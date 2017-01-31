@@ -3,6 +3,7 @@
 namespace Ibtikar\ShareEconomyUMSBundle\Controller;
 
 use Ibtikar\ShareEconomyDashboardDesignBundle\Controller\DashboardController;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends DashboardController
 {
@@ -23,6 +24,10 @@ class AdminController extends DashboardController
 
     protected $pageTitle = 'Admin Users';
 
+    protected $listGlobalActions = array("add"=> 'create_admin');
+
+    protected $formType = 'Ibtikar\ShareEconomyUMSBundle\Form\AdminType';
+
     /**
      * @author Sarah Mostafa <sarah.marzouk@ibtikar.net.sa>
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -42,4 +47,29 @@ class AdminController extends DashboardController
         return $query->andWhere('e.systemUser = true');
     }
 
+    protected function prePostParametersCreate(){
+        return array('closeRedirection'=>$this->generateUrl('admin_list'));
+    }
+
+    protected function getPageTitle()
+    {
+        return $this->get('translator')->trans('Add New Admin User', array(), $this->translationDomain);
+    }
+
+    protected function getCreateFormOptions(){
+        $options = array('translation_domain'=>$this->translationDomain, 'validation_groups' => array('email','phone'));
+        return $options;
+    }
+
+    protected function postValidCreate(Request $request, $entity){
+
+        $em = $this->get('doctrine')->getManager();
+        $entity->setValidPassword();
+        $entity->setSystemUser(true);
+        $em->persist($entity);
+        $em->flush();
+
+        $this->getFlashBag("success", $this->get('translator')->trans('Done Successfully'));
+        return $this->redirect($this->generateUrl('admin_list'));
+    }
 }

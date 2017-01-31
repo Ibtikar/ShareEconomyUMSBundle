@@ -536,7 +536,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
      */
     public function setRoles($roles)
     {
-        $this->roles = $roles;
+        $this->roles = (array)$roles;
 
         return $this;
     }

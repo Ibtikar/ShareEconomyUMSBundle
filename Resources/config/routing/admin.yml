@@ -1,7 +1,7 @@
-ibtikar_share_economy_ums_list_admin_users:
+admin_list:
     path:     /dashboard/admin/list
     defaults: { _controller: IbtikarShareEconomyUMSBundle:Admin:list }
 
-delete_user:
-    path:     /dashboard/admin/delete/{entityId}
-    defaults: { _controller: IbtikarShareEconomyUMSBundle:Admin:delete, entityId:~ }
+create_admin:
+    path:     /dashboard/admin/create
+    defaults: { _controller: IbtikarShareEconomyUMSBundle:Admin:create }

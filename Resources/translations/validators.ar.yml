@@ -50,3 +50,5 @@ user_not_found: 'هذا المستخدم غير موجود'
 
 # Desc: verification_message_not_sent
 verification_message_not_sent: 'حدث خطأ أثناء إرسال رسالة التأكيد'
+
+The password fields must match: 'يجب أن تتطابق كلمتي المرور'

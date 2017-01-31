@@ -29,3 +29,9 @@ ROLE_ADMIN: ادمن
 ROLE_FINANCE: المشرف المالى
 
 ROLE_SUPPORT: الدعم
+
+Add New Admin User: أضف مشرف جديد
+
+Password: كلمة المرور
+
+Repeat Password: أعد كلمة المرور

@@ -50,3 +50,5 @@ user_not_found: 'User not found'
 
 # Desc: verification_message_not_sent
 verification_message_not_sent: 'something went wrong while trying to send the verification message'
+
+The password fields must match: The password fields must match
