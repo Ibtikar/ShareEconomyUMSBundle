@@ -19,7 +19,7 @@ use Ibtikar\ShareEconomyUMSBundle\Validator\Constraints\CustomEmail as AssertEma
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  * @UniqueEntity(fields={"email"}, groups={"signup", "edit", "email"}, message="email_exist")
- * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist")
+ * @UniqueEntity(fields={"phone"}, groups={"signup", "edit", "phone"}, message="phone_exist", repositoryMethod="findPhoneByUniqueCriteria")
  */
 class BaseUser implements AdvancedUserInterface, EquatableInterface
 {

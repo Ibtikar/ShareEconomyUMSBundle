@@ -48,4 +48,9 @@ class BaseUserRepository extends \Doctrine\ORM\EntityRepository
 
         return $return;
     }
+
+    public function findPhoneByUniqueCriteria(array $criteria)
+    {
+        return $this->_em->getRepository('AppBundle:User')->findBy($criteria);
+    }
 }
