@@ -43,7 +43,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=190, unique=true)
+     * @ORM\Column(name="email", type="string", length=190)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "edit"})
      * @AssertEmail(strict=true,checkMX=true, checkHost=true, message="invalid_email", groups={"signup", "edit"})
@@ -181,7 +181,7 @@ class BaseUser implements AdvancedUserInterface, EquatableInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=190, unique=true)
+     * @ORM\Column(name="phone", type="string", length=190)
      *
      * @Assert\NotBlank(message="fill_mandatory_field", groups={"signup", "phone", "edit", "joinrequest"})
      * @Assert\Regex("/^[+-]?\d+$/", groups={"edit"})
