@@ -181,8 +181,7 @@ class UserOperations extends APIOperations
         }
         $this->generateNewForgetPasswordToken($user);
         $em->flush($user);
-        $emailSenderService = $this->configParams['email_sender_service'];
-        $this->get($emailSenderService)->sendResetPasswordEmail($user);
+        $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user, $this->get('twig')->getGlobals()['projectName']);
         return 'success';
     }
 
@@ -353,8 +352,7 @@ class UserOperations extends APIOperations
             $user->setEmailVerified(false);
 
             // send verification email
-            $emailSenderService = $this->configParams['email_sender_service'];
-            $this->get($emailSenderService)->sendEmailVerification($user);
+            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
         }
 
         if ($user->getPhone() !== $oldPhone) {

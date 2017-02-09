@@ -91,8 +91,18 @@ class EmailSender
      * @param BaseUser $user
      * @return type
      */
-    public function sendResetPasswordEmail(BaseUser $user)
+    public function sendResetPasswordEmail(BaseUser $user, $projectName)
     {
-        return $this->send($user->getEmail(), $this->translator->trans('Reset password', array(), 'email'), $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', ['user' => $user]));
+        $template = $this->templating->render('IbtikarShareEconomyDashboardDesignBundle:Email:layout.html.twig', [
+            'name' => $user->getFullName(),
+            'headText' => false,
+            'longText' => false,
+            'boldText' => false,
+            'rows' => [
+            ],
+            'thanks' => $this->translator->trans('Thanks', array(), 'email'),
+            'websiteteam' => $this->translator->trans($projectName.' Team', array(), 'email')
+        ]);
+        return $this->send($user->getEmail(), $this->translator->trans('Reset password', array(), 'email'), $template);
     }
 }
