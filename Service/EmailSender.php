@@ -96,7 +96,7 @@ class EmailSender
         $template = $this->templating->render('IbtikarShareEconomyDashboardDesignBundle:Email:layout.html.twig', [
             'name' => $user->getFullName(),
             'headText' => false,
-            'longText' => false,
+            'longText' => $this->templating->render('IbtikarShareEconomyUMSBundle:Emails:sendResetPasswordEmail.html.twig', array($user)),
             'boldText' => false,
             'rows' => [
             ],
