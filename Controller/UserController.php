@@ -174,7 +174,7 @@ class UserController extends DashboardController
                 $user->setChangePasswordTokenExpiryTime(null);
                 $em->flush($user);
                 $this->addFlash('success', $translator->trans('Password changed sucessfully.'));
-                return $this->redirectToRoute('ibtikar_share_economy_ums_api_user_login');
+                return $this->redirectToRoute('ibtikar_share_economy_ums_login');
             }
         }
         return $this->render('IbtikarShareEconomyDashboardDesignBundle:Layout:not_loggedin_form.html.twig', array(
