@@ -181,7 +181,8 @@ class UserOperations extends APIOperations
         }
         $this->generateNewForgetPasswordToken($user);
         $em->flush($user);
-        $this->get('ibtikar.shareeconomy.ums.email_sender')->sendResetPasswordEmail($user);
+        $emailSenderService = $this->configParams['email_sender_service'];
+        $this->get($emailSenderService)->sendResetPasswordEmail($user);
         return 'success';
     }
 
@@ -352,7 +353,8 @@ class UserOperations extends APIOperations
             $user->setEmailVerified(false);
 
             // send verification email
-            $this->get('ibtikar.shareeconomy.ums.email_sender')->sendEmailVerification($user);
+            $emailSenderService = $this->configParams['email_sender_service'];
+            $this->get($emailSenderService)->sendEmailVerification($user);
         }
 
         if ($user->getPhone() !== $oldPhone) {
