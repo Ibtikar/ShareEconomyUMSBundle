@@ -203,8 +203,8 @@ class UserController extends DashboardController
             ->setMethod('POST')
             ->add('file', formInputsTypes\FileType::class, array(
                 'required' => false,
-                'label' => false,
-                'attr' => array('data-image-type' => 'profile', 'data-image-url' => &$userImage, 'data-image-alt' => &$userImageAlt)))
+                'required' => true,
+                'attr' => array('data-error-after-selector' => '.fileupload-new','data-image-type' => 'profile', 'data-image-url' => &$userImage, 'data-image-alt' => &$userImageAlt)))
             ->add('fullName', formInputsTypes\TextType::class)
 //            ->add('phone', formInputsTypes\TextType::class)
             ->add('email', formInputsTypes\EmailType::class)
