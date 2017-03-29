@@ -12,8 +12,8 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "Ibtikar/ShareEconomyToolsBundle": "~1.0@dev",
-        "Ibtikar/ShareEconomyDashboardDesignBundle": "~1.0@dev",
+        "Ibtikar/ShareEconomyToolsBundle": "~1.0",
+        "Ibtikar/ShareEconomyDashboardDesignBundle": "~1.0",
         "symfony/form": "~3.0",
         "symfony/framework-bundle": "~3.0",
         "symfony/security-bundle": "~2.3|~3.0",
